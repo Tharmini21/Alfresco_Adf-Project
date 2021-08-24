@@ -30,7 +30,15 @@
     </content-action>
 
   </content-actions>
+
 </adf-document-list>
+<adf-search-control [highlight]="true"
+                    (optionClicked)=""
+                    (submit)="onSearchSubmit($event)">
+    <adf-empty-search-result>
+        <span>No Record Found.</span>
+    </adf-empty-search-result>
+</adf-search-control>
 <adf-pagination [target]="documentList" [supportedPageSizes]="[5, 10, 15, 20]" [pagination]="10">
 </adf-pagination>
 

@@ -5,7 +5,7 @@
   "description": "ACS ADF Application with Angular CLI",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve",
+    "start": "ng serve --open",
     "build": "ng build",
     "build:dist": "ng build --prod",
     "test": "ng test",

@@ -104,6 +104,19 @@ export class DocumentsComponent {
         }
       );
   }
-}
 
+onSearchSubmit(event) {
+    let entry = event.value.entry;
+    var name = entry.name;
+    this.apiService.getsimplesearch(name)
+      .subscribe(
+        res => {
+          this.listnodedatas = res;
+        },
+        err => {
+          console.log('Error occured while searching data');
+        }
+      );
+  }
+}
 
