@@ -104,6 +104,22 @@ export class DocumentsComponent {
         }
       );
   }
+  secondaychildcount(event) {
+    let entry = event.value.entry;
+    var nodeId = entry.id;
+    this.apiService.getsecondarychild(nodeId)
+      .subscribe(
+        res => {
+          this.listnodedatas = res;
+          var SecChildCount = this.listnodedatas.list.pagination.count;
+          this.notificationService.openSnackMessage("Secondary Child Count:" + SecChildCount);
+        },
+        err => {
+          console.log('Error occured');
+        }
+      );
+  }
+
 
 onSearchSubmit(event) {
     let entry = event.value.entry;
