@@ -49,5 +49,16 @@ export class ApiService {
          });
         return this.httpclient.get(`${this.dataUrl}/alfresco/api/-default-/public/alfresco/versions/1/nodes/${node_id}/secondary-children`,{ headers: reqHeader });
     }
+
+    searchdata(name: string) {
+        let searchdata = name;
+        let data=JSON.stringify({ data: searchdata})
+        var reqHeader = new HttpHeaders({ 
+            'Content-Type': 'application/json',
+            'Authorization': "Basic YWRtaW46QWxmcmVzY29AMTIz",
+            'accept': 'application/json'
+         });
+        return this.httpclient.post(`${this.dataUrl}/alfresco/api/-default-/public/search/versions/1/search`,data,{ headers: reqHeader});
+    }
 }
 

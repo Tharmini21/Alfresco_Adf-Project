@@ -12,11 +12,13 @@
   </adf-upload-button>
   <div class="adf-toolbar--spacer"></div>
   <adf-search-control [highlight]="true"
-                    (submit)="onSearchSubmit($event)">
+                    (submit)="onSearchSubmit($event.target)">
     <adf-empty-search-result>
         <span>No Record Found.</span>
     </adf-empty-search-result>
 </adf-search-control>
+<adf-search-filter #settings [showContextFacets]=true (submit)="onSearchevent($event)"></adf-search-filter>
+
 </adf-toolbar>
 <adf-document-list #documentList currentFolderId="-root-" (preview)="showPreview($event)" [contentActions]="true">
   <content-actions>

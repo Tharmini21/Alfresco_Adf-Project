@@ -122,12 +122,28 @@ export class DocumentsComponent {
 
 
 onSearchSubmit(event) {
-    let entry = event.value.entry;
-    var name = entry.name;
+    let entry = event.value;
+    var name = entry;
     this.apiService.getsimplesearch(name)
       .subscribe(
         res => {
           this.listnodedatas = res;
+        },
+        err => {
+          console.log('Error occured while searching data');
+        }
+      );
+  }
+
+  onSearchevent(event) {
+    let entry = event.value.entry;
+    var name = entry.name;
+    this.apiService.searchdata(name)
+      .subscribe(
+        res => {
+          this.listnodedatas = res;
+          var output = this.listnodedatas.list.pagination.count;
+          this.notificationService.openSnackMessage("Searched data:" + output);
         },
         err => {
           console.log('Error occured while searching data');

@@ -130,7 +130,7 @@
         "enabled": true,
         "expanded": true,
         "component": {
-          "selector": "adf-search-text",
+          "selector": "text",
           "settings": {
             "pattern": "cm:name:'(.*?)'",
             "field": "cm:name",
