@@ -24,11 +24,18 @@ import { ApiService } from '../services/ApiService';
 import { NodeDatas } from '../Classes/NodeDatas';
 import { HttpParams } from '@angular/common/http';
 import { Conditional } from '@angular/compiler';
+import { SearchService, SearchConfigurationService } from '@alfresco/adf-core';
+import { TestSearchConfigurationService } from '../services/ApiService';
+
 
 @Component({
   selector: 'app-documents',
   templateUrl: './documents.component.html',
-  styleUrls: ['./documents.component.scss']
+  styleUrls: ['./documents.component.scss'],
+  providers: [
+    { provide: SearchConfigurationService, useClass: TestSearchConfigurationService },
+    SearchService
+]
 })
 export class DocumentsComponent {
 
@@ -136,8 +143,9 @@ onSearchSubmit(event) {
   }
 
   onSearchevent(event) {
-    let entry = event.value.entry;
-    var name = entry.name;
+   // var divElement = document.getElementById("search");
+   let entry = event.value.entry;
+    var name = entry.nodeType;
     this.apiService.searchdata(name)
       .subscribe(
         res => {
@@ -151,4 +159,6 @@ onSearchSubmit(event) {
       );
   }
 }
+
+
 

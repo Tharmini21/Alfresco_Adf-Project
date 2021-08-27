@@ -17,8 +17,18 @@
         <span>No Record Found.</span>
     </adf-empty-search-result>
 </adf-search-control>
-<adf-search-filter #settings [showContextFacets]=true (submit)="onSearchevent($event)"></adf-search-filter>
+<adf-search-filter  [showContextFacets]=true (onsearch)="onSearchevent($event.target)"></adf-search-filter>
+<!-- <adf-search-filter #settings [showContextFacets]=true (submit)="onSearchevent()"></adf-search-filter> -->
 
+<input type="text" [searchAutocomplete]="search" id="search" (onsearch)="onSearchevent()">
+
+<adf-search #search="searchAutocomplete">
+    <ng-template let-result>
+        <span *ngFor="let item of result?.list?.entries">
+            {{ item?.entry.name }}
+        </span>
+    </ng-template>
+</adf-search> 
 </adf-toolbar>
 <adf-document-list #documentList currentFolderId="-root-" (preview)="showPreview($event)" [contentActions]="true">
   <content-actions>
@@ -32,6 +42,8 @@
 
     <!-- custom handler -->
     <content-action target="folder" title="Folder Count" (execute)="myfoldercountdetails($event)">
+    </content-action>
+    <content-action target="folder" title="All Nested Folder Count" (execute)="onSearchevent($event)">
     </content-action>
     <content-action target="folder" title="File Count" (execute)="myfilecountdetails($event)">
     </content-action>

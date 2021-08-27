@@ -2,6 +2,8 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { HttpClient, HttpParams, HttpHeaders } from '@angular/common/http';
 import { NodeDatas } from 'app/Classes/NodeDatas';
+import { QueryBody } from '@alfresco/js-api';
+import { SearchConfigurationInterface } from '@alfresco/adf-core';
 
 @Injectable()
 export class ApiService {
@@ -61,4 +63,26 @@ export class ApiService {
         return this.httpclient.post(`${this.dataUrl}/alfresco/api/-default-/public/search/versions/1/search`,data,{ headers: reqHeader});
     }
 }
+export class TestSearchConfigurationService implements SearchConfigurationInterface {
 
+    constructor() {
+    }
+  
+    public generateQueryBody(searchTerm: string, maxResults: number, skipCount: number): QueryBody {
+        const defaultQueryBody: QueryBody = {
+            query: {
+                query: searchTerm ? `${searchTerm}* OR name:${searchTerm}*` : searchTerm
+            },
+            include: ['path', 'allowableOperations'],
+            paging: {
+                maxItems: maxResults,
+                skipCount: skipCount
+            },
+            filterQueries: [
+                { query: "TYPE:'cm:folder'" },
+                { query: 'NOT cm:creator:System' }]
+        };
+  
+        return defaultQueryBody;
+    }
+  }
