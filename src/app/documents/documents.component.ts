@@ -25,17 +25,17 @@ import { NodeDatas } from '../Classes/NodeDatas';
 import { HttpParams } from '@angular/common/http';
 import { Conditional } from '@angular/compiler';
 import { SearchService, SearchConfigurationService } from '@alfresco/adf-core';
-import { TestSearchConfigurationService } from '../services/ApiService';
+// import { TestSearchConfigurationService } from '../services/ApiService';
 
 
 @Component({
   selector: 'app-documents',
   templateUrl: './documents.component.html',
-  styleUrls: ['./documents.component.scss'],
-  providers: [
-    { provide: SearchConfigurationService, useClass: TestSearchConfigurationService },
-    SearchService
-]
+  styleUrls: ['./documents.component.scss']
+//   providers: [
+//     { provide: SearchConfigurationService, useClass: TestSearchConfigurationService },
+//     SearchService
+// ]
 })
 export class DocumentsComponent {
 
@@ -145,13 +145,17 @@ onSearchSubmit(event) {
   onSearchevent(event) {
    // var divElement = document.getElementById("search");
    let entry = event.value.entry;
-    var name = entry.nodeType;
+    // var name = entry.nodeType;
+    var name = entry.name;
+    var path=entry.path.name;
+   // var documentLibrary = companyhome.childByNamePath("path");
+   // var folder = search.luceneSearch("+PATH:\"/app:company_home/cm:Test_x0020_Folder//*\" AND (TYPE:\"cm:content\" OR TYPE:\"cm:folder\")");
     this.apiService.searchdata(name)
       .subscribe(
         res => {
           this.listnodedatas = res;
           var output = this.listnodedatas.list.pagination.count;
-          this.notificationService.openSnackMessage("Searched data:" + output);
+          this.notificationService.openSnackMessage("Nested Folder Count data:" + output);
         },
         err => {
           console.log('Error occured while searching data');

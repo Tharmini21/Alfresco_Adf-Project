@@ -54,24 +54,23 @@ export class ApiService {
 
     searchdata(name: string) {
         let searchdata = name;
-        let data=JSON.stringify({ data: searchdata})
+        let querydata=this.generateQueryBody(searchdata,100,0);
+       // let query=({ query: querydata});
+        let query=JSON.stringify(querydata)
         var reqHeader = new HttpHeaders({ 
             'Content-Type': 'application/json',
             'Authorization': "Basic YWRtaW46QWxmcmVzY29AMTIz",
             'accept': 'application/json'
          });
-        return this.httpclient.post(`${this.dataUrl}/alfresco/api/-default-/public/search/versions/1/search`,data,{ headers: reqHeader});
+        return this.httpclient.post(`${this.dataUrl}/alfresco/api/-default-/public/search/versions/1/search`,query,{ headers: reqHeader});
     }
-}
-export class TestSearchConfigurationService implements SearchConfigurationInterface {
 
-    constructor() {
-    }
-  
     public generateQueryBody(searchTerm: string, maxResults: number, skipCount: number): QueryBody {
         const defaultQueryBody: QueryBody = {
             query: {
-                query: searchTerm ? `${searchTerm}* OR name:${searchTerm}*` : searchTerm
+                // query: searchTerm ? `${searchTerm}* OR name:${searchTerm}*` : searchTerm
+                // query: searchTerm ? `SITE:${searchTerm}` : searchTerm
+                query: `SITE:${searchTerm}` 
             },
             include: ['path', 'allowableOperations'],
             paging: {
@@ -82,7 +81,30 @@ export class TestSearchConfigurationService implements SearchConfigurationInterf
                 { query: "TYPE:'cm:folder'" },
                 { query: 'NOT cm:creator:System' }]
         };
-  
-        return defaultQueryBody;
+          return defaultQueryBody;
     }
-  }
+
+}
+// export class TestSearchConfigurationService implements SearchConfigurationInterface {
+
+//     constructor() {
+//     }
+  
+//     public generateQueryBody(searchTerm: string, maxResults: number, skipCount: number): QueryBody {
+//         const defaultQueryBody: QueryBody = {
+//             query: {
+//                 query: searchTerm ? `${searchTerm}* OR name:${searchTerm}*` : searchTerm
+//             },
+//             include: ['path', 'allowableOperations'],
+//             paging: {
+//                 maxItems: maxResults,
+//                 skipCount: skipCount
+//             },
+//             filterQueries: [
+//                 { query: "TYPE:'cm:folder'" },
+//                 { query: 'NOT cm:creator:System' }]
+//         };
+  
+//         return defaultQueryBody;
+//     }
+//   }
