@@ -26,16 +26,19 @@ import { HttpParams } from '@angular/common/http';
 import { Conditional } from '@angular/compiler';
 import { SearchService, SearchConfigurationService } from '@alfresco/adf-core';
 // import { TestSearchConfigurationService } from '../services/ApiService';
-
+import { MatDialog } from '@angular/material/dialog';
+import { ContentNodeSelectorComponent} from '@alfresco/adf-content-services';
+import { ContentNodeSelectorComponentData} from '../Classes/ContentTypeInterface';
+import { Subject } from 'rxjs';
 
 @Component({
   selector: 'app-documents',
   templateUrl: './documents.component.html',
   styleUrls: ['./documents.component.scss']
-//   providers: [
-//     { provide: SearchConfigurationService, useClass: TestSearchConfigurationService },
-//     SearchService
-// ]
+  //   providers: [
+  //     { provide: SearchConfigurationService, useClass: TestSearchConfigurationService },
+  //     SearchService
+  // ]
 })
 export class DocumentsComponent {
 
@@ -46,8 +49,8 @@ export class DocumentsComponent {
   @ViewChild('documentList')
   documentList: DocumentListComponent;
 
-
-  constructor(private notificationService: NotificationService, private preview: PreviewService, private apiService: ApiService) {
+  private dialog;
+  constructor(private notificationService: NotificationService, private preview: PreviewService, private apiService: ApiService, dialog: MatDialog) {
   }
 
   uploadSuccess(event: any) {
@@ -66,6 +69,39 @@ export class DocumentsComponent {
     this.showViewer = false;
     this.nodeId = null;
   }
+  onUploadPermissionFailed(event: any) {
+    this.notificationService.openSnackMessage(
+      `you don't have the ${event.permission} permission to ${event.action} the ${event.type} `, 4000
+    );
+  }
+
+  openSelectorDialog() {
+   var data: ContentNodeSelectorComponentData = {
+      title: "Choose an item",
+      actionName: "Choose",
+      currentFolderId: "someFolderId",
+      select: new Subject<Node[]>()
+    };
+
+    this.dialog.open(
+        ContentNodeSelectorComponent,
+        {
+            data, panelClass: 'adf-content-node-selector-dialog',
+            width: '630px'
+        }
+    );
+
+    data.select.subscribe((selections: Node[]) => {
+        // Use or store selection...
+    }, 
+    (error)=>{
+        //your error handling
+    }, 
+    ()=>{
+        //action called when an action or cancel is clicked on the dialog
+        this.dialog.closeAll();
+    });
+  }
   myCustomActionAfterDelete(event) {
     let entry = event.value.entry;
     let item = "";
@@ -75,6 +111,7 @@ export class DocumentsComponent {
       item = "folder"
     }
     this.notificationService.openSnackMessage(`Deleted ${item} "${entry.name}" `, 20000);
+    this.documentList.reload();
   }
   listnodedatas: any;
   FolderCount: any = [];
@@ -128,7 +165,7 @@ export class DocumentsComponent {
   }
 
 
-onSearchSubmit(event) {
+  onSearchSubmit(event) {
     let entry = event.value;
     var name = entry;
     this.apiService.getsimplesearch(name)
@@ -143,13 +180,13 @@ onSearchSubmit(event) {
   }
 
   onSearchevent(event) {
-   // var divElement = document.getElementById("search");
-   let entry = event.value.entry;
+    // var divElement = document.getElementById("search");
+    let entry = event.value.entry;
     // var name = entry.nodeType;
     var name = entry.name;
-    var path=entry.path.name;
-   // var documentLibrary = companyhome.childByNamePath("path");
-   // var folder = search.luceneSearch("+PATH:\"/app:company_home/cm:Test_x0020_Folder//*\" AND (TYPE:\"cm:content\" OR TYPE:\"cm:folder\")");
+    var path = entry.path.name;
+    // var documentLibrary = companyhome.childByNamePath("path");
+    // var folder = search.luceneSearch("+PATH:\"/app:company_home/cm:Test_x0020_Folder//*\" AND (TYPE:\"cm:content\" OR TYPE:\"cm:folder\")");
     this.apiService.searchdata(name)
       .subscribe(
         res => {
