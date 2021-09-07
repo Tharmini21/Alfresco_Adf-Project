@@ -65,6 +65,16 @@ export class ApiService {
         return this.httpclient.post(`${this.dataUrl}/alfresco/api/-default-/public/search/versions/1/search`,query,{ headers: reqHeader});
     }
 
+    GetModelContentType() {
+        let searchdata = "(namespaceUri matches('http://www.mycompany.com/model/finance/1.0.'))";
+        var reqHeader = new HttpHeaders({ 
+            'Content-Type': 'application/json',
+            'Authorization': "Basic YWRtaW46QWxmcmVzY29AMTIz",
+            'accept': 'application/json'
+         });
+        return this.httpclient.get(`${this.dataUrl}/alfresco/api/-default-/public/alfresco/versions/1/types?where=(${searchdata})`,{ headers: reqHeader});
+    }
+
     public generateQueryBody(searchTerm: string, maxResults: number, skipCount: number): QueryBody {
         const defaultQueryBody: QueryBody = {
             query: {

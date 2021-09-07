@@ -27,8 +27,8 @@ import { Conditional } from '@angular/compiler';
 import { SearchService, SearchConfigurationService } from '@alfresco/adf-core';
 // import { TestSearchConfigurationService } from '../services/ApiService';
 import { MatDialog } from '@angular/material/dialog';
-import { ContentNodeSelectorComponent} from '@alfresco/adf-content-services';
-import { ContentNodeSelectorComponentData} from '../Classes/ContentTypeInterface';
+import { MyFirstComponentComponent } from '../my-first-component/my-first-component.component';
+import { ContentNodeSelectorComponentData } from '../Classes/ContentTypeInterface';
 import { Subject } from 'rxjs';
 
 @Component({
@@ -40,6 +40,8 @@ import { Subject } from 'rxjs';
   //     SearchService
   // ]
 })
+
+
 export class DocumentsComponent {
 
   @Input()
@@ -49,8 +51,8 @@ export class DocumentsComponent {
   @ViewChild('documentList')
   documentList: DocumentListComponent;
 
-  private dialog;
-  constructor(private notificationService: NotificationService, private preview: PreviewService, private apiService: ApiService, dialog: MatDialog) {
+
+  constructor(private notificationService: NotificationService, private preview: PreviewService, private apiService: ApiService, private dialog: MatDialog) {
   }
 
   uploadSuccess(event: any) {
@@ -76,32 +78,34 @@ export class DocumentsComponent {
   }
 
   openSelectorDialog() {
-   var data: ContentNodeSelectorComponentData = {
+    var data: ContentNodeSelectorComponentData = {
       title: "Choose an item",
       actionName: "Choose",
       currentFolderId: "someFolderId",
       select: new Subject<Node[]>()
     };
-
     this.dialog.open(
-        ContentNodeSelectorComponent,
-        {
-            data, panelClass: 'adf-content-node-selector-dialog',
-            width: '630px'
-        }
+      MyFirstComponentComponent,
+      {
+        data,
+        //panelClass: 'adf-content-type-dialog',
+        // data, panelClass: 'adf-content-node-selector-dialog',
+        width: '630px'
+      }
     );
 
     data.select.subscribe((selections: Node[]) => {
-        // Use or store selection...
-    }, 
-    (error)=>{
+      // Use or store selection...
+    },
+      (error) => {
         //your error handling
-    }, 
-    ()=>{
+      },
+      () => {
         //action called when an action or cancel is clicked on the dialog
         this.dialog.closeAll();
-    });
+      });
   }
+
   myCustomActionAfterDelete(event) {
     let entry = event.value.entry;
     let item = "";

@@ -10,18 +10,21 @@
   <!-- <adf-upload-button [rootFolderId]="documentList.currentFolderId || '-root-'"
     [adf-check-allowable-operation]="'create'" [multipleFiles]="true" (success)="uploadSuccess($event)">
   </adf-upload-button> -->
-  <adf-upload-button [rootFolderId]="documentList.currentFolderId || '-root-'"
-     [multipleFiles]="true" [nodeType]="'cm:content'" (beginUpload)="onUploadPermissionFailed($event)" (click)="openSelectorDialog()">
+  <adf-upload-button [rootFolderId]="documentList.currentFolderId || '-root-'" [multipleFiles]="true"
+   (beginUpload)="onUploadPermissionFailed($event)" (click)="openSelectorDialog()">
   </adf-upload-button>
-  <mat-form-field appearance="fill">
-    <mat-label>Select content type</mat-label>
-    <select matNativeControl id="mySelectId">
-      <option value="" disabled selected></option>
-      <option value="cm:content">cm:content</option>
-      <option value="cm:folder">cm:folder</option>
-      <option value="dc:whitepaper">dc:whitepaper</option>
-    </select>
-  </mat-form-field>
+
+  <!-- <adf-upload-button [rootFolderId]="documentList.currentFolderId || '-root-'" [multipleFiles]="true"
+  [nodeType]="'cm:content'" (beginUpload)="onUploadPermissionFailed($event)" (click)="openSelectorDialog()">
+</adf-upload-button> -->
+ 
+  <!-- <mat-form-field appearance="fill">
+    <mat-select>
+      <mat-option *ngFor="let ct of contentTypes" [value]="ct.value">
+        {{ct.displayValue}}
+      </mat-option>
+    </mat-select>
+  </mat-form-field> -->
   <!-- <h1 mat-dialog-title>Dialog with elements</h1>
   <div mat-dialog-content>This dialog showcases the title, close, content and actions elements.</div>
   <div mat-dialog-actions>
@@ -46,7 +49,7 @@
     </ng-template> -->
   </adf-search>
 </adf-toolbar>
-<adf-document-list #documentList currentFolderId="-root-" (preview)="showPreview($event)" [contentActions]="true">
+<adf-document-list #documentList currentFolderId="-root-" (preview)="showPreview($event)" [contentActions]="true" [contextMenuActions]="true">
   <content-actions>
 
     <!-- system handler -->
@@ -69,7 +72,8 @@
     </content-action>
     <content-action target="document" title="File Count" (execute)="myfilecountdetails($event)">
     </content-action>
-
+    <content-action target="folder" title="BulkUpload" (execute)="openSelectorDialog()">
+    </content-action>
   </content-actions>
 
 </adf-document-list>
