@@ -11,25 +11,13 @@
     [adf-check-allowable-operation]="'create'" [multipleFiles]="true" (success)="uploadSuccess($event)">
   </adf-upload-button> -->
   <adf-upload-button [rootFolderId]="documentList.currentFolderId || '-root-'" [multipleFiles]="true"
-   (beginUpload)="onUploadPermissionFailed($event)" (click)="openSelectorDialog()">
+    (click)="openSelectorDialog()">
   </adf-upload-button>
 
   <!-- <adf-upload-button [rootFolderId]="documentList.currentFolderId || '-root-'" [multipleFiles]="true"
   [nodeType]="'cm:content'" (beginUpload)="onUploadPermissionFailed($event)" (click)="openSelectorDialog()">
 </adf-upload-button> -->
  
-  <!-- <mat-form-field appearance="fill">
-    <mat-select>
-      <mat-option *ngFor="let ct of contentTypes" [value]="ct.value">
-        {{ct.displayValue}}
-      </mat-option>
-    </mat-select>
-  </mat-form-field> -->
-  <!-- <h1 mat-dialog-title>Dialog with elements</h1>
-  <div mat-dialog-content>This dialog showcases the title, close, content and actions elements.</div>
-  <div mat-dialog-actions>
-    <button mat-button mat-dialog-close>Close</button>
-  </div> -->
   <div class="adf-toolbar--spacer"></div>
   <adf-search-control [highlight]="true" (submit)="onSearchSubmit($event.target)">
     <adf-empty-search-result>

@@ -55,6 +55,10 @@
 import { Component } from '@angular/core';  
 import { FormGroup, FormControl, Validators} from '@angular/forms'; 
 import { ApiService } from '../services/ApiService'; 
+// import {Component, Inject} from '@angular/core';
+import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
+import { ContentNodeSelectorComponentData} from '../Classes/ContentTypeInterface';
+import { Subject } from 'rxjs';
     
 @Component({  
   selector: 'app-my-first-component',
@@ -65,7 +69,7 @@ import { ApiService } from '../services/ApiService';
 export class MyFirstComponentComponent {  
  
   constructor(private apiService: ApiService){}
-
+  isShown: boolean = false;
   contentTypes: any[] = [
     { value: '0', displayValue: 'cm:content' },
     { value: '1', displayValue: 'cm:folder' },
@@ -82,6 +86,8 @@ export class MyFirstComponentComponent {
   changecontenttype(event)
   {
     let entry = event.value.entry;
+    this.isShown = ! this.isShown;
+    //this.isShown = true;
   }
 
   listcontentdatas: any;
@@ -98,3 +104,14 @@ export class MyFirstComponentComponent {
   //     );
   // }
 };  
+
+// export class DialogElementsExample {
+//   constructor(public dialog: MatDialog) {}
+
+//   openDialog() {
+//     this.dialog.open(DialogElements);
+//   }
+// }
+// export class DialogElements {}
+
+  

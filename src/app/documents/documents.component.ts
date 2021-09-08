@@ -76,35 +76,38 @@ export class DocumentsComponent {
       `you don't have the ${event.permission} permission to ${event.action} the ${event.type} `, 4000
     );
   }
-
   openSelectorDialog() {
     var data: ContentNodeSelectorComponentData = {
-      title: "Choose an item",
-      actionName: "Choose",
-      currentFolderId: "someFolderId",
-      select: new Subject<Node[]>()
-    };
-    this.dialog.open(
+       title: "Choose an item",
+       actionName: "Choose",
+       currentFolderId: "someFolderId",
+       select: new Subject<Node[]>()
+     };
+   
+     this.dialog.open(
       MyFirstComponentComponent,
-      {
-        data,
-        //panelClass: 'adf-content-type-dialog',
-        // data, panelClass: 'adf-content-node-selector-dialog',
-        width: '630px'
-      }
-    );
-
-    data.select.subscribe((selections: Node[]) => {
-      // Use or store selection...
-    },
-      (error) => {
-        //your error handling
-      },
-      () => {
-        //action called when an action or cancel is clicked on the dialog
-        this.dialog.closeAll();
-      });
-  }
+         {
+           data, 
+             //panelClass: 'adf-content-type-dialog',
+             // data, panelClass: 'adf-content-node-selector-dialog',
+             width: '630px'
+         }
+     );
+     data.select.subscribe((selections: Node[]) => {
+     var contentTypeslist: any[] = [
+        { value: '0', displayValue: 'cm:content' },
+        { value: '1', displayValue: 'cm:folder' },
+        { value: '2', displayValue: 'dc:whitepaper' }
+    ];
+         // Use or store selection...
+     }, 
+     (error)=>{
+         //your error handling
+     }, 
+     ()=>{
+         this.dialog.closeAll();
+     });
+   }
 
   myCustomActionAfterDelete(event) {
     let entry = event.value.entry;

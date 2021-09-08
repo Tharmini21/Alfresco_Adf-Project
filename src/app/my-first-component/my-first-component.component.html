@@ -1,8 +1,24 @@
 <div class="container">
-    <h3>Select Content Type</h3>
+    <h1 mat-dialog-title>Select Content Type</h1>
+    <!-- <div mat-dialog-content>This dialog select content type.
+    </div> -->
+    <mat-form-field appearance="fill">
+        <label for="contenttype">Content type</label>
+        <mat-select formControlName="contenttype" (change)="changecontenttype($event)">
+            <mat-option *ngFor="let ct of contentTypes" [value]="ct.value">
+                {{ct.displayValue}}
+            </mat-option>
+        </mat-select>
+    </mat-form-field>
+    <div mat-dialog-actions>
+        <button mat-button mat-dialog-close>Close</button>
+    </div>
+    <!-- <div *ngIf="isShown"> -->
+    <!-- <div>
+        <input type="file" class="file-upload" multiple (onchange)="console.log(event.target.files)">
+    </div> -->
 
-    <form [formGroup]="form" (ngSubmit)="submit()">
-
+    <!-- <form [formGroup]="form" (ngSubmit)="submit()">
         <div class="form-group">
             <label for="contenttype">Content type: </label>
             <select formControlName="contenttype" class="form-control" (change)="changecontenttype($event)">
@@ -12,26 +28,9 @@
             <div ng-show="false">
                 <input type="file" class="file-upload" onchange="console.log(event.target.files)">
             </div>
-            <!-- <mat-form-field appearance="fill">
-                <label for="contenttype">Content type:</label> 
-                <mat-select formControlName="contenttype" (change)="changecontenttype($event)">
-                    <mat-option *ngFor="let ct of contentTypes" [value]="ct.value">
-                        {{ct.displayValue}}
-                    </mat-option>
-                </mat-select>
-            </mat-form-field> -->
-            <!-- <mat-form-field appearance="fill">
-                <mat-label>Select content type</mat-label>
-                <select matNativeControl id="mySelectId">
-                    <option value="" disabled selected></option>
-                    <option value="cm:content">cm:content</option>
-                    <option value="cm:folder">cm:folder</option>
-                    <option value="dc:whitepaper">dc:whitepaper</option>
-                </select>
-            </mat-form-field> -->
             <div *ngIf="f.contenttype.touched && f.contenttype.invalid" class="alert alert-danger">
                 <div *ngIf="f.contenttype.errors.required">Name is required.</div>
             </div>
         </div>
-    </form>
+    </form> -->
 </div>
