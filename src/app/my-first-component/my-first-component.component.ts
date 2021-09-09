@@ -69,7 +69,10 @@ import { Subject } from 'rxjs';
 export class MyFirstComponentComponent {  
  
   constructor(private apiService: ApiService){}
-  isShown: boolean = false;
+  
+  isShown: boolean = true;
+  //isShown = false;
+  checked: boolean = true;
   contentTypes: any[] = [
     { value: '0', displayValue: 'cm:content' },
     { value: '1', displayValue: 'cm:folder' },
@@ -87,6 +90,7 @@ export class MyFirstComponentComponent {
   {
     let entry = event.value.entry;
     this.isShown = ! this.isShown;
+    this.checked=false;
     //this.isShown = true;
   }
 

@@ -4,7 +4,7 @@
     </div> -->
     <mat-form-field appearance="fill">
         <label for="contenttype">Content type</label>
-        <mat-select formControlName="contenttype" (change)="changecontenttype($event)">
+        <mat-select formControlName="contenttype" (change)="show=!show" (ngModel)="show">
             <mat-option *ngFor="let ct of contentTypes" [value]="ct.value">
                 {{ct.displayValue}}
             </mat-option>
@@ -14,10 +14,19 @@
         <button mat-button mat-dialog-close>Close</button>
     </div>
     <!-- <div *ngIf="isShown"> -->
+    <!-- <ng-container *ngIf="isShown"></ng-container> -->
     <!-- <div>
         <input type="file" class="file-upload" multiple (onchange)="console.log(event.target.files)">
     </div> -->
+    <div class="form-group">
+        <!-- <label for="file">Choose File</label> -->
+        <input type="file" id="file" multiple>
+    </div>
+    <div>
+        <mat-checkbox class="">Apply Same Content Type to all the Document</mat-checkbox>
 
+        <!-- <mat-checkbox class="" [(ngModel)]="checked" *ngIf="checked">Checked</mat-checkbox> -->
+    </div>
     <!-- <form [formGroup]="form" (ngSubmit)="submit()">
         <div class="form-group">
             <label for="contenttype">Content type: </label>
