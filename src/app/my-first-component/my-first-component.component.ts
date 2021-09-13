@@ -14,7 +14,7 @@
 //   constructor(private dialog: MatDialog) { }
 
 //   ngOnInit(): void {
-    
+
 //   }
 //   openSelectorDialog() {
 //     var data: ContentNodeSelectorComponentData = {
@@ -23,8 +23,8 @@
 //        currentFolderId: "someFolderId",
 //        select: new Subject<Node[]>()
 //      };
- 
-   
+
+
 //      this.dialog.open(
 //         //  ContentNodeSelectorComponent,
 //         //  {
@@ -34,9 +34,9 @@
 //         //      width: '630px'
 //         //  }
 //         {
-         
+
 //      );
- 
+
 //      data.select.subscribe((selections: Node[]) => {
 //          // Use or store selection...
 //      }, 
@@ -52,45 +52,43 @@
 // }
 
 
-import { Component } from '@angular/core';  
-import { FormGroup, FormControl, Validators} from '@angular/forms'; 
-import { ApiService } from '../services/ApiService'; 
+import { Component } from '@angular/core';
+import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { ApiService } from '../services/ApiService';
 // import {Component, Inject} from '@angular/core';
-import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
-import { ContentNodeSelectorComponentData} from '../Classes/ContentTypeInterface';
+import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { ContentNodeSelectorComponentData } from '../Classes/ContentTypeInterface';
 import { Subject } from 'rxjs';
-    
-@Component({  
+
+@Component({
   selector: 'app-my-first-component',
   templateUrl: './my-first-component.component.html',
   styleUrls: ['./my-first-component.component.css']
-})  
-    
-export class MyFirstComponentComponent {  
- 
-  constructor(private apiService: ApiService){}
-  
-  isShown: boolean = true;
-  //isShown = false;
-  checked: boolean = true;
+})
+
+export class MyFirstComponentComponent {
+
+  constructor(private apiService: ApiService) { }
+
+  isShown: boolean = false;
+  checked: boolean = false;
   contentTypes: any[] = [
     { value: '0', displayValue: 'cm:content' },
     { value: '1', displayValue: 'cm:folder' },
     { value: '2', displayValue: 'dc:whitepaper' }
-];
-  
-  form = new FormGroup({  
-    contenttype: new FormControl('', Validators.required)  
-  });  
+  ];
 
-  get f(){  
-    return this.form.controls;  
-  }  
-  changecontenttype(event)
-  {
+  form = new FormGroup({
+    contenttype: new FormControl('', Validators.required)
+  });
+
+  get f() {
+    return this.form.controls;
+  }
+  changecontenttype(event) {
     let entry = event.value.entry;
-    this.isShown = ! this.isShown;
-    this.checked=false;
+    this.isShown = true;
+    this.checked = true;
     //this.isShown = true;
   }
 
@@ -107,7 +105,7 @@ export class MyFirstComponentComponent {
   //       }
   //     );
   // }
-};  
+};
 
 // export class DialogElementsExample {
 //   constructor(public dialog: MatDialog) {}
@@ -118,4 +116,3 @@ export class MyFirstComponentComponent {
 // }
 // export class DialogElements {}
 
-  

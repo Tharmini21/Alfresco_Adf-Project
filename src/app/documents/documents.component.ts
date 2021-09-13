@@ -30,6 +30,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { MyFirstComponentComponent } from '../my-first-component/my-first-component.component';
 import { ContentNodeSelectorComponentData } from '../Classes/ContentTypeInterface';
 import { Subject } from 'rxjs';
+import { DocumentActionsService } from '@alfresco/adf-content-services';
 
 @Component({
   selector: 'app-documents',
@@ -52,9 +53,18 @@ export class DocumentsComponent {
   documentList: DocumentListComponent;
 
 
-  constructor(private notificationService: NotificationService, private preview: PreviewService, private apiService: ApiService, private dialog: MatDialog) {
+  constructor(private notificationService: NotificationService, private preview: PreviewService, private apiService: ApiService, private dialog: MatDialog, documentActions: DocumentActionsService) {
+    documentActions.setHandler(
+      'my-handler',
+      this.myDocumentActionHandler.bind(this)
+    );
   }
-
+  myDocumentActionHandler(obj: any) {
+  // myDocumentActionHandler(event) {
+  //   const entry = event.value.entry;
+  //this.contentTypeService.getContentTypeChildren
+    window.alert('my custom action handler');
+  }
   uploadSuccess(event: any) {
     this.notificationService.openSnackMessage('File uploaded');
     this.documentList.reload();
@@ -78,36 +88,36 @@ export class DocumentsComponent {
   }
   openSelectorDialog() {
     var data: ContentNodeSelectorComponentData = {
-       title: "Choose an item",
-       actionName: "Choose",
-       currentFolderId: "someFolderId",
-       select: new Subject<Node[]>()
-     };
-   
-     this.dialog.open(
+      title: "Choose an item",
+      actionName: "Choose",
+      currentFolderId: "someFolderId",
+      select: new Subject<Node[]>()
+    };
+
+    this.dialog.open(
       MyFirstComponentComponent,
-         {
-           data, 
-             //panelClass: 'adf-content-type-dialog',
-             // data, panelClass: 'adf-content-node-selector-dialog',
-             width: '630px'
-         }
-     );
-     data.select.subscribe((selections: Node[]) => {
-     var contentTypeslist: any[] = [
+      {
+        data,
+        //panelClass: 'adf-content-type-dialog',
+        // data, panelClass: 'adf-content-node-selector-dialog',
+        width: '630px'
+      }
+    );
+    data.select.subscribe((selections: Node[]) => {
+      var contentTypeslist: any[] = [
         { value: '0', displayValue: 'cm:content' },
         { value: '1', displayValue: 'cm:folder' },
         { value: '2', displayValue: 'dc:whitepaper' }
-    ];
-         // Use or store selection...
-     }, 
-     (error)=>{
-         //your error handling
-     }, 
-     ()=>{
-         this.dialog.closeAll();
-     });
-   }
+      ];
+      // Use or store selection...
+    },
+      (error) => {
+        //your error handling
+      },
+      () => {
+        this.dialog.closeAll();
+      });
+  }
 
   myCustomActionAfterDelete(event) {
     let entry = event.value.entry;

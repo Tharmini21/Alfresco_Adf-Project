@@ -40,6 +40,7 @@ import localeFi from '@angular/common/locales/fi';
 import localeDa from '@angular/common/locales/da';
 import localeSv from '@angular/common/locales/sv';
 import { MyFirstComponentComponent } from './my-first-component/my-first-component.component';
+import { MyDialogComponentComponent } from './my-dialog-component/my-dialog-component.component';
 
 registerLocaleData(localeFr);
 registerLocaleData(localeDe);
@@ -78,7 +79,8 @@ registerLocaleData(localeSv);
         DocumentsComponent,
         AppLayoutComponent,
         FileViewComponent,
-        MyFirstComponentComponent
+        MyFirstComponentComponent,
+        MyDialogComponentComponent
     ],
     providers: [
         PreviewService,
