@@ -30,7 +30,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { MyFirstComponentComponent } from '../my-first-component/my-first-component.component';
 import { ContentNodeSelectorComponentData } from '../Classes/ContentTypeInterface';
 import { Subject } from 'rxjs';
-import { DocumentActionsService } from '@alfresco/adf-content-services';
+import { DocumentActionsService, ContentTypeService } from '@alfresco/adf-content-services';
 
 @Component({
   selector: 'app-documents',
@@ -53,16 +53,18 @@ export class DocumentsComponent {
   documentList: DocumentListComponent;
 
 
-  constructor(private notificationService: NotificationService, private preview: PreviewService, private apiService: ApiService, private dialog: MatDialog, documentActions: DocumentActionsService) {
+  constructor(private notificationService: NotificationService, private preview: PreviewService, private apiService: ApiService, private dialog: MatDialog, private documentActions: DocumentActionsService, private contentservice: ContentTypeService) {
     documentActions.setHandler(
       'my-handler',
-      this.myDocumentActionHandler.bind(this)
+      this.myDocumentActionHandler.bind(this),
+
     );
   }
+
   myDocumentActionHandler(obj: any) {
-  // myDocumentActionHandler(event) {
-  //   const entry = event.value.entry;
-  //this.contentTypeService.getContentTypeChildren
+    // myDocumentActionHandler(event) {
+    //   const entry = event.value.entry;
+    //this.contentTypeService.getContentTypeChildren
     window.alert('my custom action handler');
   }
   uploadSuccess(event: any) {
@@ -86,39 +88,51 @@ export class DocumentsComponent {
       `you don't have the ${event.permission} permission to ${event.action} the ${event.type} `, 4000
     );
   }
+  // static listcontentdatas;
+  listcontentdatas: any;
+  //listcontenttypes: any;
+  getcontenttypelist() {
+    var nodetype = "cm:content";
+    this.listcontentdatas=this.contentservice.getContentTypeChildren(nodetype)
+      // .subscribe(
+      //   res => {
+      //     this.listcontentdatas = res;
+      //     return this.listcontentdatas;
+      //     // for (let i = 0; i <= this.listcontentdatas.length; i++) {
+      //     //   this.listcontentdatas =  this.listcontentdatas[i].entry.id;
+      //     // }
+      //   },
+      //   err => {
+      //     console.log('Error occured while searching data');
+      //   }
+      // );
+  }
   openSelectorDialog() {
-    var data: ContentNodeSelectorComponentData = {
-      title: "Choose an item",
-      actionName: "Choose",
-      currentFolderId: "someFolderId",
-      select: new Subject<Node[]>()
-    };
-
+    // var data: ContentNodeSelectorComponentData = {
+    //   title: "Choose an item",
+    //   actionName: "Choose",
+    //   currentFolderId: "someFolderId",
+    //   select: this.getcontenttypelist()
+    // };
+    var datas = this.getcontenttypelist();
+    var d1=this.listcontentdatas;
     this.dialog.open(
       MyFirstComponentComponent,
       {
-        data,
-        //panelClass: 'adf-content-type-dialog',
-        // data, panelClass: 'adf-content-node-selector-dialog',
-        width: '630px'
+        data: d1,
+        width: '630px',
       }
     );
-    data.select.subscribe((selections: Node[]) => {
-      var contentTypeslist: any[] = [
-        { value: '0', displayValue: 'cm:content' },
-        { value: '1', displayValue: 'cm:folder' },
-        { value: '2', displayValue: 'dc:whitepaper' }
-      ];
-      // Use or store selection...
-    },
-      (error) => {
-        //your error handling
-      },
-      () => {
-        this.dialog.closeAll();
-      });
-  }
+    // data.select.subscribe((selections: Node[]) => {
 
+    // },
+    //   (error) => {
+    //     //your error handling
+    //   },
+    //   () => {
+    //     this.dialog.closeAll();
+    //   });
+  }
   myCustomActionAfterDelete(event) {
     let entry = event.value.entry;
     let item = "";
