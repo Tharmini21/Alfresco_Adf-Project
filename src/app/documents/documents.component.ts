@@ -54,19 +54,16 @@ export class DocumentsComponent {
 
 
   constructor(private notificationService: NotificationService, private preview: PreviewService, private apiService: ApiService, private dialog: MatDialog, private documentActions: DocumentActionsService, private contentservice: ContentTypeService) {
-    documentActions.setHandler(
-      'my-handler',
-      this.myDocumentActionHandler.bind(this),
+    // documentActions.setHandler(
+    //   'my-handler',
+    //   this.myDocumentActionHandler.bind(this),
 
-    );
+    // );
   }
 
-  myDocumentActionHandler(obj: any) {
-    // myDocumentActionHandler(event) {
-    //   const entry = event.value.entry;
-    //this.contentTypeService.getContentTypeChildren
-    window.alert('my custom action handler');
-  }
+  // myDocumentActionHandler(obj: any) {
+  //   window.alert('my custom action handler');
+  // }
   uploadSuccess(event: any) {
     this.notificationService.openSnackMessage('File uploaded');
     this.documentList.reload();
@@ -88,50 +85,13 @@ export class DocumentsComponent {
       `you don't have the ${event.permission} permission to ${event.action} the ${event.type} `, 4000
     );
   }
-  // static listcontentdatas;
-  listcontentdatas: any;
-  //listcontenttypes: any;
-  getcontenttypelist() {
-    var nodetype = "cm:content";
-    this.listcontentdatas=this.contentservice.getContentTypeChildren(nodetype)
-      // .subscribe(
-      //   res => {
-      //     this.listcontentdatas = res;
-      //     return this.listcontentdatas;
-      //     // for (let i = 0; i <= this.listcontentdatas.length; i++) {
-      //     //   this.listcontentdatas =  this.listcontentdatas[i].entry.id;
-      //     // }
-      //   },
-      //   err => {
-      //     console.log('Error occured while searching data');
-      //   }
-      // );
-  }
   openSelectorDialog() {
-    // var data: ContentNodeSelectorComponentData = {
-    //   title: "Choose an item",
-    //   actionName: "Choose",
-    //   currentFolderId: "someFolderId",
-    //   select: this.getcontenttypelist()
-    // };
-    var datas = this.getcontenttypelist();
-    var d1=this.listcontentdatas;
     this.dialog.open(
       MyFirstComponentComponent,
       {
-        data: d1,
-        width: '630px',
+        width: '500px',
       }
     );
-    // data.select.subscribe((selections: Node[]) => {
-
-    // },
-    //   (error) => {
-    //     //your error handling
-    //   },
-    //   () => {
-    //     this.dialog.closeAll();
-    //   });
   }
   myCustomActionAfterDelete(event) {
     let entry = event.value.entry;

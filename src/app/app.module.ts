@@ -6,6 +6,7 @@ import { RouterModule } from '@angular/router';
 import { CoreModule, TRANSLATION_PROVIDER, TranslateLoaderService, CoreAutomationService } from '@alfresco/adf-core';
 import { ContentModule } from '@alfresco/adf-content-services';
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
+// import { MatStepperModule } from '@angular/material/stepper';
 
 
 import { appRoutes } from './app.routes';
@@ -81,6 +82,7 @@ registerLocaleData(localeSv);
         FileViewComponent,
         MyFirstComponentComponent,
         MyDialogComponentComponent
+        // MatStepperModule
     ],
     providers: [
         PreviewService,
@@ -97,7 +99,7 @@ registerLocaleData(localeSv);
     bootstrap: [AppComponent]
 })
 export class AppModule {
-  constructor(automationService: CoreAutomationService) {
-    automationService.setup();
-  }
+    constructor(automationService: CoreAutomationService) {
+        automationService.setup();
+    }
 }

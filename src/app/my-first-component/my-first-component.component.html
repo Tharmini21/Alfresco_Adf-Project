@@ -1,46 +1,56 @@
-<div class="container">
+<!-- <div class="container">
     <h1 mat-dialog-title>Select Content Type</h1>
-    <!-- <div mat-dialog-content>This dialog select content type.
-    </div> -->
     <mat-form-field appearance="fill">
         <label for="contenttype">Content type</label>
-        <!-- <mat-select formControlName="contenttype" (change)="show=!show" (ngModel)="show"> -->
         <mat-select formControlName="contenttype" (selectionChange)="changecontenttype($event)">
-            <mat-option *ngFor="let ct of contentTypes" [value]="ct.value">
-                {{ct.displayValue}}
+            <mat-option *ngFor="let ct of listcontentdatas" [value]="ct.entry.id">
+                {{ct.entry.id}}
             </mat-option>
         </mat-select>
     </mat-form-field>
     <div mat-dialog-actions>
         <button mat-button mat-dialog-close>Close</button>
     </div>
-    <!-- <div *ngIf="isShown"> -->
-    <!-- <ng-container *ngIf="isShown"></ng-container> -->
-    <!-- <div>
-        <input type="file" class="file-upload" multiple (onchange)="console.log(event.target.files)">
-    </div> -->
-    <div class="form-control" *ngIf="isShown">
-        <!-- <label for="file">Choose File</label> -->
-        <input type="file" id="file" multiple>
+    <div class="form-control" >
+        <adf-upload-button  [multipleFiles]="true">
+        </adf-upload-button>
     </div>
-    <div *ngIf="checked">
+    <div >
         <mat-checkbox class="">Apply Same Content Type to all the Document</mat-checkbox>
-
-        <!-- <mat-checkbox class="" [(ngModel)]="checked" *ngIf="checked">Checked</mat-checkbox> -->
     </div>
-    <!-- <form [formGroup]="form" (ngSubmit)="submit()">
-        <div class="form-group">
-            <label for="contenttype">Content type: </label>
-            <select formControlName="contenttype" class="form-control" (change)="changecontenttype($event)">
-                <option value="" disabled selected>Choose Content Type</option>
-                <option *ngFor="let ct of contentTypes" [value]="ct.value">{{ct.displayValue}}</option>
-            </select>
-            <div ng-show="false">
-                <input type="file" class="file-upload" onchange="console.log(event.target.files)">
+</div> -->
+<!-- <button mat-raised-button (click)="isEditable = !isEditable">
+    {{!isEditable ? 'Enable edit mode' : 'Disable edit mode'}}
+</button> -->
+<mat-stepper linear #stepper>
+    <mat-step [stepControl]="firstFormGroup" [editable]="">
+        <form [formGroup]="firstFormGroup">
+            <ng-template matStepLabel>Fill out content type</ng-template>
+            <h1 mat-dialog-title>Select Content Type</h1>
+            <mat-form-field appearance="fill">
+                <label for="contenttype">Content type</label>
+                <mat-select formControlName="firstCtrl" (selectionChange)="changecontenttype($event)"
+                    aria-required="true">
+                    <mat-option *ngFor="let ct of listcontentdatas" [value]="ct.entry.id">
+                        {{ct.entry.id}}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+            <div>
+                <button mat-button matStepperNext>Next</button>
             </div>
-            <div *ngIf="f.contenttype.touched && f.contenttype.invalid" class="alert alert-danger">
-                <div *ngIf="f.contenttype.errors.required">Name is required.</div>
+        </form>
+    </mat-step>
+    <mat-step [stepControl]="secondFormGroup" [editable]="isEditable" *ngIf="isShown">
+        <form [formGroup]="secondFormGroup" *ngIf="isShown">
+            <ng-template matStepLabel>Fill out your Document</ng-template>
+            <adf-upload-button 
+                 [multipleFiles]="true" (success)="uploadSuccess($event)">
+            </adf-upload-button>
+            <div>
+                <button mat-button matStepperPrevious>Back</button>
+                <button mat-button matStepperNext>Next</button>
             </div>
-        </div>
-    </form> -->
-</div>
+        </form>
+    </mat-step>
+</mat-stepper>
