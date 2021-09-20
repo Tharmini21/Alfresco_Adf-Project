@@ -15,15 +15,15 @@
         <adf-upload-button  [multipleFiles]="true">
         </adf-upload-button>
     </div>
-    <div >
+    <div>
         <mat-checkbox class="">Apply Same Content Type to all the Document</mat-checkbox>
     </div>
 </div> -->
 <!-- <button mat-raised-button (click)="isEditable = !isEditable">
     {{!isEditable ? 'Enable edit mode' : 'Disable edit mode'}}
 </button> -->
-<mat-stepper linear #stepper>
-    <mat-step [stepControl]="firstFormGroup" [editable]="">
+<mat-horizontal-stepper linear #stepper>
+    <mat-step [stepControl]="firstFormGroup">
         <form [formGroup]="firstFormGroup">
             <ng-template matStepLabel>Fill out content type</ng-template>
             <h1 mat-dialog-title>Select Content Type</h1>
@@ -41,16 +41,23 @@
             </div>
         </form>
     </mat-step>
-    <mat-step [stepControl]="secondFormGroup" [editable]="isEditable" *ngIf="isShown">
-        <form [formGroup]="secondFormGroup" *ngIf="isShown">
+    <mat-step [stepControl]="secondFormGroup">
+        <form [formGroup]="secondFormGroup">
             <ng-template matStepLabel>Fill out your Document</ng-template>
-            <adf-upload-button 
-                 [multipleFiles]="true" (success)="uploadSuccess($event)">
-            </adf-upload-button>
+            <!-- <mat-form-field appearance="fill"> -->
+                <adf-upload-button [multipleFiles]="true" (success)="uploadSuccess($event)">
+                </adf-upload-button>
+            <!-- </mat-form-field> -->
             <div>
-                <button mat-button matStepperPrevious>Back</button>
-                <button mat-button matStepperNext>Next</button>
+                <button mat-button matStepperPrevious type="button">Back</button>
+                <button mat-button matStepperNext type="button">Next</button>
             </div>
         </form>
     </mat-step>
-</mat-stepper>
+    <mat-step label="Confirm your information">
+        Everything seems correct.
+        <div>
+            <button mat-button matDialogClose>Done</button>
+        </div>
+    </mat-step>
+</mat-horizontal-stepper>

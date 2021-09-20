@@ -8,11 +8,16 @@ import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dial
 import { ContentNodeSelectorComponentData } from '../Classes/ContentTypeInterface';
 import { Subject } from 'rxjs';
 import { DocumentActionsService, ContentTypeService } from '@alfresco/adf-content-services';
+// import {StepperOrientation} from '@angular/material/stepper';
+import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
 
 @Component({
   selector: 'app-my-first-component',
   templateUrl: './my-first-component.component.html',
-  styleUrls: ['./my-first-component.component.css']
+  styleUrls: ['./my-first-component.component.css'],
+  providers: [{
+    provide: STEPPER_GLOBAL_OPTIONS, useValue: { showError: true }
+  }]
 })
 
 export class MyFirstComponentComponent {
@@ -21,8 +26,12 @@ export class MyFirstComponentComponent {
 
   firstFormGroup: FormGroup;
   secondFormGroup: FormGroup;
-  isEditable = false;
+  //isEditable = true;
   constructor(private apiService: ApiService, private contentservice: ContentTypeService,private notificationService: NotificationService,private _formBuilder: FormBuilder) { }
+  uploadSuccess(event: any) {
+    this.notificationService.openSnackMessage('File uploaded');
+    this.documentList.reload();
+  }
   ngOnInit() {
     this.getcontenttypelist();
     this.firstFormGroup = this._formBuilder.group({
@@ -47,10 +56,7 @@ export class MyFirstComponentComponent {
      this.isShown = true;
     // this.checked = true;
   }
-  uploadSuccess(event: any) {
-    this.notificationService.openSnackMessage('File uploaded');
-   // this.documentList.reload();
-  }
+  
 
   listcontentdatas: any;
   getcontenttypelist() {

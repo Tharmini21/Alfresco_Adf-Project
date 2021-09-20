@@ -10,9 +10,10 @@
   <!-- <adf-upload-button [rootFolderId]="documentList.currentFolderId || '-root-'"
     [adf-check-allowable-operation]="'create'" [multipleFiles]="true" (success)="uploadSuccess($event)">
   </adf-upload-button> -->
-  <adf-upload-button [rootFolderId]="documentList.currentFolderId || '-root-'" [multipleFiles]="true"
+
+  <!-- <adf-upload-button [rootFolderId]="documentList.currentFolderId || '-root-'" [multipleFiles]="true"
     (click)="openSelectorDialog()">
-  </adf-upload-button>
+  </adf-upload-button> -->
 
   <!-- <adf-upload-button [rootFolderId]="documentList.currentFolderId || '-root-'" [multipleFiles]="true"
   [nodeType]="'cm:content'" (beginUpload)="onUploadPermissionFailed($event)" (click)="openSelectorDialog()">
@@ -37,10 +38,10 @@
     </ng-template> -->
   </adf-search>
 </adf-toolbar>
-<adf-document-list #documentList currentFolderId="-root-" (preview)="showPreview($event)" [contentActions]="true" 
+<adf-document-list #documentList currentFolderId="-root-" (preview)="showPreview($event)" [contentActions]="true"
   [contextMenuActions]="true">
+  
   <content-actions>
-
     <!-- system handler -->
     <content-action target="document" title="copy" permission="update" [disableWithNoPermission]="true" handler="copy">
     </content-action>
@@ -55,8 +56,6 @@
     </content-action>
     <content-action target="folder" title="File Count" (execute)="myfilecountdetails($event)">
     </content-action>
-    <!-- <content-action target="folder" title="Primary child" (execute)="myfilecountdetails($event)">
-    </content-action> -->
     <content-action target="folder" title="Secondary child" (execute)="secondaychildcount($event)">
     </content-action>
     <content-action target="document" title="File Count" (execute)="myfilecountdetails($event)">

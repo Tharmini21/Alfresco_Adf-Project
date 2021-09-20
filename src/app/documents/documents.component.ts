@@ -31,6 +31,8 @@ import { MyFirstComponentComponent } from '../my-first-component/my-first-compon
 import { ContentNodeSelectorComponentData } from '../Classes/ContentTypeInterface';
 import { Subject } from 'rxjs';
 import { DocumentActionsService, ContentTypeService } from '@alfresco/adf-content-services';
+import { MyDialogComponentComponent } from '../my-dialog-component/my-dialog-component.component';
+
 
 @Component({
   selector: 'app-documents',
@@ -52,6 +54,9 @@ export class DocumentsComponent {
   @ViewChild('documentList')
   documentList: DocumentListComponent;
 
+  // ngAfterViewInit() {
+  //   console.log(this.documentList);
+  // }
 
   constructor(private notificationService: NotificationService, private preview: PreviewService, private apiService: ApiService, private dialog: MatDialog, private documentActions: DocumentActionsService, private contentservice: ContentTypeService) {
     // documentActions.setHandler(
@@ -87,9 +92,10 @@ export class DocumentsComponent {
   }
   openSelectorDialog() {
     this.dialog.open(
-      MyFirstComponentComponent,
+    MyFirstComponentComponent,
+     //MyDialogComponentComponent,
       {
-        width: '500px',
+       // width: '500px',
       }
     );
   }

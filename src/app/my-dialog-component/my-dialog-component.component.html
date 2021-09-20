@@ -1,1 +1,32 @@
-<p>my-dialog-component works!</p>
+<mat-horizontal-stepper [linear]="isLinear" #stepper>
+  <mat-step [stepControl]="firstFormGroup" label="Fill out content type">
+    <form [formGroup]="firstFormGroup">
+      <ng-template matStepLabel>Fill out content type</ng-template>
+      <h1 mat-dialog-title>Select Content Type</h1>
+      <mat-form-field appearance="fill">
+          <label for="contenttype">Content type</label>
+          <input matInput>
+      </mat-form-field>
+      <div>
+          <button mat-button matStepperNext>Next</button>
+      </div>
+  </form>
+  </mat-step>
+  <mat-step [stepControl]="secondFormGroup" label="Fill out document">
+    <mat-form-field>
+      <mat-label>Upload document</mat-label>
+      <input matInput>
+    </mat-form-field>
+    <div>
+      <button mat-button matStepperPrevious>Back</button>
+      <button mat-button matStepperNext>Next</button>
+    </div>
+  </mat-step>
+
+  <mat-step label="Confirm your information">
+    Everything seems correct.
+    <div>
+      <button mat-button matDialogClose>Done</button>
+    </div>
+  </mat-step>
+</mat-horizontal-stepper>

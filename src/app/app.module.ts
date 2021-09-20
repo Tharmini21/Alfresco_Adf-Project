@@ -6,8 +6,9 @@ import { RouterModule } from '@angular/router';
 import { CoreModule, TRANSLATION_PROVIDER, TranslateLoaderService, CoreAutomationService } from '@alfresco/adf-core';
 import { ContentModule } from '@alfresco/adf-content-services';
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
-// import { MatStepperModule } from '@angular/material/stepper';
-
+import { MatStepperModule } from '@angular/material/stepper';
+import { MatIconModule } from '@angular/material/icon';
+import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
 
 import { appRoutes } from './app.routes';
 import { PreviewService } from './services/preview.service';
@@ -71,7 +72,9 @@ registerLocaleData(localeSv);
         TranslateModule.forRoot({
             loader: { provide: TranslateLoader, useClass: TranslateLoaderService }
         }),
-        HttpClientModule
+        HttpClientModule,
+        MatStepperModule,
+        MatIconModule
     ],
     declarations: [
         AppComponent,
@@ -95,6 +98,11 @@ registerLocaleData(localeSv);
             }
         },
         ApiService
+        // {
+        //     provide: STEPPER_GLOBAL_OPTIONS,
+        //     useValue: { displayDefaultIndicatorType: false }
+        // }
+
     ],
     bootstrap: [AppComponent]
 })

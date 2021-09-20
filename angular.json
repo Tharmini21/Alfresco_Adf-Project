@@ -68,6 +68,7 @@
               }
             ],
             "styles": [
+              "./node_modules/@angular/material/prebuilt-themes/indigo-pink.css",
               "src/custom-style.scss"
             ],
             "scripts": [
@@ -132,6 +133,7 @@
               "node_modules/moment/min/moment.min.js"
             ],
             "styles": [
+              "./node_modules/@angular/material/prebuilt-themes/indigo-pink.css",
               "src/custom-style.scss"
             ],
             "assets": [

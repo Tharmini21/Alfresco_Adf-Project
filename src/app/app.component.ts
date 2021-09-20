@@ -5,6 +5,7 @@ import { ApiService } from './services/ApiService';
 import { NodeDatas } from './Classes/NodeDatas';
 import { MyFirstComponentComponent } from './my-first-component/my-first-component.component';
 import { ContentTypeService } from '@alfresco/adf-content-services';
+import { MyDialogComponentComponent } from './my-dialog-component/my-dialog-component.component';
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
