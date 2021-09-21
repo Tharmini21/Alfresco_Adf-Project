@@ -19,11 +19,12 @@
         <mat-checkbox class="">Apply Same Content Type to all the Document</mat-checkbox>
     </div>
 </div> -->
-<!-- <button mat-raised-button (click)="isEditable = !isEditable">
+
+<button mat-raised-button (click)="isEditable = !isEditable">
     {{!isEditable ? 'Enable edit mode' : 'Disable edit mode'}}
-</button> -->
+</button>
 <mat-horizontal-stepper linear #stepper>
-    <mat-step [stepControl]="firstFormGroup">
+    <mat-step [stepControl]="firstFormGroup" [editable]="isEditable">
         <form [formGroup]="firstFormGroup">
             <ng-template matStepLabel>Fill out content type</ng-template>
             <h1 mat-dialog-title>Select Content Type</h1>
@@ -35,27 +36,39 @@
                         {{ct.entry.id}}
                     </mat-option>
                 </mat-select>
+                <test-component-a #step1 [data]="data"></test-component-a>
             </mat-form-field>
             <div>
                 <button mat-button matStepperNext>Next</button>
             </div>
         </form>
     </mat-step>
-    <mat-step [stepControl]="secondFormGroup">
+    <mat-step [stepControl]="secondFormGroup" [editable]="isEditable">
         <form [formGroup]="secondFormGroup">
             <ng-template matStepLabel>Fill out your Document</ng-template>
+            <!-- completed="iscompleted"<input type="file" id="file" multiple [rootFolderId]="'-root-'" [adf-check-allowable-operation]="'create'" (execute)="uploadSuccess($event)"> -->
             <!-- <mat-form-field appearance="fill"> -->
-                <adf-upload-button [multipleFiles]="true" (success)="uploadSuccess($event)">
-                </adf-upload-button>
+            <adf-upload-button [rootFolderId]="'-root-'" [adf-check-allowable-operation]="'create'"
+                [multipleFiles]="true" (success)="uploadSuccess($event)">
+            </adf-upload-button>
             <!-- </mat-form-field> -->
+            <test-component-b #step2></test-component-b>
             <div>
                 <button mat-button matStepperPrevious type="button">Back</button>
                 <button mat-button matStepperNext type="button">Next</button>
             </div>
         </form>
     </mat-step>
-    <mat-step label="Confirm your information">
-        Everything seems correct.
+    <mat-step label="Apply Content Type">
+        <form [formGroup]="thirdFormGroup" [editable]="isEditable">
+            <mat-checkbox class="">Apply Same Content Type to all the Document</mat-checkbox>
+            <div>
+                <button mat-button matStepperPrevious type="button">Back</button>
+                <button mat-button matStepperNext type="button">Next</button>
+            </div>
+        </form>
+    </mat-step>
+    <mat-step label="LastStep">
         <div>
             <button mat-button matDialogClose>Done</button>
         </div>

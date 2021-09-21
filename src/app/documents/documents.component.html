@@ -40,7 +40,24 @@
 </adf-toolbar>
 <adf-document-list #documentList currentFolderId="-root-" (preview)="showPreview($event)" [contentActions]="true"
   [contextMenuActions]="true">
-  
+  <data-columns>
+    <data-column key="$thumbnail" type="image"></data-column>
+    <data-column title="Name" key="name" sortable="true" class="full-width ellipsis-cell">
+    </data-column>
+    <data-column title="Size" key="content.sizeInBytes" sortable="true" type="fileSize"
+      class="full-width ellipsis-cell">
+    </data-column>
+    <data-column title="Created By" key="createdByUser.displayName" sortable="true" class="desktop-only">
+    </data-column>
+    <data-column title="Created On" key="createdAt" type="date" format="medium" sortable="true" class="desktop-only">
+    </data-column>
+    <data-column title="Modified By" key="modifiedByUser.displayName" sortable="true" class="desktop-only">
+    </data-column>
+    <data-column title="Modified On" key="modifiedAt" type="date" format="medium" sortable="true" class="desktop-only">
+    </data-column>
+    <data-column title="Content Type" key=""  sortable="true" class="desktop-only">
+    </data-column>
+  </data-columns>
   <content-actions>
     <!-- system handler -->
     <content-action target="document" title="copy" permission="update" [disableWithNoPermission]="true" handler="copy">

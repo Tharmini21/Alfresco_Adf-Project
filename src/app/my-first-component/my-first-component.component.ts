@@ -1,5 +1,5 @@
-import { Component,ViewChild } from '@angular/core';
-import { FormBuilder,FormGroup, FormControl, Validators } from '@angular/forms';
+import { Component, ViewChild, Input,Output, EventEmitter } from '@angular/core';
+import { FormBuilder, FormGroup, FormControl, Validators } from '@angular/forms';
 import { ApiService } from '../services/ApiService';
 import { NotificationService } from '@alfresco/adf-core';
 import { DocumentListComponent } from '@alfresco/adf-content-services';
@@ -8,8 +8,10 @@ import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dial
 import { ContentNodeSelectorComponentData } from '../Classes/ContentTypeInterface';
 import { Subject } from 'rxjs';
 import { DocumentActionsService, ContentTypeService } from '@alfresco/adf-content-services';
-// import {StepperOrientation} from '@angular/material/stepper';
+
 import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
+//import { Matstepper } from '@angular/material/stepper';
+//import {TestComponentA, TestComponentB} from "./test.component";
 
 @Component({
   selector: 'app-my-first-component',
@@ -21,18 +23,35 @@ import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
 })
 
 export class MyFirstComponentComponent {
+  //@Output() onDataChange: EventEmitter<ItemType> = new EventEmitter();
+  //@Input()
+  @Input() data: {};
+  // @Output() newItemEvent = new EventEmitter<string>();
+  // addNewItem(value: string) {
+  //   this.newItemEvent.emit(value);
+  // }
+
   @ViewChild('documentList')
   documentList: DocumentListComponent;
 
+ // @ViewChild("stepper") stepperComponent: Matstepper;
+  // @ViewChild("step1") stepOneComponent: TestComponentA;
+  // @ViewChild("step2") stepTwoComponent: TestComponentB;
+
   firstFormGroup: FormGroup;
   secondFormGroup: FormGroup;
+  thirdFormGroup:FormGroup;
+  iscompleted=false;
   //isEditable = true;
-  constructor(private apiService: ApiService, private contentservice: ContentTypeService,private notificationService: NotificationService,private _formBuilder: FormBuilder) { }
+  constructor(private apiService: ApiService, private contentservice: ContentTypeService, private notificationService: NotificationService, private _formBuilder: FormBuilder) { }
   uploadSuccess(event: any) {
     this.notificationService.openSnackMessage('File uploaded');
     this.documentList.reload();
+    this.iscompleted=true;
   }
   ngOnInit() {
+    // this.form=<FormGroup>this.controlContainer.control;
+    // this.form.valueChanges.subscribe(data=>console.log(data));
     this.getcontenttypelist();
     this.firstFormGroup = this._formBuilder.group({
       firstCtrl: ['', Validators.required]
@@ -40,8 +59,11 @@ export class MyFirstComponentComponent {
     this.secondFormGroup = this._formBuilder.group({
       secondCtrl: ['', Validators.required]
     });
+    this.thirdFormGroup = this._formBuilder.group({
+      thirdCtrl: ['', Validators.required]
+    });
   }
-   isShown: boolean = false;
+  isShown: boolean = false;
   // checked: boolean = false;
 
   form = new FormGroup({
@@ -53,10 +75,10 @@ export class MyFirstComponentComponent {
   }
   changecontenttype(event) {
     let entry = event.value.entry;
-     this.isShown = true;
+    this.isShown = true;
     // this.checked = true;
   }
-  
+
 
   listcontentdatas: any;
   getcontenttypelist() {

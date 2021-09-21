@@ -54,9 +54,9 @@ export class DocumentsComponent {
   @ViewChild('documentList')
   documentList: DocumentListComponent;
 
-  // ngAfterViewInit() {
-  //   console.log(this.documentList);
-  // }
+  ngAfterViewInit() {
+    console.log(this.documentList);
+  }
 
   constructor(private notificationService: NotificationService, private preview: PreviewService, private apiService: ApiService, private dialog: MatDialog, private documentActions: DocumentActionsService, private contentservice: ContentTypeService) {
     // documentActions.setHandler(
