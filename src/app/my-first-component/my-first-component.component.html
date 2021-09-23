@@ -1,25 +1,3 @@
-<!-- <div class="container">
-    <h1 mat-dialog-title>Select Content Type</h1>
-    <mat-form-field appearance="fill">
-        <label for="contenttype">Content type</label>
-        <mat-select formControlName="contenttype" (selectionChange)="changecontenttype($event)">
-            <mat-option *ngFor="let ct of listcontentdatas" [value]="ct.entry.id">
-                {{ct.entry.id}}
-            </mat-option>
-        </mat-select>
-    </mat-form-field>
-    <div mat-dialog-actions>
-        <button mat-button mat-dialog-close>Close</button>
-    </div>
-    <div class="form-control" >
-        <adf-upload-button  [multipleFiles]="true">
-        </adf-upload-button>
-    </div>
-    <div>
-        <mat-checkbox class="">Apply Same Content Type to all the Document</mat-checkbox>
-    </div>
-</div> -->
-
 <button mat-raised-button (click)="isEditable = !isEditable">
     {{!isEditable ? 'Enable edit mode' : 'Disable edit mode'}}
 </button>
@@ -36,7 +14,7 @@
                         {{ct.entry.id}}
                     </mat-option>
                 </mat-select>
-                <test-component-a #step1 [data]="data"></test-component-a>
+                <!-- <step1-component #step1></step1-component> -->
             </mat-form-field>
             <div>
                 <button mat-button matStepperNext>Next</button>
@@ -46,22 +24,65 @@
     <mat-step [stepControl]="secondFormGroup" [editable]="isEditable">
         <form [formGroup]="secondFormGroup">
             <ng-template matStepLabel>Fill out your Document</ng-template>
-            <!-- completed="iscompleted"<input type="file" id="file" multiple [rootFolderId]="'-root-'" [adf-check-allowable-operation]="'create'" (execute)="uploadSuccess($event)"> -->
-            <!-- <mat-form-field appearance="fill"> -->
+            <!-- <input type="file" id="file" multiple [rootFolderId]="'-root-'" [adf-check-allowable-operation]="'create'" (success)="uploadSuccess($event)"> -->
+            <!-- <mat-form-field appearance="fill"> (success)="uploadSuccess($event)" [node]="node"
+    [rootFolderId]="node.parentId" (execute)="onUploadFiles($event)"-->
             <adf-upload-button [rootFolderId]="'-root-'" [adf-check-allowable-operation]="'create'"
-                [multipleFiles]="true" (success)="uploadSuccess($event)">
+                [multipleFiles]="true" (beginUpload)="onBeginUpload($event)" (success)="onUploadFiles($event)">
             </adf-upload-button>
+            <!-- <input type="file" #fileInput id="uploadFile" name="uploadFile" multiple="multiple"
+                (change)="onUploadFiles($event.target.files)" /> -->
+
+            <!-- <input type="file" class="file-input" (change)="onUploadFiles($event.target.files)" multiple="multiple"
+                #fileUpload>
+
+            <div class="file-upload">
+
+                {{fileName || "No file uploaded yet."}}
+
+                <button mat-mini-fab color="primary" class="upload-btn" (click)="fileUpload.click()">
+                    <mat-icon>attach_file</mat-icon>
+
+                </button>
+
+            </div> -->
+            <!-- <input type="file" id="file" multiple [rootFolderId]="'-root-'" [adf-check-allowable-operation]="'create'" (onchange)="onUploadFiles($event.target.files)">  -->
+            <div *ngIf="showuploaddialog">
+                <adf-file-uploading-dialog></adf-file-uploading-dialog>
+            </div>
+
             <!-- </mat-form-field> -->
-            <test-component-b #step2></test-component-b>
+            <!-- <step2-component #step2></step2-component> -->
             <div>
-                <button mat-button matStepperPrevious type="button">Back</button>
-                <button mat-button matStepperNext type="button">Next</button>
+                <button mat-button matStepperPrevious>Back</button>
+                <button mat-button matStepperNext>Next</button>
             </div>
         </form>
     </mat-step>
-    <mat-step label="Apply Content Type">
+    <mat-step label="Apply Content Type" [stepControl]="thirdFormGroup">
         <form [formGroup]="thirdFormGroup" [editable]="isEditable">
-            <mat-checkbox class="">Apply Same Content Type to all the Document</mat-checkbox>
+            <!-- (execute)="checkboxevent($event)" -->
+
+            <!-- <adf-card-view [properties]="[{label: 'My Label', value: 'Test Value'}]" [editable]="false">
+            </adf-card-view> -->
+            <div class="adf-property-list">
+                <div *ngFor="let property of listofproperties">
+                    <adf-card-view [properties]="listofproperties" [editable]="true">
+                    </adf-card-view>
+                    <!-- <div  class="adf-property">
+                        <adf-card-view-item-dispatcher
+                            [property]="property"
+                [editable]="editable"
+                [displayEmpty]="displayEmpty">
+                        </adf-card-view-item-dispatcher>
+                    </div> -->
+                </div>
+            </div>
+            <!-- <adf-card-view *ngFor="let lp of listofproperties" [editable]="false">
+                {{lp}}
+            </adf-card-view> -->
+            <mat-checkbox class="" (change)="checkboxevent($event)">Apply Changes for to all the Document</mat-checkbox>
+            <!-- <step3-component #step3></step3-component> -->
             <div>
                 <button mat-button matStepperPrevious type="button">Back</button>
                 <button mat-button matStepperNext type="button">Next</button>

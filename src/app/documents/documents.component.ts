@@ -91,10 +91,12 @@ export class DocumentsComponent {
     );
   }
   openSelectorDialog() {
+    //let entry = event.value.entry;
     this.dialog.open(
     MyFirstComponentComponent,
      //MyDialogComponentComponent,
       {
+        //data:entry
        // width: '500px',
       }
     );

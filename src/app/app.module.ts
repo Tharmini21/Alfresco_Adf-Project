@@ -9,6 +9,7 @@ import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { MatStepperModule } from '@angular/material/stepper';
 import { MatIconModule } from '@angular/material/icon';
 import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
+import { FormsModule,ReactiveFormsModule } from '@angular/forms';
 
 import { appRoutes } from './app.routes';
 import { PreviewService } from './services/preview.service';
@@ -43,6 +44,8 @@ import localeDa from '@angular/common/locales/da';
 import localeSv from '@angular/common/locales/sv';
 import { MyFirstComponentComponent } from './my-first-component/my-first-component.component';
 import { MyDialogComponentComponent } from './my-dialog-component/my-dialog-component.component';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
 
 registerLocaleData(localeFr);
 registerLocaleData(localeDe);
@@ -74,7 +77,11 @@ registerLocaleData(localeSv);
         }),
         HttpClientModule,
         MatStepperModule,
-        MatIconModule
+        MatIconModule,
+        FormsModule,
+        ReactiveFormsModule,
+        MatFormFieldModule,
+        MatInputModule
     ],
     declarations: [
         AppComponent,
