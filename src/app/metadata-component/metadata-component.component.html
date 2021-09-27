@@ -1,0 +1,6 @@
+<ng-container *ngIf="nodeId">
+    <ng-template let-node="node" #sidebarTemplate>
+<adf-content-metadata-card  [displayDefaultProperties]="true" [preset]="'*'" [node]="node">
+</adf-content-metadata-card>
+</ng-template>
+</ng-container>

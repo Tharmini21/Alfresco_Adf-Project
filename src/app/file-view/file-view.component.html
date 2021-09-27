@@ -12,21 +12,18 @@
       <adf-info-drawer-tab [label]="'APP.INFO_DRAWER.VERSIONS' | translate">
         <mat-card>
           <mat-card-content>
-            <adf-version-manager
-              [node]="node"
-              (uploadError)="onUploadError($event)"
-            >
+            <adf-version-manager [node]="node" (uploadError)="onUploadError($event)">
             </adf-version-manager>
           </mat-card-content>
         </mat-card>
       </adf-info-drawer-tab>
     </adf-info-drawer>
+    <adf-content-metadata-card [displayEmpty]="false" [preset]="'my-preset'" [node]="node">
+    </adf-content-metadata-card>
+    <adf-card-view [properties]="properties"></adf-card-view>
   </ng-template>
 
-  <adf-viewer
-    [nodeId]="nodeId"
-    (showViewerChange)="onViewerVisibilityChanged()"
-  >
+  <adf-viewer [nodeId]="nodeId" (showViewerChange)="onViewerVisibilityChanged()">
     <adf-viewer-toolbar-actions>
       <button mat-icon-button>
         <mat-icon>alarm</mat-icon>
@@ -71,4 +68,7 @@
         </extension-viewer>
         -->
   </adf-viewer>
+  <!-- <adf-content-metadata-card [displayEmpty]="false" [preset]="'my-preset'" [node]="node">
+  </adf-content-metadata-card> -->
+
 </ng-container>

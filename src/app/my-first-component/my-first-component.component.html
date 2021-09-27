@@ -59,28 +59,9 @@
             </div>
         </form>
     </mat-step>
-    <mat-step label="Apply Content Type" [stepControl]="thirdFormGroup">
-        <form [formGroup]="thirdFormGroup" [editable]="isEditable">
-            <!-- (execute)="checkboxevent($event)" -->
-
-            <!-- <adf-card-view [properties]="[{label: 'My Label', value: 'Test Value'}]" [editable]="false">
-            </adf-card-view> -->
-            <div class="adf-property-list">
-                <div *ngFor="let property of listofproperties">
-                    <adf-card-view [properties]="listofproperties" [editable]="true">
-                    </adf-card-view>
-                    <!-- <div  class="adf-property">
-                        <adf-card-view-item-dispatcher
-                            [property]="property"
-                [editable]="editable"
-                [displayEmpty]="displayEmpty">
-                        </adf-card-view-item-dispatcher>
-                    </div> -->
-                </div>
-            </div>
-            <!-- <adf-card-view *ngFor="let lp of listofproperties" [editable]="false">
-                {{lp}}
-            </adf-card-view> -->
+    <mat-step label="Apply Content Type" [stepControl]="thirdFormGroup" [editable]="isEditable">
+        <form [formGroup]="thirdFormGroup">
+            <button mat-button type="button" (click)="openDialog($event)">Properties</button>
             <mat-checkbox class="" (change)="checkboxevent($event)">Apply Changes for to all the Document</mat-checkbox>
             <!-- <step3-component #step3></step3-component> -->
             <div>

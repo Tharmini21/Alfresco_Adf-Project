@@ -46,6 +46,7 @@ import { MyFirstComponentComponent } from './my-first-component/my-first-compone
 import { MyDialogComponentComponent } from './my-dialog-component/my-dialog-component.component';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
+import { MetadataComponentComponent } from './metadata-component/metadata-component.component';
 
 registerLocaleData(localeFr);
 registerLocaleData(localeDe);
@@ -91,7 +92,8 @@ registerLocaleData(localeSv);
         AppLayoutComponent,
         FileViewComponent,
         MyFirstComponentComponent,
-        MyDialogComponentComponent
+        MyDialogComponentComponent,
+        MetadataComponentComponent
         // MatStepperModule
     ],
     providers: [

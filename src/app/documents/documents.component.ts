@@ -90,14 +90,15 @@ export class DocumentsComponent {
       `you don't have the ${event.permission} permission to ${event.action} the ${event.type} `, 4000
     );
   }
-  openSelectorDialog() {
-    //let entry = event.value.entry;
+  openSelectorDialog(event) {
+    let entry = event.value.entry;
+    var nodeId = entry.id;
     this.dialog.open(
-    MyFirstComponentComponent,
-     //MyDialogComponentComponent,
+      MyFirstComponentComponent,
+      //MyDialogComponentComponent,
       {
-        //data:entry
-       // width: '500px',
+        //data: {'nodeId':nodeId}
+        // width: '500px',
       }
     );
   }

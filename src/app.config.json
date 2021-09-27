@@ -186,5 +186,21 @@
       "label": "Simplified Chinese"
     }
   ],
+  "content-metadata": {
+    "presets": {
+        "my-preset": [
+            {
+                "title": "This is my preset",
+                "items": [
+                    {
+                        "aspect": "st:siteContainer",
+                        "properties": ["*"],
+                        "type": "custom:type"
+                    }
+                ]
+            }
+        ]
+    }
+},
   "logLevel": "trace"
 }

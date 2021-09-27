@@ -15,7 +15,8 @@ import { CardViewItem } from '../Classes/CartviewTextitem';
 // import { CardViewBaseItemModel, DynamicComponentModel } from '@alfresco/adf-core';
 import { CardViewTextItemModel } from '../cartview-textitem';
 import { UploadFilesEvent, ConfirmDialogComponent } from '@alfresco/adf-content-services';
-
+import { FileViewComponent } from '../file-view/file-view.component';
+import { MetadataComponentComponent } from '../metadata-component/metadata-component.component';
 @Component({
   selector: 'app-my-first-component',
   templateUrl: './my-first-component.component.html',
@@ -42,6 +43,7 @@ export class MyFirstComponentComponent {
   // addNewItem(value: string) {
   //   this.newItemEvent.emit(value);
   // }
+  // @Input() nodeId: string;
 
   @ViewChild('documentList')
   documentList: DocumentListComponent;
@@ -100,9 +102,6 @@ export class MyFirstComponentComponent {
     return this.form.controls;
   }
 
-  // onUploadFiles(e: CustomEvent) {
-  //   console.log(e.detail.files);
-  // }
   onUploadFiles(event) {
     let entry = event.value;
     console.log(entry);
@@ -131,6 +130,19 @@ export class MyFirstComponentComponent {
       });
     }
   }
+  lstproperties: any = [];
+  openDialog(event) {
+    // let entry = event.value.entry;
+    // this.lstproperties= entry.properties;
+    this.dialog.open(
+      // MetadataComponentComponent,
+      FileViewComponent,
+      {
+        // data:this.lstproperties,
+        // width: '500px',
+      }
+    );
+  }
   checkboxevent(event) {
     let entry = event.checked;
     this.ischeckboxevent = entry;
@@ -144,60 +156,51 @@ export class MyFirstComponentComponent {
     this.frmStepOne();
     let entry = event.value;
     this.selectedcontenttype = entry;
-    // this.lstcontentdata=this.getcontenttypelist();
-    var nodetype = "cm:content";
-    this.contentservice.getContentTypeChildren(nodetype)
-      .subscribe(
-        res => {
-          this.newlstcontentdata = res;
-          if (this.newlstcontentdata.length != 0) {
-            for (let i = 0; i < this.newlstcontentdata.length; i++) {
-              if (this.selectedcontenttype == this.newlstcontentdata[i].entry.id) {
-                console.log(this.properties = this.newlstcontentdata[i].entry.properties);
-                this.listofproperties = this.properties;
-                // this.listofproperties = [
-                //     new CardViewTextItemModel({
-                //         label: this.properties.title,
-                //         value: this.properties.id,
-                //         key: this.properties.title,
-                //         default: '',
-                //         multiline: false,
-                //         editable: true,
-                //         clickable: true
-                //     }),
-                //     new CardViewTextItemModel({
-                //         label: 'Rank',
-                //         value: 'Captain',
-                //         key: 'rank',
-                //         default: 'No rank entered',
-                //         multiline: false,
-                //         editable: true,
-                //         clickable: true
-                //     })
-                // ];
-
-                // if(this.properties.length!=0)
-                // {
-                //   for (let i = 0; i < this.properties.length; i++) {
-                //     this.listofproperties=new CardViewTextItemModel({
-                //               label: this.properties[i].title,
-                //               value: this.properties[i].id,
-                //               key: this.properties[i].title,
-                //               default: '',
-                //               multiline: false,
-                //               editable: true,
-                //               clickable: true
-                //           })
-                //   }
-                // }
-              }
-            }
-          }
-        },
-        err => {
-          console.log('Error occured while getting data');
+    if (this.listcontentdatas.length != 0) {
+      for (let i = 0; i < this.listcontentdatas.length; i++) {
+        if (this.selectedcontenttype == this.listcontentdatas[i].entry.id) {
+          console.log(this.properties = this.listcontentdatas[i].entry.properties);
+          this.listofproperties = this.properties;
         }
-      );
+      }
+    }
+
+    // this.listofproperties = [
+    //     new CardViewTextItemModel({
+    //         label: this.properties.title,
+    //         value: this.properties.id,
+    //         key: this.properties.title,
+    //         default: '',
+    //         multiline: false,
+    //         editable: true,
+    //         clickable: true
+    //     }),
+    //     new CardViewTextItemModel({
+    //         label: 'Rank',
+    //         value: 'Captain',
+    //         key: 'rank',
+    //         default: 'No rank entered',
+    //         multiline: false,
+    //         editable: true,
+    //         clickable: true
+    //     })
+    // ];
+
+    // if(this.properties.length!=0)
+    // {
+    //   for (let i = 0; i < this.properties.length; i++) {
+    //     this.listofproperties=new CardViewTextItemModel({
+    //               label: this.properties[i].title,
+    //               value: this.properties[i].id,
+    //               key: this.properties[i].title,
+    //               default: '',
+    //               multiline: false,
+    //               editable: true,
+    //               clickable: true
+    //           })
+    //   }
+    // }
+
   }
   getcontenttypelist() {
     var nodetype = "cm:content";
