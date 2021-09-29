@@ -18,9 +18,8 @@
         </mat-card>
       </adf-info-drawer-tab>
     </adf-info-drawer>
-    <adf-content-metadata-card [displayEmpty]="false" [preset]="'my-preset'" [node]="node">
+    <adf-content-metadata-card [displayEmpty]="false" [preset]="'*'" [node]="node">
     </adf-content-metadata-card>
-    <adf-card-view [properties]="properties"></adf-card-view>
   </ng-template>
 
   <adf-viewer [nodeId]="nodeId" (showViewerChange)="onViewerVisibilityChanged()">

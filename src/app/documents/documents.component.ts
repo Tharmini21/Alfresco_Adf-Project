@@ -54,21 +54,14 @@ export class DocumentsComponent {
   @ViewChild('documentList')
   documentList: DocumentListComponent;
 
-  ngAfterViewInit() {
-    console.log(this.documentList);
-  }
+  // ngAfterViewInit() {
+  //   console.log(this.documentList);
+  // }
 
   constructor(private notificationService: NotificationService, private preview: PreviewService, private apiService: ApiService, private dialog: MatDialog, private documentActions: DocumentActionsService, private contentservice: ContentTypeService) {
-    // documentActions.setHandler(
-    //   'my-handler',
-    //   this.myDocumentActionHandler.bind(this),
-
-    // );
+   
   }
 
-  // myDocumentActionHandler(obj: any) {
-  //   window.alert('my custom action handler');
-  // }
   uploadSuccess(event: any) {
     this.notificationService.openSnackMessage('File uploaded');
     this.documentList.reload();
@@ -93,14 +86,15 @@ export class DocumentsComponent {
   openSelectorDialog(event) {
     let entry = event.value.entry;
     var nodeId = entry.id;
-    this.dialog.open(
+    let dialogRef = this.dialog.open(
       MyFirstComponentComponent,
-      //MyDialogComponentComponent,
       {
-        //data: {'nodeId':nodeId}
+        //data:{node:entry},
         // width: '500px',
       }
     );
+    dialogRef.componentInstance.node = entry;
+    dialogRef.componentInstance.nodeId = nodeId;
   }
   myCustomActionAfterDelete(event) {
     let entry = event.value.entry;

@@ -17,6 +17,12 @@ import { CardViewTextItemModel } from '../cartview-textitem';
 import { UploadFilesEvent, ConfirmDialogComponent } from '@alfresco/adf-content-services';
 import { FileViewComponent } from '../file-view/file-view.component';
 import { MetadataComponentComponent } from '../metadata-component/metadata-component.component';
+import { ContentMetadataComponent } from '@alfresco/adf-content-services';
+import { Content } from '@angular/compiler/src/render3/r3_ast';
+import { ActivatedRoute, PRIMARY_OUTLET, Router } from '@angular/router';
+import { NodesApiService } from '@alfresco/adf-core';
+import { Node } from '@alfresco/js-api';
+
 @Component({
   selector: 'app-my-first-component',
   templateUrl: './my-first-component.component.html',
@@ -26,45 +32,17 @@ import { MetadataComponentComponent } from '../metadata-component/metadata-compo
   }]
 })
 
-
-// class CardViewStarDateItemModel extends CardViewBaseItemModel implements CardViewItem, DynamicComponentModel {
-//   type: string = 'text';
-//   inputType: string = 'text';
-//   get displayValue(): string {
-//     return (this.value);
-//   }
-// }
 export class MyFirstComponentComponent {
   //@Output() onDataChange: EventEmitter<ItemType> = new EventEmitter();
-  //@Input()
-  //data: FormGroup;
-  //@Input() data: {};
-  // @Output() newItemEvent = new EventEmitter<string>();
-  // addNewItem(value: string) {
-  //   this.newItemEvent.emit(value);
-  // }
-  // @Input() nodeId: string;
+  @Input() node: Node;
+  // @Input() data:string;
+  nodeId: string;
+  nodedata: Node;
+
 
   @ViewChild('documentList')
   documentList: DocumentListComponent;
 
-  // @ViewChild("stepper") stepperdata;
-  //@ViewChild("stepper") stepperComponent: MatStepper;
-  // @ViewChild("step1") stepOneComponent: MatStepper;
-  // @ViewChild("step2") stepTwoComponent: StepTwoComponent;
-  // @ViewChild("step3") stepThreeComponent: StepThreeComponent;
-
-  // get frmStepOne() {
-  //    return this.stepOneComponent ? this.stepOneComponent.frmStepOne : null;
-  // }
-
-  // get frmStepTwo() {
-  //    return this.stepTwoComponent ? this.stepTwoComponent.frmStepTwo : null;
-  // }
-
-  // get frmStepThree() {
-  //    return this.stepThreeComponent ? this.stepThreeComponent.frmStepThree : null;
-  // }
   selectedcontenttype: string;
   ischeckboxevent: boolean;
 
@@ -73,13 +51,67 @@ export class MyFirstComponentComponent {
   thirdFormGroup: FormGroup;
   isEditable = true;
   showuploaddialog = false;
-  constructor(private apiService: ApiService, private contentservice: ContentTypeService, private notificationService: NotificationService, private _formBuilder: FormBuilder, private dialog: MatDialog) { }
+  //nodeId: string = null;
+  constructor(private apiService: ApiService, private contentservice: ContentTypeService, private notificationService: NotificationService, private _formBuilder: FormBuilder, private dialog: MatDialog, private router: Router,
+    private route: ActivatedRoute,
+    private nodeApiService: NodesApiService) { }
 
   uploadSuccess(event: any) {
     this.notificationService.openSnackMessage('File uploaded');
     // this.documentList.reload();
   }
+  onUploadFiles(event) {
+    let entry = event.value;
+    console.log(entry);
+    this.showuploaddialog = true;
+    this.uploadSuccess(event);
+  }
+  onUploadFilescall(e: CustomEvent) {
+    console.log(e.detail.files);
+  }
+  onBeginUpload(event: UploadFilesEvent) {
+    const files = event.files || [];
+
+    if (files.length >= 1) {
+      event.pauseUpload();
+      // this.nodeApiService.getNodeMetadata(files[0].id).subscribe(
+      //   (node) => {
+      //     if (node) {
+      //       this.nodeId = files[0].id;
+      //       return;
+      //     }
+      //   },
+      // );
+      const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+        data: {
+          title: 'Upload',
+          message: `Are you sure you want to upload ${files.length} file(s)?`
+        },
+        minWidth: '250px'
+      });
+
+      dialogRef.afterClosed().subscribe(result => {
+        if (result === true) {
+          event.resumeUpload();
+        }
+      });
+    }
+  }
   ngOnInit() {
+    const id = this.nodeId;
+    if (id) {
+      this.nodeApiService.getNode(id).subscribe(
+        (node) => {
+          if (node) {
+            this.nodeId = id;
+            //  this.nodedata = node;
+            return;
+          }
+        },
+      );
+    }
+
+
     this.getcontenttypelist();
     this.firstFormGroup = this._formBuilder.group({
       firstCtrl: ['', Validators.required]
@@ -102,46 +134,24 @@ export class MyFirstComponentComponent {
     return this.form.controls;
   }
 
-  onUploadFiles(event) {
-    let entry = event.value;
-    console.log(entry);
-    // console.log(event);
-    this.showuploaddialog = true;
-    this.uploadSuccess(event);
-  }
-  onBeginUpload(event: UploadFilesEvent) {
-    const files = event.files || [];
 
-    if (files.length >= 1) {
-      event.pauseUpload();
-
-      const dialogRef = this.dialog.open(ConfirmDialogComponent, {
-        data: {
-          title: 'Upload',
-          message: `Are you sure you want to upload ${files.length} file(s)?`
-        },
-        minWidth: '250px'
-      });
-
-      dialogRef.afterClosed().subscribe(result => {
-        if (result === true) {
-          event.resumeUpload();
-        }
-      });
-    }
-  }
   lstproperties: any = [];
-  openDialog(event) {
-    // let entry = event.value.entry;
-    // this.lstproperties= entry.properties;
-    this.dialog.open(
+  openDialog() {
+    const dialogRef = this.dialog.open(
       // MetadataComponentComponent,
-      FileViewComponent,
+      //FileViewComponent,
+      ContentMetadataComponent,
       {
-        // data:this.lstproperties,
-        // width: '500px',
+        data: {
+          preset: "*",
+          node: this.node,
+          editable: true
+        },
+        width: '700px',
+        height: '800px'
       }
     );
+    dialogRef.componentInstance.node = this.node;
   }
   checkboxevent(event) {
     let entry = event.checked;
@@ -164,43 +174,6 @@ export class MyFirstComponentComponent {
         }
       }
     }
-
-    // this.listofproperties = [
-    //     new CardViewTextItemModel({
-    //         label: this.properties.title,
-    //         value: this.properties.id,
-    //         key: this.properties.title,
-    //         default: '',
-    //         multiline: false,
-    //         editable: true,
-    //         clickable: true
-    //     }),
-    //     new CardViewTextItemModel({
-    //         label: 'Rank',
-    //         value: 'Captain',
-    //         key: 'rank',
-    //         default: 'No rank entered',
-    //         multiline: false,
-    //         editable: true,
-    //         clickable: true
-    //     })
-    // ];
-
-    // if(this.properties.length!=0)
-    // {
-    //   for (let i = 0; i < this.properties.length; i++) {
-    //     this.listofproperties=new CardViewTextItemModel({
-    //               label: this.properties[i].title,
-    //               value: this.properties[i].id,
-    //               key: this.properties[i].title,
-    //               default: '',
-    //               multiline: false,
-    //               editable: true,
-    //               clickable: true
-    //           })
-    //   }
-    // }
-
   }
   getcontenttypelist() {
     var nodetype = "cm:content";
