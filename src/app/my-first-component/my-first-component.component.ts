@@ -1,14 +1,11 @@
-import { Component, ViewChild, Input, Output, EventEmitter } from '@angular/core';
+import { Component, ViewChild, Input, Output, EventEmitter, OnDestroy } from '@angular/core';
 import { FormBuilder, FormGroup, FormControl, Validators } from '@angular/forms';
 import { ApiService } from '../services/ApiService';
 import { NotificationService } from '@alfresco/adf-core';
-import { DocumentListComponent } from '@alfresco/adf-content-services';
 // import {Component, Inject} from '@angular/core';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { ContentNodeSelectorComponentData } from '../Classes/ContentTypeInterface';
 import { Subject } from 'rxjs';
-import { DocumentActionsService, ContentTypeService } from '@alfresco/adf-content-services';
-
 import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
 import { MatStepper } from '@angular/material/stepper';
 import { CardViewItem } from '../Classes/CartviewTextitem';
@@ -20,8 +17,10 @@ import { MetadataComponentComponent } from '../metadata-component/metadata-compo
 import { ContentMetadataComponent } from '@alfresco/adf-content-services';
 import { Content } from '@angular/compiler/src/render3/r3_ast';
 import { ActivatedRoute, PRIMARY_OUTLET, Router } from '@angular/router';
-import { NodesApiService } from '@alfresco/adf-core';
+import { NodesApiService, CardViewUpdateService, CardViewBaseItemModel, UpdateNotification,AlfrescoApiService } from '@alfresco/adf-core';
 import { Node } from '@alfresco/js-api';
+import { takeUntil, debounceTime, catchError, map } from 'rxjs/operators';
+import { ContentMetadataService, DocumentListComponent, ContentTypeService, DocumentActionsService } from '@alfresco/adf-content-services';
 
 @Component({
   selector: 'app-my-first-component',
@@ -38,10 +37,10 @@ export class MyFirstComponentComponent {
   // @Input() data:string;
   nodeId: string;
   nodedata: Node;
-
-
-  @ViewChild('documentList')
-  documentList: DocumentListComponent;
+  fileslist: any = [];
+  protected onDestroy$ = new Subject<boolean>();
+  // @ViewChild('documentList')
+  // documentList: DocumentListComponent;
 
   selectedcontenttype: string;
   ischeckboxevent: boolean;
@@ -54,17 +53,29 @@ export class MyFirstComponentComponent {
   //nodeId: string = null;
   constructor(private apiService: ApiService, private contentservice: ContentTypeService, private notificationService: NotificationService, private _formBuilder: FormBuilder, private dialog: MatDialog, private router: Router,
     private route: ActivatedRoute,
-    private nodeApiService: NodesApiService) { }
+    private nodeApiService: NodesApiService,
+    private cardViewUpdateService: CardViewUpdateService,
+    private alfrescoApiService: AlfrescoApiService) { }
 
   uploadSuccess(event: any) {
     this.notificationService.openSnackMessage('File uploaded');
     // this.documentList.reload();
   }
   onUploadFiles(event) {
-    let entry = event.value;
-    console.log(entry);
+    let entry = event.value.entry;
+    this.fileslist.push(entry);
+    //  this.fileslist[0].properties.filename = "Update Test Final";
+    if (this.fileslist.length > 1) {
+      this.nodedata = this.fileslist[0];
+    }
+    else {
+      this.nodedata = entry;
+    }
+    console.log("List of Files");
+    console.log(this.fileslist);
     this.showuploaddialog = true;
-    this.uploadSuccess(event);
+    this.notificationService.openSnackMessage('File uploaded');
+    //this.uploadSuccess(event);
   }
   onUploadFilescall(e: CustomEvent) {
     console.log(e.detail.files);
@@ -74,14 +85,6 @@ export class MyFirstComponentComponent {
 
     if (files.length >= 1) {
       event.pauseUpload();
-      // this.nodeApiService.getNodeMetadata(files[0].id).subscribe(
-      //   (node) => {
-      //     if (node) {
-      //       this.nodeId = files[0].id;
-      //       return;
-      //     }
-      //   },
-      // );
       const dialogRef = this.dialog.open(ConfirmDialogComponent, {
         data: {
           title: 'Upload',
@@ -97,21 +100,50 @@ export class MyFirstComponentComponent {
       });
     }
   }
-  ngOnInit() {
-    const id = this.nodeId;
-    if (id) {
-      this.nodeApiService.getNode(id).subscribe(
-        (node) => {
-          if (node) {
-            this.nodeId = id;
-            //  this.nodedata = node;
-            return;
-          }
-        },
-      );
+  checkboxevent(event) {
+    let entry = event.checked;
+    this.ischeckboxevent = entry;
+    if (this.ischeckboxevent == true && this.fileslist.length > 0) {
+      for (let i = 0; i <= this.fileslist.length; i++) {
+        this.fileslist[i].properties = this.fileslist[0].properties;
+      }
     }
+  }
+  changedProperties = {};
+  hasMetadataChanged = false;
+  private targetProperty: CardViewBaseItemModel;
 
-
+  ngOnInit() {
+    this.cardViewUpdateService.itemUpdated$
+      .subscribe(
+        (updatedNode: UpdateNotification) => {
+          this.hasMetadataChanged = true;
+          this.targetProperty = updatedNode.target;
+          this.updateChanges(updatedNode.changed);
+        }
+      );
+    // this.cardViewUpdateService.itemUpdated$
+    //   .pipe(
+    //     debounceTime(500),
+    //     takeUntil(this.onDestroy$))
+    //   .subscribe(
+    //     (updatedNode: UpdateNotification) => {
+    //       this.hasMetadataChanged = true;
+    //       this.targetProperty = updatedNode.target;
+    //       this.updateChanges(updatedNode.changed);
+    //     }
+    //   );
+    // const id = this.nodeId;
+    // if (id) {
+    //   this.nodeApiService.getNode(id).subscribe(
+    //     (node) => {
+    //       if (node) {
+    //         this.nodeId = id;
+    //         return;
+    //       }
+    //     },
+    //   );
+    // }
     this.getcontenttypelist();
     this.firstFormGroup = this._formBuilder.group({
       firstCtrl: ['', Validators.required]
@@ -134,7 +166,50 @@ export class MyFirstComponentComponent {
     return this.form.controls;
   }
 
+  updateChanges(updatedNodeChanges) {
+    Object.keys(updatedNodeChanges).map((propertyGroup: string) => {
+      if (typeof updatedNodeChanges[propertyGroup] === 'object') {
+        this.changedProperties[propertyGroup] = {
+          ...this.changedProperties[propertyGroup],
+          ...updatedNodeChanges[propertyGroup]
+        };
+      } else {
+        this.changedProperties[propertyGroup] = updatedNodeChanges[propertyGroup];
+      }
+    });
+  }
+  saveChanges() {
+    if (this.hasContentTypeChanged(this.changedProperties)) {
+      this.updateNode();
+    }
+  }
 
+  private updateNode() {
+    this.nodeApiService.updateNode(this.node.id, this.changedProperties).pipe(
+      catchError((err) => {
+        this.cardViewUpdateService.updateElement(this.targetProperty);
+        return (null);
+      }))
+      .subscribe((updatedNode) => {
+        if (updatedNode) {
+          if (this.hasContentTypeChanged(this.changedProperties)) {
+            this.cardViewUpdateService.updateNodeAspect(this.node);
+          }
+          this.revertChanges();
+          Object.assign(this.node, updatedNode);
+          this.alfrescoApiService.nodeUpdated.next(this.node);
+        }
+      });
+  }
+
+  private hasContentTypeChanged(changedProperties): boolean {
+    return !!changedProperties?.nodeType;
+  }
+
+  revertChanges() {
+    this.changedProperties = {};
+    this.hasMetadataChanged = false;
+  }
   lstproperties: any = [];
   openDialog() {
     const dialogRef = this.dialog.open(
@@ -142,23 +217,19 @@ export class MyFirstComponentComponent {
       //FileViewComponent,
       ContentMetadataComponent,
       {
-        data: {
-          preset: "*",
-          node: this.node,
-          editable: true
-        },
-        width: '700px',
-        height: '800px'
+        // data: {
+        //   preset: "*",
+        //   node: this.node,
+        //   editable: true
+        // },
+        // width: '700px',
+        // height: '800px'
       }
     );
     dialogRef.componentInstance.node = this.node;
   }
-  checkboxevent(event) {
-    let entry = event.checked;
-    this.ischeckboxevent = entry;
-  }
+
   listcontentdatas: any;
-  newlstcontentdata: any = [];
   properties: any = [];
   listofproperties: any = [];
 
@@ -166,14 +237,6 @@ export class MyFirstComponentComponent {
     this.frmStepOne();
     let entry = event.value;
     this.selectedcontenttype = entry;
-    if (this.listcontentdatas.length != 0) {
-      for (let i = 0; i < this.listcontentdatas.length; i++) {
-        if (this.selectedcontenttype == this.listcontentdatas[i].entry.id) {
-          console.log(this.properties = this.listcontentdatas[i].entry.properties);
-          this.listofproperties = this.properties;
-        }
-      }
-    }
   }
   getcontenttypelist() {
     var nodetype = "cm:content";

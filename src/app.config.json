@@ -188,7 +188,9 @@
   ],
   "content-metadata": {
     "presets": {
-      "default": "*"
+      "my-preset": {
+        "properties": "*"
+      }
     }
   },
   "logLevel": "trace"
