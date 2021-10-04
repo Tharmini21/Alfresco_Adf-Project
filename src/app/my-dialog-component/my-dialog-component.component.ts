@@ -1,31 +1,32 @@
 import { Component, OnInit } from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
+import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { ContentTypeService } from '@alfresco/adf-content-services';
 
 @Component({
   selector: 'app-my-dialog-component',
   templateUrl: './my-dialog-component.component.html',
   styleUrls: ['./my-dialog-component.component.css']
-  // providers: [{
-  //   provide: STEPPER_GLOBAL_OPTIONS, useValue: { showError: true }
-  // }]
 })
 export class MyDialogComponentComponent implements OnInit {
-  isLinear = true;
-  firstFormGroup: FormGroup;
-  secondFormGroup: FormGroup;
-
-  constructor(private _formBuilder: FormBuilder) {}
-
+  
+  constructor(private dialog: MatDialog, private contentservice: ContentTypeService) {}
+  listcontentdatas: any;
   ngOnInit() {
-    this.firstFormGroup = this._formBuilder.group({
-      firstCtrl: ['', Validators.required]
-    });
-    this.secondFormGroup = this._formBuilder.group({
-      secondCtrl: ['', Validators.required]
-    });
+   this.getcontenttypelist();
   }
-
+  getcontenttypelist() {
+    var nodetype = "cm:content";
+    this.contentservice.getContentTypeChildren(nodetype)
+      .subscribe(
+        res => {
+          this.listcontentdatas = res;
+        },
+        err => {
+          console.log('Error occured while searching data');
+        }
+      );
+  }
 }
 
 
