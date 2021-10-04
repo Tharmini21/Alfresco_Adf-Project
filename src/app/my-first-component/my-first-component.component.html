@@ -1,6 +1,6 @@
-<button mat-raised-button (click)="isEditable = !isEditable">
+<!-- <button mat-raised-button (click)="isEditable = !isEditable">
     {{!isEditable ? 'Enable edit mode' : 'Disable edit mode'}}
-</button>
+</button> -->
 <mat-horizontal-stepper linear #stepper>
     <mat-step [stepControl]="firstFormGroup" [editable]="isEditable">
         <form [formGroup]="firstFormGroup">
@@ -44,11 +44,7 @@
     </mat-step>
     <mat-step label="Apply Content Type" [stepControl]="thirdFormGroup" [editable]="isEditable">
         <form [formGroup]="thirdFormGroup">
-            <!-- <button mat-button type="button" (click)="onEditPress()">EditClick</button> -->
-            <!-- <button mat-button type="button" (click)="openDialog()">Properties</button> -->
-            <!-- <adf-content-metadata-card [node]="nodedata" adf-infinite-scroll
-            (scrollEnd)="load()">
-            </adf-content-metadata-card> -->
+            
             <adf-content-metadata-card [node]="nodedata" [preset]="'my-preset'">
             </adf-content-metadata-card>
             <!-- <adf-content-metadata-card [displayEmpty]="false" [preset]="'my-preset'" [node]="node">
@@ -57,7 +53,7 @@
             <!-- <step3-component #step3></step3-component> -->
             <div>
                 <button mat-button matStepperPrevious type="button">Back</button>
-                <button mat-button matStepperNext type="button">Next</button>
+                <!-- <button mat-button matStepperNext type="button">Next</button> -->
             </div>
         </form>
     </mat-step>

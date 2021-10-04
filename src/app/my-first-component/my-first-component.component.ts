@@ -17,7 +17,7 @@ import { MetadataComponentComponent } from '../metadata-component/metadata-compo
 import { ContentMetadataComponent } from '@alfresco/adf-content-services';
 import { Content } from '@angular/compiler/src/render3/r3_ast';
 import { ActivatedRoute, PRIMARY_OUTLET, Router } from '@angular/router';
-import { NodesApiService, CardViewUpdateService, CardViewBaseItemModel, UpdateNotification,AlfrescoApiService } from '@alfresco/adf-core';
+import { NodesApiService, CardViewUpdateService, CardViewBaseItemModel, UpdateNotification, AlfrescoApiService } from '@alfresco/adf-core';
 import { Node } from '@alfresco/js-api';
 import { takeUntil, debounceTime, catchError, map } from 'rxjs/operators';
 import { ContentMetadataService, DocumentListComponent, ContentTypeService, DocumentActionsService } from '@alfresco/adf-content-services';
@@ -57,6 +57,9 @@ export class MyFirstComponentComponent {
     private cardViewUpdateService: CardViewUpdateService,
     private alfrescoApiService: AlfrescoApiService) { }
 
+  onUploadFilescall(e: CustomEvent) {
+    console.log(e.detail.files);
+  }
   uploadSuccess(event: any) {
     this.notificationService.openSnackMessage('File uploaded');
     // this.documentList.reload();
@@ -65,21 +68,20 @@ export class MyFirstComponentComponent {
     let entry = event.value.entry;
     this.fileslist.push(entry);
     //  this.fileslist[0].properties.filename = "Update Test Final";
+    
     if (this.fileslist.length > 1) {
       this.nodedata = this.fileslist[0];
     }
     else {
       this.nodedata = entry;
     }
-    console.log("List of Files");
-    console.log(this.fileslist);
+    // console.log("List of Files");
+    // console.log(this.fileslist);
     this.showuploaddialog = true;
     this.notificationService.openSnackMessage('File uploaded');
     //this.uploadSuccess(event);
   }
-  onUploadFilescall(e: CustomEvent) {
-    console.log(e.detail.files);
-  }
+
   onBeginUpload(event: UploadFilesEvent) {
     const files = event.files || [];
 
@@ -104,9 +106,10 @@ export class MyFirstComponentComponent {
     let entry = event.checked;
     this.ischeckboxevent = entry;
     if (this.ischeckboxevent == true && this.fileslist.length > 0) {
-      for (let i = 0; i <= this.fileslist.length; i++) {
-        this.fileslist[i].properties = this.fileslist[0].properties;
-      }
+      this.updateNode();
+      // for (let i = 0; i <= this.fileslist.length; i++) {
+      //   this.fileslist[i].properties = this.fileslist[0].properties;
+      // }
     }
   }
   changedProperties = {};
@@ -120,30 +123,15 @@ export class MyFirstComponentComponent {
           this.hasMetadataChanged = true;
           this.targetProperty = updatedNode.target;
           this.updateChanges(updatedNode.changed);
+          if (this.ischeckboxevent == true && this.fileslist.length > 0) {
+            for (let i = 0; i <= this.fileslist.length; i++) {
+             this.cardViewUpdateService.update(this.targetProperty,updatedNode.changed)
+              //this.fileslist[i].properties = this.cardViewUpdateService.update(this.targetProperty,updatedNode.changed)
+            }
+          }
         }
       );
-    // this.cardViewUpdateService.itemUpdated$
-    //   .pipe(
-    //     debounceTime(500),
-    //     takeUntil(this.onDestroy$))
-    //   .subscribe(
-    //     (updatedNode: UpdateNotification) => {
-    //       this.hasMetadataChanged = true;
-    //       this.targetProperty = updatedNode.target;
-    //       this.updateChanges(updatedNode.changed);
-    //     }
-    //   );
-    // const id = this.nodeId;
-    // if (id) {
-    //   this.nodeApiService.getNode(id).subscribe(
-    //     (node) => {
-    //       if (node) {
-    //         this.nodeId = id;
-    //         return;
-    //       }
-    //     },
-    //   );
-    // }
+    
     this.getcontenttypelist();
     this.firstFormGroup = this._formBuilder.group({
       firstCtrl: ['', Validators.required]
@@ -183,23 +171,24 @@ export class MyFirstComponentComponent {
       this.updateNode();
     }
   }
-
   private updateNode() {
-    this.nodeApiService.updateNode(this.node.id, this.changedProperties).pipe(
-      catchError((err) => {
-        this.cardViewUpdateService.updateElement(this.targetProperty);
-        return (null);
-      }))
-      .subscribe((updatedNode) => {
-        if (updatedNode) {
-          if (this.hasContentTypeChanged(this.changedProperties)) {
-            this.cardViewUpdateService.updateNodeAspect(this.node);
+    for (let i = 0; i <= this.fileslist.length; i++) {
+      this.nodeApiService.updateNode( this.fileslist[i].id, this.changedProperties).pipe(
+        catchError((err) => {
+          this.cardViewUpdateService.updateElement(this.targetProperty);
+          return (null);
+        }))
+        .subscribe((updatedNode) => {
+          if (updatedNode) {
+            if (this.hasContentTypeChanged(this.changedProperties)) {
+              this.cardViewUpdateService.updateNodeAspect(this.fileslist[i]);
+            }
+            this.revertChanges();
+            Object.assign(this.fileslist[i], updatedNode);
+            this.alfrescoApiService.nodeUpdated.next(this.fileslist[i]);
           }
-          this.revertChanges();
-          Object.assign(this.node, updatedNode);
-          this.alfrescoApiService.nodeUpdated.next(this.node);
-        }
-      });
+        });
+    }
   }
 
   private hasContentTypeChanged(changedProperties): boolean {
