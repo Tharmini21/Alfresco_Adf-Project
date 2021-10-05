@@ -1,7 +1,7 @@
 <h1 mat-dialog-title>Select Content Type</h1>
 <mat-form-field appearance="fill">
     <label for="contenttype">Content type</label>
-    <mat-select formControlName="firstCtrl" (selectionChange)="changecontenttype($event)"
+    <mat-select (selectionChange)="changecontenttype($event)"
         aria-required="true">
         <mat-option *ngFor="let ct of listcontentdatas" [value]="ct.entry.id">
             {{ct.entry.id}}

@@ -26,7 +26,7 @@
             <ng-template matStepLabel>Fill out your Document</ng-template>
             <adf-upload-button [rootFolderId]="nodeId" [adf-check-allowable-operation]="'create'" [multipleFiles]="true"
                 [nodeType]="selectedcontenttype" (beginUpload)="onBeginUpload($event)"
-                (success)="onUploadFiles($event)">
+                (success)="onUploadFiles($event)"  (error)="onUploadError($event)">
             </adf-upload-button>
             <!-- <adf-upload-button [rootFolderId]="nodeId" [adf-check-allowable-operation]="'create'" [multipleFiles]="true"
                 (success)="onUploadFilescall($event)">
@@ -57,9 +57,12 @@
             </div>
         </form>
     </mat-step>
-    <!-- <mat-step label="LastStep">
+    <mat-step label="Status">
+        <!-- <div [hidden]="!visible">
+            Upload failed: {{ errorCode | adfFileUploadError }}
+        </div> -->
         <div>
             <button mat-button matDialogClose>Done</button>
         </div>
-    </mat-step> -->
+    </mat-step>
 </mat-horizontal-stepper>

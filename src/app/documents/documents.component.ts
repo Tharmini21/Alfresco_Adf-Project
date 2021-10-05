@@ -96,12 +96,15 @@ export class DocumentsComponent {
     dialogRef.componentInstance.node = entry;
     dialogRef.componentInstance.nodeId = nodeId;
   }
-  openbulkupdateDialog(){
+  openbulkupdateDialog(event){
+    let entry = event.value.entry;
+    var nodeId = entry.id;
     let dialogRef = this.dialog.open(
       MyDialogComponentComponent,
       {
       }
     );
+    dialogRef.componentInstance.nodeId = nodeId;
   }
   myCustomActionAfterDelete(event) {
     let entry = event.value.entry;

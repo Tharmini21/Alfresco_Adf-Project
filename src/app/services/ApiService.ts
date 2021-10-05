@@ -74,6 +74,25 @@ export class ApiService {
          });
         return this.httpclient.get(`${this.dataUrl}/alfresco/api/-default-/public/alfresco/versions/1/types?where=(${searchdata})`,{ headers: reqHeader});
     }
+    getnodedata_datatable(nodeId: string ,nodeType:string) {
+        let node_id = nodeId;
+        node_id = node_id.replace(/"/g, "");
+        var reqHeader = new HttpHeaders({ 
+            'Content-Type': 'application/json',
+            'Authorization': "Basic YWRtaW46QWxmcmVzY29AMTIz"
+         });
+       // (nodeType='finance:FileId')
+        return this.httpclient.get(`${this.dataUrl}/alfresco/api/-default-/public/alfresco/versions/1/nodes/${node_id}/children?where=(nodeType=${nodeType})`,{ headers: reqHeader });
+    }
+    getnodedatalist(nodeId: string) {
+        let node_id = nodeId;
+        node_id = node_id.replace(/"/g, "");
+        var reqHeader = new HttpHeaders({ 
+            'Content-Type': 'application/json',
+            'Authorization': "Basic YWRtaW46QWxmcmVzY29AMTIz"
+         });
+        return this.httpclient.get(`${this.dataUrl}/alfresco/api/-default-/public/alfresco/versions/1/nodes/${node_id}/children`,{ headers: reqHeader });
+    }
 
     public generateQueryBody(searchTerm: string, maxResults: number, skipCount: number): QueryBody {
         const defaultQueryBody: QueryBody = {

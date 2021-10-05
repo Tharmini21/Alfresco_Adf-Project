@@ -50,7 +50,6 @@ export class MyFirstComponentComponent {
   thirdFormGroup: FormGroup;
   isEditable = true;
   showuploaddialog = false;
-  //nodeId: string = null;
   constructor(private apiService: ApiService, private contentservice: ContentTypeService, private notificationService: NotificationService, private _formBuilder: FormBuilder, private dialog: MatDialog, private router: Router,
     private route: ActivatedRoute,
     private nodeApiService: NodesApiService,
@@ -60,6 +59,10 @@ export class MyFirstComponentComponent {
   onUploadFilescall(e: CustomEvent) {
     console.log(e.detail.files);
   }
+ // visible: boolean = true;
+  onUploadError(e: CustomEvent) {
+    console.log(e.detail.files);
+  }
   uploadSuccess(event: any) {
     this.notificationService.openSnackMessage('File uploaded');
     // this.documentList.reload();
@@ -67,19 +70,14 @@ export class MyFirstComponentComponent {
   onUploadFiles(event) {
     let entry = event.value.entry;
     this.fileslist.push(entry);
-    //  this.fileslist[0].properties.filename = "Update Test Final";
-    
     if (this.fileslist.length > 1) {
       this.nodedata = this.fileslist[0];
     }
     else {
       this.nodedata = entry;
     }
-    // console.log("List of Files");
-    // console.log(this.fileslist);
     this.showuploaddialog = true;
     this.notificationService.openSnackMessage('File uploaded');
-    //this.uploadSuccess(event);
   }
 
   onBeginUpload(event: UploadFilesEvent) {
@@ -133,6 +131,7 @@ export class MyFirstComponentComponent {
       );
     
     this.getcontenttypelist();
+   
     this.firstFormGroup = this._formBuilder.group({
       firstCtrl: ['', Validators.required]
     });
@@ -221,9 +220,8 @@ export class MyFirstComponentComponent {
   listcontentdatas: any;
   properties: any = [];
   listofproperties: any = [];
-
   changecontenttype(event) {
-    this.frmStepOne();
+    //this.frmStepOne();
     let entry = event.value;
     this.selectedcontenttype = entry;
   }
@@ -240,6 +238,7 @@ export class MyFirstComponentComponent {
       );
   }
 };
+
 
 
 
