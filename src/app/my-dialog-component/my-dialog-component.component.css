@@ -1,7 +1,8 @@
-.mat-stepper-horizontal {
-    margin-top: 8px;
+  table {
+    width: 100%;
+    text-align: left;
+    border-collapse: collapse;
   }
-  
-  .mat-form-field {
-    margin-top: 16px;
+  table, td, th {
+    border: 1px solid black;
   }

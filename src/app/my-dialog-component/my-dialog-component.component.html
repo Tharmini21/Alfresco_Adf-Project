@@ -1,10 +1,92 @@
-<h1 mat-dialog-title>Select Content Type</h1>
-<mat-form-field appearance="fill">
-    <label for="contenttype">Content type</label>
-    <mat-select (selectionChange)="changecontenttype($event)"
-        aria-required="true">
-        <mat-option *ngFor="let ct of listcontentdatas" [value]="ct.entry.id">
-            {{ct.entry.id}}
-        </mat-option>
-    </mat-select>
-</mat-form-field>
+<ng-container>
+  <h1 mat-dialog-title>Select Content Type</h1>
+  <mat-form-field appearance="fill">
+      <label for="contenttype">Content type</label>
+      <mat-select (selectionChange)="changecontenttype($event)" aria-required="true">
+          <mat-option *ngFor="let ct of listcontentdatas" [value]="ct.entry.id">
+              {{ct.entry.id}}
+          </mat-option>
+      </mat-select>
+  </mat-form-field>
+  <div *ngIf="selectedcontenttype">
+    <table class="table table-bordered table-responsive-md table-striped text-center">
+   <thead>
+       <tr>
+           <th>Name</th>
+           <th>Content Type</th>
+           <th>Created By</th>
+           <th>Created On</th>
+           <th>Modified By</th>
+           <th>Modified On</th>
+           <!-- <th>Action</th> -->
+       </tr>
+   </thead>
+   <tbody>
+       <tr *ngFor="let item of listnodewithcontenttype;let id = index">
+           <td>
+             <span contenteditable="true" (keyup)="changeValue(id, 'entry.name', $event)" (blur)="updateList(id, 'entry.name', $event)">{{ item.entry.name }}</span>
+            </td>
+           <td>
+            <span  (keyup)="changeValue(id, 'entry.nodeType', $event)" (blur)="updateList(id, 'entry.nodeType', $event)">{{ item.entry.nodeType }}</span>
+          </td>
+          <td>
+            <span  (keyup)="changeValue(id, 'entry.createdByUser.displayName', $event)" (blur)="updateList(id, 'entry.createdByUser.displayName', $event)">{{ item.entry.createdByUser.displayName }}</span>
+          </td>
+          <td>
+            <span  (keyup)="changeValue(id, 'entry.createdAt', $event)" (blur)="updateList(id, 'entry.createdAt', $event)">{{ item.entry.createdAt | date:'yyyy-MM-dd hh:mm' }}</span>
+          </td>
+          <td>
+            <span contenteditable="true" (keyup)="changeValue(id, 'entry.modifiedByUser.displayName', $event)" (blur)="updateList(id, 'entry.modifiedByUser.displayName', $event)">{{ item.entry.modifiedByUser.displayName }}</span>
+          </td>
+          <td>
+            <span contenteditable="true" (keyup)="changeValue(id, 'entry.modifiedAt', $event)"  (blur)="updateList(id, 'entry.modifiedAt', $event)">{{ item.entry.modifiedAt | date:'yyyy-MM-dd hh:mm' }}</span>
+          </td>
+           <!-- <td>
+            <span class="table-editable">
+              <button type="button">Edit</button>
+            </span>
+            <span>
+              <button type="button" mdbBtn color="danger" rounded="true" size="sm" class="my-0" (click)="remove(id)">Remove</button>
+            </span>
+           </td> -->
+       </tr>
+   </tbody>
+ </table>
+ </div>
+ 
+</ng-container>
+
+<!-- <div class="mat-elevation-z8">
+    <table mat-table [dataSource]="dataSource">
+      <ng-container matColumnDef="name">
+        <th mat-header-cell *matHeaderCellDef> Name </th>
+        <td mat-cell *matCellDef="let element"> {{element.name}} </td>
+      </ng-container>
+      <ng-container matColumnDef="Content Type">
+        <th mat-header-cell *matHeaderCellDef> Content Type </th>
+        <td mat-cell *matCellDef="let element"> {{element.name}} </td>
+      </ng-container>
+  
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+  </div> -->
+<!-- <ng-container *ngFor="let col of listnodewithcontenttype" [matColumnDef]="col">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> {{ col }} </th>
+        <td mat-cell *matCellDef="let element"> {{ element[col] }} </td>
+    </ng-container> -->
+    
+    <!-- <table mat-table [dataSource]="dataSource" class="mat-elevation-z8 demo-table">
+        <ng-container *ngFor="let column of columns" [matColumnDef]="column.columnDef">
+          <th mat-header-cell *matHeaderCellDef>
+            {{column.header}}
+          </th>
+          <td mat-cell *matCellDef="let row">
+            {{column.cell(row)}}
+          </td>
+        </ng-container>
+      
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      </table> -->
+

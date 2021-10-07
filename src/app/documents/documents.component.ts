@@ -32,7 +32,7 @@ import { ContentNodeSelectorComponentData } from '../Classes/ContentTypeInterfac
 import { Subject } from 'rxjs';
 import { DocumentActionsService, ContentTypeService } from '@alfresco/adf-content-services';
 import { MyDialogComponentComponent } from '../my-dialog-component/my-dialog-component.component';
-
+import { MetadataComponentComponent } from '../metadata-component/metadata-component.component';
 
 @Component({
   selector: 'app-documents',
@@ -102,9 +102,19 @@ export class DocumentsComponent {
     let dialogRef = this.dialog.open(
       MyDialogComponentComponent,
       {
+         // width: '700px',
       }
     );
     dialogRef.componentInstance.nodeId = nodeId;
+  }
+  openmetaDialog(event){
+    let entry = event.value.entry;
+    var nodeId = entry.id;
+    let dialogRef = this.dialog.open(
+      MetadataComponentComponent,
+      {
+      }
+    );
   }
   myCustomActionAfterDelete(event) {
     let entry = event.value.entry;
