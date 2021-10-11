@@ -189,7 +189,8 @@
   "content-metadata": {
     "presets": {
       "my-preset": {
-        "properties": "*"
+        "properties": "*",
+        "editable":false
       }
     }
   },

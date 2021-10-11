@@ -24,8 +24,8 @@
     <mat-step [stepControl]="secondFormGroup" [editable]="isEditable">
         <form [formGroup]="secondFormGroup">
             <ng-template matStepLabel>Fill out your Document</ng-template>
-            <adf-upload-button [rootFolderId]="nodeId" [adf-check-allowable-operation]="'create'" [multipleFiles]="true"
-                [nodeType]="selectedcontenttype" (beginUpload)="onBeginUpload($event)"
+            <adf-upload-button [rootFolderId]="nodeId" [adf-check-allowable-operation]="'create'" [multipleFiles]="true" [versioning]="false"
+                [nodeType]="selectedcontenttype" (beginUpload)="onBeginUpload($event)"  
                 (success)="onUploadFiles($event)"  (error)="onUploadError($event)">
             </adf-upload-button>
             <!-- <adf-upload-button [rootFolderId]="nodeId" [adf-check-allowable-operation]="'create'" [multipleFiles]="true"
@@ -45,7 +45,7 @@
     <mat-step label="Apply Content Type" [stepControl]="thirdFormGroup" [editable]="isEditable">
         <form [formGroup]="thirdFormGroup">
             
-            <adf-content-metadata-card [node]="nodedata" [preset]="'my-preset'">
+            <adf-content-metadata-card [node]="nodedata" [preset]="'my-preset'" [readOnly]="true">
             </adf-content-metadata-card>
             <!-- <adf-content-metadata-card [displayEmpty]="false" [preset]="'my-preset'" [node]="node">
             </adf-content-metadata-card> -->

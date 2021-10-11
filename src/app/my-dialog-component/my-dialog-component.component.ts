@@ -5,7 +5,7 @@ import { ContentTypeService } from '@alfresco/adf-content-services';
 import { ApiService } from '../services/ApiService';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
-import { JsonCellComponent } from '@alfresco/adf-core';
+import { JsonCellComponent, NodesApiService ,AlfrescoApiService,CardViewUpdateService,CardViewBaseItemModel, UpdateNotification} from '@alfresco/adf-core';
 import { element } from 'protractor';
 
 
@@ -27,18 +27,38 @@ export class MyDialogComponentComponent implements OnInit {
   nodeId: string;
   selectedcontenttype: string;
   editField: string;
-  constructor(private dialog: MatDialog, private contentservice: ContentTypeService, private apiService: ApiService) { }
+  isedit: boolean;
+  dtlistlength: boolean;
+  constructor(private dialog: MatDialog, private contentservice: ContentTypeService, private apiService: ApiService, private nodeApiService: NodesApiService,private alfrescoApiService: AlfrescoApiService,  private cardViewUpdateService: CardViewUpdateService) { }
   listcontentdatas: any = [];
   listnodedatas: any = [];
   listnodewithcontenttype: any = [];
+  ischeckboxevent: boolean;
+  changedProperties = {};
+  hasMetadataChanged = false;
+  private targetProperty: CardViewBaseItemModel;
   ngOnInit() {
     this.getcontenttypelist();
     //this.getnodedatalist();
+    this.cardViewUpdateService.itemUpdated$
+    .subscribe(
+      (updatedNode: UpdateNotification) => {
+        this.hasMetadataChanged = true;
+        this.targetProperty = updatedNode.target;
+        this.updateChanges(updatedNode.changed);
+        // if (this.ischeckboxevent == true && this.fileslist.length > 0) {
+        //   for (let i = 0; i < this.fileslist.length; i++) {
+        //     this.cardViewUpdateService.update(this.targetProperty, updatedNode.changed)
+        //   }
+        // }
+      }
+    );
   }
   changecontenttype(event) {
+    this.listnodewithcontenttype = [];
     let entry = event.value;
     this.selectedcontenttype = entry;
-    
+
     // if (this.listnodedatas != null && this.listnodedatas.list.entries.length!=0) {
     //   var nodelstlength=this.listnodedatas.list.entries.length;
     //   for (let i = 0; i < nodelstlength; i++) {
@@ -49,6 +69,7 @@ export class MyDialogComponentComponent implements OnInit {
     //   console.log(this.listnodewithcontenttype);
     // }
     this.getnodedatalist();
+
   }
   getcontenttypelist() {
     var nodetype = "cm:content";
@@ -62,18 +83,24 @@ export class MyDialogComponentComponent implements OnInit {
         }
       );
   }
-  
+
   getnodedatalist() {
     this.apiService.getnodedata_datatable(this.nodeId, this.selectedcontenttype)
       .subscribe(
         res => {
           this.listnodedatas = res;
-          let lengthval=this.listnodedatas.list.entries.length;
+          let lengthval = this.listnodedatas.list.entries.length;
           for (let i = 0; i < lengthval; i++) {
 
             JSON.parse(this.listnodewithcontenttype.push(this.listnodedatas.list.entries[i]));
           }
           console.log(this.listnodewithcontenttype);
+          if (this.listnodewithcontenttype.length == 0) {
+            this.dtlistlength = false;
+          }
+          else {
+            this.dtlistlength = true;
+          }
         },
         err => {
           console.log('Error occured while fetching node data');
@@ -83,14 +110,49 @@ export class MyDialogComponentComponent implements OnInit {
   updateList(id: number, property: string, event: any) {
     const editField = event.target.textContent;
     this.listnodewithcontenttype[id][property] = editField;
+    // this.changedProperties = ({this.listnodewithcontenttype[id][property]:editField});
+    var propdata = property;
+    this.changedProperties = { name: editField };
+    // this.updateChanges({property:editField});
+    this.isedit = true;
   }
-
+  updateChanges(updatedNodeChanges) {
+    Object.keys(updatedNodeChanges).map((propertyGroup: string) => {
+      if (typeof updatedNodeChanges[propertyGroup] === 'object') {
+        this.changedProperties[propertyGroup] = {
+          ...this.changedProperties[propertyGroup],
+          ...updatedNodeChanges[propertyGroup]
+        };
+      } else {
+        this.changedProperties[propertyGroup] = updatedNodeChanges[propertyGroup];
+      }
+    });
+  }
   changeValue(id: number, property: string, event: any) {
     this.editField = event.target.textContent;
+    this.isedit = true;
+  }
+  checkboxevent(event) {
+    let entry = event.checked;
+    this.ischeckboxevent = entry;
+    if (this.ischeckboxevent == true && this.listnodewithcontenttype.length > 0 && this.isedit == true) {
+      this.updateNode();
+    }
+  }
+  private updateNode() {
+    for (let i = 0; i <= this.listnodewithcontenttype.length; i++) {
+      this.nodeApiService.updateNode(this.listnodewithcontenttype[i].entry.id, this.changedProperties).subscribe(data => {
+        Object.assign(this.listnodewithcontenttype[i], data);
+        this.alfrescoApiService.nodeUpdated.next(this.listnodewithcontenttype[i]);
+        console.log(data);
+      }, error => {
+        console.log(error);
+      });
+    }
   }
 
   ELEMENT_DATA: dtElement[] = this.listnodewithcontenttype;
- 
+
   columns = [
     {
       columnDef: 'name',
@@ -104,7 +166,7 @@ export class MyDialogComponentComponent implements OnInit {
     }
   ];
   dataSource = this.ELEMENT_DATA;
-  
+
   displayedColumns = this.columns.map(c => c.columnDef);
   // const ELEMENT_DATA: dtcolumns[] = [
 
@@ -112,8 +174,8 @@ export class MyDialogComponentComponent implements OnInit {
   //displayedColumns: string[] = ['name', 'Content Type', 'Created By', 'Modified On'];
   displayedColumnsData: string[] = ['name', 'Content Type'];
   // dataSource = ELEMENT_DATA;
-  
-  
+
+
 }
 
 

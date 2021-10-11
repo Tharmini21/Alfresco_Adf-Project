@@ -56,10 +56,10 @@ export class MyFirstComponentComponent {
     private cardViewUpdateService: CardViewUpdateService,
     private alfrescoApiService: AlfrescoApiService) { }
 
-  onUploadFilescall(e: CustomEvent) {
+  onUploadFilescall(e) {
     console.log(e.detail.files);
   }
- // visible: boolean = true;
+  // visible: boolean = true;
   onUploadError(e: CustomEvent) {
     console.log(e.detail.files);
   }
@@ -84,20 +84,24 @@ export class MyFirstComponentComponent {
     const files = event.files || [];
 
     if (files.length >= 1) {
-      event.pauseUpload();
-      const dialogRef = this.dialog.open(ConfirmDialogComponent, {
-        data: {
-          title: 'Upload',
-          message: `Are you sure you want to upload ${files.length} file(s)?`
-        },
-        minWidth: '250px'
-      });
+      for (let i = 0; i < files.length; i++) {
+        if (files[i].size > 200000) {
+          event.pauseUpload();
+          const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+            data: {
+              title: 'Upload',
+              message: `Are you sure you want to upload ${files.length} file(s)?`
+            },
+            minWidth: '250px'
+          });
 
-      dialogRef.afterClosed().subscribe(result => {
-        if (result === true) {
-          event.resumeUpload();
+          dialogRef.afterClosed().subscribe(result => {
+            if (result === true) {
+              event.resumeUpload();
+            }
+          });
         }
-      });
+      }
     }
   }
   checkboxevent(event) {
@@ -122,16 +126,15 @@ export class MyFirstComponentComponent {
           this.targetProperty = updatedNode.target;
           this.updateChanges(updatedNode.changed);
           if (this.ischeckboxevent == true && this.fileslist.length > 0) {
-            for (let i = 0; i <= this.fileslist.length; i++) {
-             this.cardViewUpdateService.update(this.targetProperty,updatedNode.changed)
-              //this.fileslist[i].properties = this.cardViewUpdateService.update(this.targetProperty,updatedNode.changed)
+            for (let i = 0; i < this.fileslist.length; i++) {
+              this.cardViewUpdateService.update(this.targetProperty, updatedNode.changed)
             }
           }
         }
       );
-    
+
     this.getcontenttypelist();
-   
+
     this.firstFormGroup = this._formBuilder.group({
       firstCtrl: ['', Validators.required]
     });
@@ -142,8 +145,8 @@ export class MyFirstComponentComponent {
     //   thirdCtrl: ['', Validators.required]
     // });
   }
-  frmStepOne() { console.log(this.firstFormGroup.get('firstCtrl').value); return this.firstFormGroup.get('firstCtrl').value; }
-  frmStepTwo() { console.log(this.firstFormGroup.get('secondCtrl').value); return this.secondFormGroup.get('secondCtrl'); }
+  // frmStepOne() { console.log(this.firstFormGroup.get('firstCtrl').value); return this.firstFormGroup.get('firstCtrl').value; }
+  // frmStepTwo() { console.log(this.firstFormGroup.get('secondCtrl').value); return this.secondFormGroup.get('secondCtrl'); }
 
   form = new FormGroup({
     contenttype: new FormControl('', Validators.required)
@@ -171,8 +174,8 @@ export class MyFirstComponentComponent {
     }
   }
   private updateNode() {
-    for (let i = 0; i <= this.fileslist.length; i++) {
-      this.nodeApiService.updateNode( this.fileslist[i].id, this.changedProperties).pipe(
+    for (let i = 0; i < this.fileslist.length; i++) {
+      this.nodeApiService.updateNode(this.fileslist[i].id, this.changedProperties).pipe(
         catchError((err) => {
           this.cardViewUpdateService.updateElement(this.targetProperty);
           return (null);
