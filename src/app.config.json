@@ -190,7 +190,7 @@
     "presets": {
       "my-preset": {
         "properties": "*",
-        "editable":false
+        "readOnlyProperties": ["cm:author"]
       }
     }
   },

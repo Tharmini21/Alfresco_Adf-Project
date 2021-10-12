@@ -1,7 +1,7 @@
 import { Component, ViewChild, Input, Output, EventEmitter, OnDestroy } from '@angular/core';
 import { FormBuilder, FormGroup, FormControl, Validators } from '@angular/forms';
 import { ApiService } from '../services/ApiService';
-import { NotificationService } from '@alfresco/adf-core';
+import { FileUploadCompleteEvent, FileUploadErrorEvent, NotificationService, UploadService } from '@alfresco/adf-core';
 // import {Component, Inject} from '@angular/core';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { ContentNodeSelectorComponentData } from '../Classes/ContentTypeInterface';
@@ -50,18 +50,30 @@ export class MyFirstComponentComponent {
   thirdFormGroup: FormGroup;
   isEditable = true;
   showuploaddialog = false;
+  visible: boolean = false;
   constructor(private apiService: ApiService, private contentservice: ContentTypeService, private notificationService: NotificationService, private _formBuilder: FormBuilder, private dialog: MatDialog, private router: Router,
     private route: ActivatedRoute,
     private nodeApiService: NodesApiService,
     private cardViewUpdateService: CardViewUpdateService,
     private alfrescoApiService: AlfrescoApiService) { }
 
-  onUploadFilescall(e) {
-    console.log(e.detail.files);
+  onUploadFilescall(event: any) {
+    console.log(event);
+    this.notificationService.openSnackMessage('File upload Error');
+    // console.log(e.detail.files);
   }
-  // visible: boolean = true;
-  onUploadError(e: CustomEvent) {
-    console.log(e.detail.files);
+
+  // onUploadError(event:any) {
+  //  // this.UploadError(event);
+  //   console.log(event);
+  //   this.notificationService.openSnackMessage('File upload Error');
+  // }
+  onUploadError(event: FileUploadErrorEvent) {
+    var errorCode = event.file.errorCode;
+    console.log(event.error);
+    this.notificationService.openSnackMessage('File upload Error:' + errorCode + "totalerrors:" + event.totalError);
+    // const errorMessage = event.error;
+    // this.snackBar.open(errorMessage, '', { duration: 4000 });
   }
   uploadSuccess(event: any) {
     this.notificationService.openSnackMessage('File uploaded');
@@ -77,31 +89,54 @@ export class MyFirstComponentComponent {
       this.nodedata = entry;
     }
     this.showuploaddialog = true;
-    this.notificationService.openSnackMessage('File uploaded');
+    // this.notificationService.openSnackMessage('File uploaded');
+    this.UploadSuccess(event);
   }
 
+  UploadError(event: FileUploadErrorEvent) {
+    this.visible = false;
+    var errorCode = event.file.errorCode;
+    console.log(event.error);
+    this.notificationService.openSnackMessage('File upload Error:' + event.error + "totalerrors:" + event.totalError);
+  }
+  totalError: number = 0;
+  //queue: FileModel[] = [];
+  // onUploadErrorNew(file: FileModel, error: any): void {
+  //   if (file) {
+  //     file.errorCode = (error || {}).status;
+  //     this.totalError++;
+
+  //     const event = new FileUploadErrorEvent(
+  //       file,
+  //       error,
+  //       this.totalError
+  //     );
+  //   }
+  // }
+  UploadSuccess(event: FileUploadCompleteEvent) {
+    this.visible = true;
+    var totalCompletefiles = event.totalComplete;
+    var successstatus = event.status;
+    this.notificationService.openSnackMessage('File uploaded:' + successstatus + "totalsuccess:" + totalCompletefiles);
+    //console.log(event.error);
+  }
   onBeginUpload(event: UploadFilesEvent) {
     const files = event.files || [];
-
     if (files.length >= 1) {
-      for (let i = 0; i < files.length; i++) {
-        if (files[i].size > 200000) {
-          event.pauseUpload();
-          const dialogRef = this.dialog.open(ConfirmDialogComponent, {
-            data: {
-              title: 'Upload',
-              message: `Are you sure you want to upload ${files.length} file(s)?`
-            },
-            minWidth: '250px'
-          });
+      event.pauseUpload();
+      const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+        data: {
+          title: 'Upload',
+          message: `Are you sure you want to upload ${files.length} file(s)?`
+        },
+        minWidth: '250px'
+      });
 
-          dialogRef.afterClosed().subscribe(result => {
-            if (result === true) {
-              event.resumeUpload();
-            }
-          });
+      dialogRef.afterClosed().subscribe(result => {
+        if (result === true) {
+          event.resumeUpload();
         }
-      }
+      });
     }
   }
   checkboxevent(event) {
