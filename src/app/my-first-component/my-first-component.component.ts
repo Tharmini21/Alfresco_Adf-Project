@@ -17,7 +17,7 @@ import { MetadataComponentComponent } from '../metadata-component/metadata-compo
 import { ContentMetadataComponent } from '@alfresco/adf-content-services';
 import { Content } from '@angular/compiler/src/render3/r3_ast';
 import { ActivatedRoute, PRIMARY_OUTLET, Router } from '@angular/router';
-import { NodesApiService, CardViewUpdateService, CardViewBaseItemModel, UpdateNotification, AlfrescoApiService } from '@alfresco/adf-core';
+import { NodesApiService, CardViewUpdateService, CardViewBaseItemModel, UpdateNotification, AlfrescoApiService, FileModel } from '@alfresco/adf-core';
 import { Node } from '@alfresco/js-api';
 import { takeUntil, debounceTime, catchError, map } from 'rxjs/operators';
 import { ContentMetadataService, DocumentListComponent, ContentTypeService, DocumentActionsService } from '@alfresco/adf-content-services';
@@ -38,6 +38,11 @@ export class MyFirstComponentComponent {
   nodeId: string;
   nodedata: Node;
   fileslist: any = [];
+  successfileslist: any = [];
+  errorfileslist: any = [];
+  filesdetaillist: any = [];
+  totalerrorfiles: number;
+  totalCompletefiles: number;
   protected onDestroy$ = new Subject<boolean>();
   // @ViewChild('documentList')
   // documentList: DocumentListComponent;
@@ -50,36 +55,31 @@ export class MyFirstComponentComponent {
   thirdFormGroup: FormGroup;
   isEditable = true;
   showuploaddialog = false;
-  visible: boolean = false;
+  visible: boolean;
   constructor(private apiService: ApiService, private contentservice: ContentTypeService, private notificationService: NotificationService, private _formBuilder: FormBuilder, private dialog: MatDialog, private router: Router,
     private route: ActivatedRoute,
     private nodeApiService: NodesApiService,
     private cardViewUpdateService: CardViewUpdateService,
     private alfrescoApiService: AlfrescoApiService) { }
 
-  onUploadFilescall(event: any) {
-    console.log(event);
-    this.notificationService.openSnackMessage('File upload Error');
-    // console.log(e.detail.files);
+  onUploadError(event: any) {
+    this.visible = false;
+    let entry = event.value.entry;
+    this.errorfileslist.push(entry);
+    if (this.errorfileslist.length > 0) {
+      this.totalerrorfiles = this.errorfileslist.length;
+      this.notificationService.openSnackMessage(this.totalerrorfiles + ' File upload Error');
+    }
   }
-
-  // onUploadError(event:any) {
-  //  // this.UploadError(event);
-  //   console.log(event);
-  //   this.notificationService.openSnackMessage('File upload Error');
+  // onUploadError(event: FileUploadErrorEvent) {
+  //   var errorCode = event.file.errorCode;
+  //   console.log(event.error);
+  //   this.notificationService.openSnackMessage('File upload Error:' + errorCode + "totalerrors:" + event.totalError);
+  //   // const errorMessage = event.error;
+  //   // this.snackBar.open(errorMessage, '', { duration: 4000 });
   // }
-  onUploadError(event: FileUploadErrorEvent) {
-    var errorCode = event.file.errorCode;
-    console.log(event.error);
-    this.notificationService.openSnackMessage('File upload Error:' + errorCode + "totalerrors:" + event.totalError);
-    // const errorMessage = event.error;
-    // this.snackBar.open(errorMessage, '', { duration: 4000 });
-  }
-  uploadSuccess(event: any) {
-    this.notificationService.openSnackMessage('File uploaded');
-    // this.documentList.reload();
-  }
-  onUploadFiles(event) {
+
+  onUploadFiles(event: any) {
     let entry = event.value.entry;
     this.fileslist.push(entry);
     if (this.fileslist.length > 1) {
@@ -89,18 +89,28 @@ export class MyFirstComponentComponent {
       this.nodedata = entry;
     }
     this.showuploaddialog = true;
-    // this.notificationService.openSnackMessage('File uploaded');
     this.UploadSuccess(event);
   }
-
+  UploadSuccess(event: any) {
+    this.visible = true;
+    // var totalCompletefiles = event.totalComplete;
+    // var successstatus = event.status;
+    // this.notificationService.openSnackMessage('File uploaded:' + successstatus + "totalsuccess:" + totalCompletefiles);
+    let entry = event.value.entry;
+    this.successfileslist.push(entry);
+    if (this.successfileslist.length > 0) {
+      this.totalCompletefiles = this.successfileslist.length;
+      this.notificationService.openSnackMessage(this.totalCompletefiles + ' Files uploaded successfully');
+    }
+  }
   UploadError(event: FileUploadErrorEvent) {
     this.visible = false;
     var errorCode = event.file.errorCode;
     console.log(event.error);
     this.notificationService.openSnackMessage('File upload Error:' + event.error + "totalerrors:" + event.totalError);
   }
-  totalError: number = 0;
-  //queue: FileModel[] = [];
+  // totalError: number = 0;
+  // queue: FileModel[];
   // onUploadErrorNew(file: FileModel, error: any): void {
   //   if (file) {
   //     file.errorCode = (error || {}).status;
@@ -113,13 +123,7 @@ export class MyFirstComponentComponent {
   //     );
   //   }
   // }
-  UploadSuccess(event: FileUploadCompleteEvent) {
-    this.visible = true;
-    var totalCompletefiles = event.totalComplete;
-    var successstatus = event.status;
-    this.notificationService.openSnackMessage('File uploaded:' + successstatus + "totalsuccess:" + totalCompletefiles);
-    //console.log(event.error);
-  }
+
   onBeginUpload(event: UploadFilesEvent) {
     const files = event.files || [];
     if (files.length >= 1) {
@@ -138,6 +142,7 @@ export class MyFirstComponentComponent {
         }
       });
     }
+    //this.onUploadErrorNew(files,null);
   }
   checkboxevent(event) {
     let entry = event.checked;
