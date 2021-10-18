@@ -188,7 +188,7 @@
   ],
   "content-metadata": {
     "presets": {
-      "my-preset": {
+      "default": {
         "properties": "*",
         "readOnlyProperties": ["cm:author"]
       }

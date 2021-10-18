@@ -9,58 +9,62 @@
     </mat-select>
   </mat-form-field>
   <div *ngIf="dtlistlength">
-    <table class="table table-bordered table-responsive-md table-striped text-center">
-      <thead>
-        <tr>
-          <th>Name
-            <mat-checkbox class="" (change)="checkboxevent($event)" matTooltip="Apply Changes to all cells">
-            </mat-checkbox>
-          </th>
-          <th>Content Type</th>
-          <th>Created By</th>
-          <th>Created On</th>
-          <th>Modified By
-            <mat-checkbox class="" (change)="checkboxevent($event)" matTooltip="Apply Changes to all cells">
-            </mat-checkbox>
-          </th>
-          <th>Modified On
-            <mat-checkbox class="" (change)="checkboxevent($event)" matTooltip="Apply Changes to all cells">
-            </mat-checkbox>
-          </th>
-          <!-- <th>Action</th> -->
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let item of listnodewithcontenttype;let id = index">
-          <td>
-            <span contenteditable="true" (keyup)="changeValue(id, 'entry.name', $event)"
-              (blur)="updateList(id, 'name', $event)">{{ item.entry.name }}</span>
-          </td>
-          <td>
-            <span (keyup)="changeValue(id, 'entry.nodeType', $event)"
-              (blur)="updateList(id, 'entry.nodeType', $event)">{{ item.entry.nodeType }}</span>
-          </td>
-          <td>
-            <span (keyup)="changeValue(id, 'entry.createdByUser.displayName', $event)"
-              (blur)="updateList(id, 'entry.createdByUser.displayName', $event)">{{ item.entry.createdByUser.displayName
-              }}</span>
-          </td>
-          <td>
-            <span (keyup)="changeValue(id, 'entry.createdAt', $event)"
-              (blur)="updateList(id, 'entry.createdAt', $event)">{{ item.entry.createdAt | date:'yyyy-MM-dd hh:mm'
-              }}</span>
-          </td>
-          <td>
-            <span contenteditable="true" (keyup)="changeValue(id, 'entry.modifiedByUser.displayName', $event)"
-              (blur)="updateList(id, 'modifiedByUser.displayName', $event)">{{
-              item.entry.modifiedByUser.displayName }}</span>
-          </td>
-          <td>
-            <span contenteditable="true" (keyup)="changeValue(id, 'entry.modifiedAt', $event)"
-              (blur)="updateList(id, 'modifiedAt', $event)">{{ item.entry.modifiedAt | date:'yyyy-MM-dd hh:mm'
-              }}</span>
-          </td>
-          <!-- <td>
+    <div class="card-body">
+      <div id="table" class="table-editable">
+        <table class="table table-bordered table-responsive-md table-striped text-center">
+          <thead>
+            <tr>
+              <th>Name
+                <mat-checkbox class="" (change)="checkboxevent($event)" matTooltip="Apply Changes to all cells">
+                </mat-checkbox>
+              </th>
+              <th>Content Type</th>
+              <th>Created By</th>
+              <th>Created On</th>
+              <th>Modified By
+                <mat-checkbox class="" (change)="checkboxevent($event)" matTooltip="Apply Changes to all cells">
+                </mat-checkbox>
+              </th>
+              <th>Modified On
+                <mat-checkbox class="" (change)="checkboxevent($event)" matTooltip="Apply Changes to all cells">
+                </mat-checkbox>
+              </th>
+              <!-- <th>Action</th> -->
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let item of listnodewithcontenttype;let id = index">
+              <td>
+                <!-- <span contenteditable="true" (keyup)="changeValue(id, 'entry.name', $event)"
+                  (blur)="updateList(id, 'name', $event)">{{ item.entry.name }}</span> -->
+                  <input contenteditable="true" matInput type="text" [(ngModel)]="item.entry.name" (focusout)="testmethod(id,'name')">
+              </td>
+              <td>
+                <span (keyup)="changeValue(id, 'entry.nodeType', $event)"
+                  (blur)="updateList(id, 'entry.nodeType', $event)">{{ item.entry.nodeType }}</span>
+              </td>
+              <td>
+                <span (keyup)="changeValue(id, 'entry.createdByUser.displayName', $event)"
+                  (blur)="updateList(id, 'entry.createdByUser.displayName', $event)">{{
+                  item.entry.createdByUser.displayName
+                  }}</span>
+              </td>
+              <td>
+                <span (keyup)="changeValue(id, 'entry.createdAt', $event)"
+                  (blur)="updateList(id, 'entry.createdAt', $event)">{{ item.entry.createdAt | date:'yyyy-MM-dd hh:mm'
+                  }}</span>
+              </td>
+              <td>
+                <span contenteditable="true" (keyup)="changeValue(id, 'entry.modifiedByUser.displayName', $event)"
+                  (blur)="updateList(id, 'modifiedByUser.displayName', $event)">{{
+                  item.entry.modifiedByUser.displayName }}</span>
+              </td>
+              <td>
+                <span contenteditable="true" (keyup)="changeValue(id, 'entry.modifiedAt', $event)"
+                  (blur)="updateList(id, 'modifiedAt', $event)">{{ item.entry.modifiedAt | date:'yyyy-MM-dd hh:mm'
+                  }}</span>
+              </td>
+              <!-- <td>
             <span class="table-editable">
               <button type="button">Edit</button>
             </span>
@@ -68,9 +72,11 @@
               <button type="button" mdbBtn color="danger" rounded="true" size="sm" class="my-0" (click)="remove(id)">Remove</button>
             </span>
            </td> -->
-        </tr>
-      </tbody>
-    </table>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
   </div>
   <div *ngIf="!dtlistlength && selectedcontenttype">
     <span>Sorry, no content</span>

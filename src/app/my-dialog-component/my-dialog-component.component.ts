@@ -5,7 +5,7 @@ import { ContentTypeService } from '@alfresco/adf-content-services';
 import { ApiService } from '../services/ApiService';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
-import { JsonCellComponent, NodesApiService ,AlfrescoApiService,CardViewUpdateService,CardViewBaseItemModel, UpdateNotification} from '@alfresco/adf-core';
+import { JsonCellComponent, NodesApiService, AlfrescoApiService, CardViewUpdateService, CardViewBaseItemModel, UpdateNotification } from '@alfresco/adf-core';
 import { element } from 'protractor';
 
 
@@ -29,7 +29,9 @@ export class MyDialogComponentComponent implements OnInit {
   editField: string;
   isedit: boolean;
   dtlistlength: boolean;
-  constructor(private dialog: MatDialog, private contentservice: ContentTypeService, private apiService: ApiService, private nodeApiService: NodesApiService,private alfrescoApiService: AlfrescoApiService,  private cardViewUpdateService: CardViewUpdateService) { }
+  tempid: any;
+  tempcellname: any;
+  constructor(private dialog: MatDialog, private contentservice: ContentTypeService, private apiService: ApiService, private nodeApiService: NodesApiService, private alfrescoApiService: AlfrescoApiService, private cardViewUpdateService: CardViewUpdateService) { }
   listcontentdatas: any = [];
   listnodedatas: any = [];
   listnodewithcontenttype: any = [];
@@ -41,18 +43,18 @@ export class MyDialogComponentComponent implements OnInit {
     this.getcontenttypelist();
     //this.getnodedatalist();
     this.cardViewUpdateService.itemUpdated$
-    .subscribe(
-      (updatedNode: UpdateNotification) => {
-        this.hasMetadataChanged = true;
-        this.targetProperty = updatedNode.target;
-        this.updateChanges(updatedNode.changed);
-        // if (this.ischeckboxevent == true && this.fileslist.length > 0) {
-        //   for (let i = 0; i < this.fileslist.length; i++) {
-        //     this.cardViewUpdateService.update(this.targetProperty, updatedNode.changed)
-        //   }
-        // }
-      }
-    );
+      .subscribe(
+        (updatedNode: UpdateNotification) => {
+          this.hasMetadataChanged = true;
+          this.targetProperty = updatedNode.target;
+          this.updateChanges(updatedNode.changed);
+          // if (this.ischeckboxevent == true && this.fileslist.length > 0) {
+          //   for (let i = 0; i < this.fileslist.length; i++) {
+          //     this.cardViewUpdateService.update(this.targetProperty, updatedNode.changed)
+          //   }
+          // }
+        }
+      );
   }
   changecontenttype(event) {
     this.listnodewithcontenttype = [];
@@ -107,6 +109,11 @@ export class MyDialogComponentComponent implements OnInit {
         }
       );
   }
+  testmethod(id: number, cellname: string) {
+    console.log(this.listnodewithcontenttype[id]);
+    this.tempid = this.listnodewithcontenttype[id].entry.id;
+    this.tempcellname = cellname;
+  }
   updateList(id: number, property: string, event: any) {
     const editField = event.target.textContent;
     this.listnodewithcontenttype[id][property] = editField;
@@ -135,9 +142,21 @@ export class MyDialogComponentComponent implements OnInit {
   checkboxevent(event) {
     let entry = event.checked;
     this.ischeckboxevent = entry;
-    if (this.ischeckboxevent == true && this.listnodewithcontenttype.length > 0 && this.isedit == true) {
-      this.updateNode();
+    if(entry){
+      switch (this.tempcellname) {
+        case "name":
+          var celval = this.listnodewithcontenttype.filter(s => s.entry.id == this.tempid);
+          if (celval && celval.length > 0) {
+            this.listnodewithcontenttype.forEach(element => {
+              element.entry.name = celval[0].entry.name
+            });
+          }
+          break;
+      }
     }
+    // if (this.ischeckboxevent == true && this.listnodewithcontenttype.length > 0 && this.isedit == true) {
+    //   this.updateNode();
+    // }
   }
   private updateNode() {
     for (let i = 0; i <= this.listnodewithcontenttype.length; i++) {
