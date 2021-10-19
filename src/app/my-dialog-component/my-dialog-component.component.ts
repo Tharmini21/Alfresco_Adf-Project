@@ -109,15 +109,12 @@ export class MyDialogComponentComponent implements OnInit {
         }
       );
   }
-  testmethod(id: number, cellname: string) {
-    console.log(this.listnodewithcontenttype[id]);
-    this.tempid = this.listnodewithcontenttype[id].entry.id;
-    this.tempcellname = cellname;
-  }
+
   updateList(id: number, property: string, event: any) {
     const editField = event.target.textContent;
-    this.listnodewithcontenttype[id][property] = editField;
+    //this.listnodewithcontenttype[id][property] = editField;
     // this.changedProperties = ({this.listnodewithcontenttype[id][property]:editField});
+    this.changedProperties = JSON.parse('{ "myString": "string", "myNumber": 4 }');
     var propdata = property;
     this.changedProperties = { name: editField };
     // this.updateChanges({property:editField});
@@ -139,16 +136,31 @@ export class MyDialogComponentComponent implements OnInit {
     this.editField = event.target.textContent;
     this.isedit = true;
   }
+  updatemethod(id: number, cellname: string,property: string, event: any) {
+    const editField = event.target.textContent;
+    console.log(editField);
+    //this.listnodewithcontenttype[id][property] = editField;
+    console.log(this.listnodewithcontenttype[id]);
+    this.tempid = this.listnodewithcontenttype[id].entry.id;
+    this.tempcellname = cellname;
+  }
   checkboxevent(event) {
     let entry = event.checked;
     this.ischeckboxevent = entry;
-    if(entry){
+    if (entry) {
+      var celval = this.listnodewithcontenttype.filter(s => s.entry.id == this.tempid);
       switch (this.tempcellname) {
         case "name":
-          var celval = this.listnodewithcontenttype.filter(s => s.entry.id == this.tempid);
           if (celval && celval.length > 0) {
             this.listnodewithcontenttype.forEach(element => {
               element.entry.name = celval[0].entry.name
+            });
+          }
+          break;
+        case "modifiedByUser":
+          if (celval && celval.length > 0) {
+            this.listnodewithcontenttype.forEach(element => {
+              element.entry.modifiedByUser.displayName = celval[0].entry.modifiedByUser.displayName
             });
           }
           break;

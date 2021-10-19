@@ -37,7 +37,7 @@
               <td>
                 <!-- <span contenteditable="true" (keyup)="changeValue(id, 'entry.name', $event)"
                   (blur)="updateList(id, 'name', $event)">{{ item.entry.name }}</span> -->
-                  <input contenteditable="true" matInput type="text" [(ngModel)]="item.entry.name" (focusout)="testmethod(id,'name')">
+                  <input contenteditable="true" matInput type="text" [(ngModel)]="item.entry.name" (focusout)="updatemethod(id,'name','entry.name', $event)">
               </td>
               <td>
                 <span (keyup)="changeValue(id, 'entry.nodeType', $event)"
@@ -58,6 +58,8 @@
                 <span contenteditable="true" (keyup)="changeValue(id, 'entry.modifiedByUser.displayName', $event)"
                   (blur)="updateList(id, 'modifiedByUser.displayName', $event)">{{
                   item.entry.modifiedByUser.displayName }}</span>
+                  <!-- <input matInput type="text" [(ngModel)]="item.entry.modifiedByUser.displayName" (focusout)="updatemethod(id,'modifiedByUser')"> -->
+
               </td>
               <td>
                 <span contenteditable="true" (keyup)="changeValue(id, 'entry.modifiedAt', $event)"
