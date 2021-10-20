@@ -36,7 +36,13 @@ export class MyDialogComponentComponent implements OnInit {
   listnodedatas: any = [];
   listnodewithcontenttype: any = [];
   ischeckboxevent: boolean;
-  changedProperties = {};
+  changedProperties = {
+    name:null,
+    modifiedByUser:{
+      displayName:null,
+      id: "admin"
+    },
+  };
   hasMetadataChanged = false;
   private targetProperty: CardViewBaseItemModel;
   ngOnInit() {
@@ -116,7 +122,8 @@ export class MyDialogComponentComponent implements OnInit {
     // this.changedProperties = ({this.listnodewithcontenttype[id][property]:editField});
     this.changedProperties = JSON.parse('{ "myString": "string", "myNumber": 4 }');
     var propdata = property;
-    this.changedProperties = { name: editField };
+    this.changedProperties.name =  editField;
+    this.changedProperties.modifiedByUser.displayName =  editField;
     // this.updateChanges({property:editField});
     this.isedit = true;
   }
@@ -132,25 +139,24 @@ export class MyDialogComponentComponent implements OnInit {
       }
     });
   }
-  changeValue(id: number, property: string, event: any) {
-    this.editField = event.target.textContent;
+  changeValue(event: any) {
+    this.editField = event;
     this.isedit = true;
   }
-  updatemethod(id: number, cellname: string,property: string, event: any) {
-    const editField = event.target.textContent;
-    console.log(editField);
-    //this.listnodewithcontenttype[id][property] = editField;
-    console.log(this.listnodewithcontenttype[id]);
+  updatemethod(id: number, cellname: any, properties: any) {
     this.tempid = this.listnodewithcontenttype[id].entry.id;
     this.tempcellname = cellname;
   }
   checkboxevent(event) {
     let entry = event.checked;
     this.ischeckboxevent = entry;
+    const editField = this.editField;
+
     if (entry) {
       var celval = this.listnodewithcontenttype.filter(s => s.entry.id == this.tempid);
       switch (this.tempcellname) {
         case "name":
+          this.changedProperties.name =  editField;
           if (celval && celval.length > 0) {
             this.listnodewithcontenttype.forEach(element => {
               element.entry.name = celval[0].entry.name
@@ -158,6 +164,7 @@ export class MyDialogComponentComponent implements OnInit {
           }
           break;
         case "modifiedByUser":
+        this.changedProperties.modifiedByUser.displayName =  editField;
           if (celval && celval.length > 0) {
             this.listnodewithcontenttype.forEach(element => {
               element.entry.modifiedByUser.displayName = celval[0].entry.modifiedByUser.displayName
@@ -165,13 +172,14 @@ export class MyDialogComponentComponent implements OnInit {
           }
           break;
       }
+      this.updateNode();
     }
     // if (this.ischeckboxevent == true && this.listnodewithcontenttype.length > 0 && this.isedit == true) {
     //   this.updateNode();
     // }
   }
   private updateNode() {
-    for (let i = 0; i <= this.listnodewithcontenttype.length; i++) {
+    for (let i = 0; i < this.listnodewithcontenttype.length; i++) {
       this.nodeApiService.updateNode(this.listnodewithcontenttype[i].entry.id, this.changedProperties).subscribe(data => {
         Object.assign(this.listnodewithcontenttype[i], data);
         this.alfrescoApiService.nodeUpdated.next(this.listnodewithcontenttype[i]);

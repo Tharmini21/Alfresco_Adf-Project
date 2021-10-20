@@ -25,7 +25,7 @@
         <form [formGroup]="secondFormGroup">
             <ng-template matStepLabel>Fill out your Document</ng-template>
             <adf-upload-button [rootFolderId]="nodeId" [adf-check-allowable-operation]="'create'" [multipleFiles]="true" [majorVersion]="true"
-                [versioningEnabled]="true" [nodeType]="selectedcontenttype" (beginUpload)="onBeginUpload($event)"
+                 [nodeType]="selectedcontenttype" (beginUpload)="onBeginUpload($event)"
                 (success)="onUploadFiles($event)" (error)="onUploadError($event)">
             </adf-upload-button>
             <!-- <adf-upload-button [rootFolderId]="nodeId" [adf-check-allowable-operation]="'create'" [multipleFiles]="true" [versioning]="false"

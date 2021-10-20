@@ -37,7 +37,12 @@
               <td>
                 <!-- <span contenteditable="true" (keyup)="changeValue(id, 'entry.name', $event)"
                   (blur)="updateList(id, 'name', $event)">{{ item.entry.name }}</span> -->
-                  <input contenteditable="true" matInput type="text" [(ngModel)]="item.entry.name" (focusout)="updatemethod(id,'name','entry.name', $event)">
+                <input contenteditable="true" matInput type="text" [(ngModel)]="item.entry.name"
+                  (ngModelChange)="changeValue($event)" (focusout)="updatemethod(id,'name','name')">
+                  <!-- <content-actions>
+                    <content-action target="file" title="Apply Changes to all cells" (execute)="checkboxevent($event)">
+                    </content-action>
+                  </content-actions> -->
               </td>
               <td>
                 <span (keyup)="changeValue(id, 'entry.nodeType', $event)"
@@ -55,17 +60,21 @@
                   }}</span>
               </td>
               <td>
-                <span contenteditable="true" (keyup)="changeValue(id, 'entry.modifiedByUser.displayName', $event)"
+                <!-- <span contenteditable="true" 
+                (focusout)="updatemethod(id,'modifiedByUser','entry.modifiedByUser.displayName', $event)">{{item.entry.modifiedByUser.displayName }}</span> -->
+                <!-- <span contenteditable="true" (keyup)="changeValue(id, 'entry.modifiedByUser.displayName', $event)"
                   (blur)="updateList(id, 'modifiedByUser.displayName', $event)">{{
-                  item.entry.modifiedByUser.displayName }}</span>
-                  <!-- <input matInput type="text" [(ngModel)]="item.entry.modifiedByUser.displayName" (focusout)="updatemethod(id,'modifiedByUser')"> -->
-
+                  item.entry.modifiedByUser.displayName }}</span> -->
+                <input matInput type="text" [(ngModel)]="item.entry.modifiedByUser.displayName"
+                  (ngModelChange)="changeValue($event)"
+                  (focusout)="updatemethod(id,'modifiedByUser','modifiedByUser.displayName')">
               </td>
               <td>
                 <span contenteditable="true" (keyup)="changeValue(id, 'entry.modifiedAt', $event)"
                   (blur)="updateList(id, 'modifiedAt', $event)">{{ item.entry.modifiedAt | date:'yyyy-MM-dd hh:mm'
                   }}</span>
               </td>
+            
               <!-- <td>
             <span class="table-editable">
               <button type="button">Edit</button>
