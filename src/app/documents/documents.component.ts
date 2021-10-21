@@ -93,7 +93,7 @@ export class DocumentsComponent {
         // width: '500px',
       }
     );
-    dialogRef.componentInstance.node = entry;
+    dialogRef.componentInstance.nodevalue = entry;
     dialogRef.componentInstance.nodeId = nodeId;
   }
   openbulkupdateDialog(event){

@@ -24,10 +24,15 @@
     <mat-step [stepControl]="secondFormGroup" [editable]="isEditable">
         <form [formGroup]="secondFormGroup">
             <ng-template matStepLabel>Fill out your Document</ng-template>
-            <adf-upload-button [rootFolderId]="nodeId" [adf-check-allowable-operation]="'create'" [multipleFiles]="true" [majorVersion]="true"
-                 [nodeType]="selectedcontenttype" (beginUpload)="onBeginUpload($event)"
+            <adf-upload-button [rootFolderId]="nodeId" [adf-check-allowable-operation]="'create'" [multipleFiles]="true"
+                [majorVersion]="true" [nodeType]="selectedcontenttype" (beginUpload)="onBeginUpload($event)"
                 (success)="onUploadFiles($event)" (error)="onUploadError($event)">
             </adf-upload-button>
+            <adf-upload-version-button staticTitle="Upload new version" [node]="nodevalue" [rootFolderId]="nodeId"
+                [adf-check-allowable-operation]="'create'" [multipleFiles]="true"
+                [nodeType]="selectedcontenttype" (beginUpload)="onBeginUpload($event)"
+                [versioning]="true" (success)="onUploadFiles($event)" (error)="onUploadError($event)">
+            </adf-upload-version-button>
             <!-- <adf-upload-button [rootFolderId]="nodeId" [adf-check-allowable-operation]="'create'" [multipleFiles]="true" [versioning]="false"
                 [nodeType]="selectedcontenttype" (beginUpload)="onBeginUpload($event)" (updateFileVersion)="onUploadFilescall($event)"
                 (success)="onUploadFiles($event)"  (error)="onUploadError($event)">
@@ -66,10 +71,14 @@
             Upload failed: {{ errorCode | adfFileUploadError }}
         </div> -->
         <div *ngIf="!visible">
-            <span><h3><strong> Total file Upload failed: {{ totalerrorfiles }}</strong></h3> </span> 
+            <span>
+                <h3><strong> Total file Upload failed: {{ totalerrorfiles }}</strong></h3>
+            </span>
         </div>
         <div *ngIf="visible">
-            <span><h3><strong> Total file Uploaded successCount : {{ totalCompletefiles }}</strong></h3> </span>
+            <span>
+                <h3><strong> Total file Uploaded successCount : {{ totalCompletefiles }}</strong></h3>
+            </span>
         </div>
         <div>
             <button mat-button matDialogClose>Done</button>

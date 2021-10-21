@@ -29,35 +29,34 @@
                 <mat-checkbox class="" (change)="checkboxevent($event)" matTooltip="Apply Changes to all cells">
                 </mat-checkbox>
               </th>
-              <!-- <th>Action</th> -->
+              <th>Action</th>
             </tr>
           </thead>
           <tbody>
-            <tr *ngFor="let item of listnodewithcontenttype;let id = index">
+            <tr *ngFor="let item of listnodewithcontenttype;let id = index" (contextmenu)="onContextMenu($event)">
               <td>
                 <!-- <span contenteditable="true" (keyup)="changeValue(id, 'entry.name', $event)"
                   (blur)="updateList(id, 'name', $event)">{{ item.entry.name }}</span> -->
                 <input contenteditable="true" matInput type="text" [(ngModel)]="item.entry.name"
                   (ngModelChange)="changeValue($event)" (focusout)="updatemethod(id,'name','name')">
-                  <!-- <content-actions>
+                <!-- <content-actions>
                     <content-action target="file" title="Apply Changes to all cells" (execute)="checkboxevent($event)">
                     </content-action>
                   </content-actions> -->
               </td>
               <td>
-                <span (keyup)="changeValue(id, 'entry.nodeType', $event)"
-                  (blur)="updateList(id, 'entry.nodeType', $event)">{{ item.entry.nodeType }}</span>
+                <span>{{ item.entry.nodeType }}</span>
+                <mat-select aria-required="true">
+                  <mat-option *ngFor="let ct of listcontentdatas" [value]="ct.entry.id">
+                    {{ct.entry.id}}
+                  </mat-option>
+                </mat-select>
               </td>
               <td>
-                <span (keyup)="changeValue(id, 'entry.createdByUser.displayName', $event)"
-                  (blur)="updateList(id, 'entry.createdByUser.displayName', $event)">{{
-                  item.entry.createdByUser.displayName
-                  }}</span>
+                <span>{{item.entry.createdByUser.displayName}}</span>
               </td>
               <td>
-                <span (keyup)="changeValue(id, 'entry.createdAt', $event)"
-                  (blur)="updateList(id, 'entry.createdAt', $event)">{{ item.entry.createdAt | date:'yyyy-MM-dd hh:mm'
-                  }}</span>
+                <span>{{ item.entry.createdAt | date:'yyyy-MM-dd hh:mm'}}</span>
               </td>
               <td>
                 <!-- <span contenteditable="true" 
@@ -73,22 +72,56 @@
                 <span contenteditable="true" (keyup)="changeValue(id, 'entry.modifiedAt', $event)"
                   (blur)="updateList(id, 'modifiedAt', $event)">{{ item.entry.modifiedAt | date:'yyyy-MM-dd hh:mm'
                   }}</span>
+                <!-- <mat-form-field appearance="fill">
+                  <mat-label>Custom calendar header</mat-label>
+                  <input matInput [matDatepicker]="picker">
+                  <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                  <mat-datepicker #picker [calendarHeaderComponent]="exampleHeader"></mat-datepicker>
+                </mat-form-field> -->
               </td>
-            
-              <!-- <td>
-            <span class="table-editable">
-              <button type="button">Edit</button>
-            </span>
-            <span>
-              <button type="button" mdbBtn color="danger" rounded="true" size="sm" class="my-0" (click)="remove(id)">Remove</button>
-            </span>
-           </td> -->
+
+              <td>
+                <!-- <span class="table-editable">
+                  <button type="button">Edit</button>
+                </span>
+                <span> -->
+                <!-- <span>
+                    <button type="button" mdbBtn color="danger" rounded="true" size="sm" class="my-0"
+                      (click)="remove(id)">Remove</button>
+                  </span> -->
+                <div>
+                  <button mat-menu-item (click)="remove(id)">
+                    <mat-icon>delete</mat-icon><!-- <span>Delete</span> -->
+                  </button>
+                  <div class="adf-toolbar--spacer"></div>
+                  <span>
+                    <mat-checkbox class="" (change)="checkboxevent($event)" matTooltip="Apply Changes to all cells">
+                    </mat-checkbox>
+                  </span>
+                </div>
+              </td>
             </tr>
           </tbody>
         </table>
+        <div style="visibility: hidden; position: fixed" [style.left]="contextMenuPosition.x"
+          [style.top]="contextMenuPosition.y" [matMenuTriggerFor]="contextMenu">
+        </div>
+        <mat-menu #contextMenu="matMenu">
+          <ng-template matMenuContent let-item="item">
+            <button mat-menu-item (click)="checkboxevent($event)">Apply Changes to all cells</button>
+          </ng-template>
+        </mat-menu>
+        <!-- <div id="contextMenu" class="dropdown clearfix">
+          <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu"
+            style="display:block;position:static;margin-bottom:5px;">
+            <li (click)="checkboxevent($event)"><a tabindex="-1">Apply Changes to all cells</a>
+            </li>
+          </ul>
+        </div> -->
       </div>
     </div>
   </div>
+
   <div *ngIf="!dtlistlength && selectedcontenttype">
     <span>Sorry, no content</span>
   </div>

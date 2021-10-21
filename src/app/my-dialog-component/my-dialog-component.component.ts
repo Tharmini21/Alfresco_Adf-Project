@@ -7,7 +7,7 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { JsonCellComponent, NodesApiService, AlfrescoApiService, CardViewUpdateService, CardViewBaseItemModel, UpdateNotification } from '@alfresco/adf-core';
 import { element } from 'protractor';
-
+import { MatMenuTrigger } from '@angular/material/menu';
 
 export interface dtElement {
   name: string;
@@ -37,15 +37,16 @@ export class MyDialogComponentComponent implements OnInit {
   listnodewithcontenttype: any = [];
   ischeckboxevent: boolean;
   changedProperties = {
-    name:null,
+    name:"",
     modifiedByUser:{
-      displayName:null,
+      displayName:"",
       id: "admin"
     },
   };
   hasMetadataChanged = false;
   private targetProperty: CardViewBaseItemModel;
   ngOnInit() {
+    
     this.getcontenttypelist();
     //this.getnodedatalist();
     this.cardViewUpdateService.itemUpdated$
@@ -66,16 +67,6 @@ export class MyDialogComponentComponent implements OnInit {
     this.listnodewithcontenttype = [];
     let entry = event.value;
     this.selectedcontenttype = entry;
-
-    // if (this.listnodedatas != null && this.listnodedatas.list.entries.length!=0) {
-    //   var nodelstlength=this.listnodedatas.list.entries.length;
-    //   for (let i = 0; i < nodelstlength; i++) {
-    //     if (this.selectedcontenttype == this.listnodedatas.list.entries[i].entry.nodeType) {
-    //       this.listnodewithcontenttype.push(this.listnodedatas.list.entries[i]);
-    //     }
-    //   }
-    //   console.log(this.listnodewithcontenttype);
-    // }
     this.getnodedatalist();
 
   }
@@ -91,7 +82,31 @@ export class MyDialogComponentComponent implements OnInit {
         }
       );
   }
+  remove(id:string)
+  {
+    this.apiService.Deletenode(this.listnodewithcontenttype[id].entry.id)
+    .subscribe(
+      res => {
+        this.listnodewithcontenttype=[];
+        this.getnodedatalist();
+      },
+      err => {
+        console.log('Error occured while deleting data');
+      }
+    );
+  }
+  contextMenu: MatMenuTrigger;
 
+  contextMenuPosition = { x: '0px', y: '0px' };
+
+  onContextMenu(event: MouseEvent) {
+    event.preventDefault();
+    this.contextMenuPosition.x = event.clientX + 'px';
+    this.contextMenuPosition.y = event.clientY + 'px';
+    // this.contextMenu.menuData = { 'item': item };
+    // this.contextMenu.menu.focusFirstItem('mouse');
+    this.contextMenu.openMenu();
+  }
   getnodedatalist() {
     this.apiService.getnodedata_datatable(this.nodeId, this.selectedcontenttype)
       .subscribe(
@@ -99,7 +114,6 @@ export class MyDialogComponentComponent implements OnInit {
           this.listnodedatas = res;
           let lengthval = this.listnodedatas.list.entries.length;
           for (let i = 0; i < lengthval; i++) {
-
             JSON.parse(this.listnodewithcontenttype.push(this.listnodedatas.list.entries[i]));
           }
           console.log(this.listnodewithcontenttype);
@@ -118,10 +132,6 @@ export class MyDialogComponentComponent implements OnInit {
 
   updateList(id: number, property: string, event: any) {
     const editField = event.target.textContent;
-    //this.listnodewithcontenttype[id][property] = editField;
-    // this.changedProperties = ({this.listnodewithcontenttype[id][property]:editField});
-    this.changedProperties = JSON.parse('{ "myString": "string", "myNumber": 4 }');
-    var propdata = property;
     this.changedProperties.name =  editField;
     this.changedProperties.modifiedByUser.displayName =  editField;
     // this.updateChanges({property:editField});
@@ -146,17 +156,25 @@ export class MyDialogComponentComponent implements OnInit {
   updatemethod(id: number, cellname: any, properties: any) {
     this.tempid = this.listnodewithcontenttype[id].entry.id;
     this.tempcellname = cellname;
+    const editField = this.editField;
+    switch (this.tempcellname) {
+      case "name":
+      this.changedProperties.name =  editField;
+    break;
+    case "modifiedByUser":
+      this.changedProperties.modifiedByUser.displayName =  editField;
+      break;
+    }
+    this.updateNode(this.tempid);
   }
   checkboxevent(event) {
     let entry = event.checked;
     this.ischeckboxevent = entry;
-    const editField = this.editField;
 
     if (entry) {
       var celval = this.listnodewithcontenttype.filter(s => s.entry.id == this.tempid);
       switch (this.tempcellname) {
         case "name":
-          this.changedProperties.name =  editField;
           if (celval && celval.length > 0) {
             this.listnodewithcontenttype.forEach(element => {
               element.entry.name = celval[0].entry.name
@@ -164,7 +182,6 @@ export class MyDialogComponentComponent implements OnInit {
           }
           break;
         case "modifiedByUser":
-        this.changedProperties.modifiedByUser.displayName =  editField;
           if (celval && celval.length > 0) {
             this.listnodewithcontenttype.forEach(element => {
               element.entry.modifiedByUser.displayName = celval[0].entry.modifiedByUser.displayName
@@ -172,21 +189,32 @@ export class MyDialogComponentComponent implements OnInit {
           }
           break;
       }
-      this.updateNode();
+      this.updateNode(null);
     }
     // if (this.ischeckboxevent == true && this.listnodewithcontenttype.length > 0 && this.isedit == true) {
     //   this.updateNode();
     // }
   }
-  private updateNode() {
-    for (let i = 0; i < this.listnodewithcontenttype.length; i++) {
-      this.nodeApiService.updateNode(this.listnodewithcontenttype[i].entry.id, this.changedProperties).subscribe(data => {
-        Object.assign(this.listnodewithcontenttype[i], data);
-        this.alfrescoApiService.nodeUpdated.next(this.listnodewithcontenttype[i]);
+  private updateNode(id?: string) {
+    if(id!=null)
+    {
+      this.nodeApiService.updateNode(id, this.changedProperties).subscribe(data => {
+        Object.assign(id, data);
         console.log(data);
       }, error => {
         console.log(error);
       });
+    }
+    else{
+      for (let i = 0; i < this.listnodewithcontenttype.length; i++) {
+        this.nodeApiService.updateNode(this.listnodewithcontenttype[i].entry.id, this.changedProperties).subscribe(data => {
+          Object.assign(this.listnodewithcontenttype[i], data);
+          this.alfrescoApiService.nodeUpdated.next(this.listnodewithcontenttype[i]);
+          console.log(data);
+        }, error => {
+          console.log(error);
+        });
+      }
     }
   }
 

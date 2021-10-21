@@ -18,7 +18,7 @@ import { ContentMetadataComponent } from '@alfresco/adf-content-services';
 import { Content } from '@angular/compiler/src/render3/r3_ast';
 import { ActivatedRoute, PRIMARY_OUTLET, Router } from '@angular/router';
 import { NodesApiService, CardViewUpdateService, CardViewBaseItemModel, UpdateNotification, AlfrescoApiService, FileModel } from '@alfresco/adf-core';
-import { Node } from '@alfresco/js-api';
+import { Node, NodeBodyUpdate } from '@alfresco/js-api';
 import { takeUntil, debounceTime, catchError, map } from 'rxjs/operators';
 import { ContentMetadataService, DocumentListComponent, ContentTypeService, DocumentActionsService } from '@alfresco/adf-content-services';
 
@@ -35,6 +35,7 @@ export class MyFirstComponentComponent {
   //@Output() onDataChange: EventEmitter<ItemType> = new EventEmitter();
   @Input() node: Node;
   // @Input() data:string;
+  nodevalue: Node;
   nodeId: string;
   nodedata: Node;
   fileslist: any = [];
@@ -43,6 +44,8 @@ export class MyFirstComponentComponent {
   filesdetaillist: any = [];
   totalerrorfiles: number;
   totalCompletefiles: number;
+  listnodedatas: any = [];
+  Existingdatalist: any = [];
   protected onDestroy$ = new Subject<boolean>();
   // @ViewChild('documentList')
   // documentList: DocumentListComponent;
@@ -59,12 +62,13 @@ export class MyFirstComponentComponent {
   constructor(private apiService: ApiService, private contentservice: ContentTypeService, private notificationService: NotificationService, private _formBuilder: FormBuilder, private dialog: MatDialog, private router: Router,
     private route: ActivatedRoute,
     private nodeApiService: NodesApiService,
+    private nodeupdate: NodeBodyUpdate,
     private cardViewUpdateService: CardViewUpdateService,
     private alfrescoApiService: AlfrescoApiService) { }
 
   onUploadError(event: any) {
     this.visible = false;
-    let entry = event.value.entry;
+    let entry = event;
     this.errorfileslist.push(entry);
     if (this.errorfileslist.length > 0) {
       this.totalerrorfiles = this.errorfileslist.length;
@@ -74,6 +78,10 @@ export class MyFirstComponentComponent {
   // onUploadError(event: FileUploadErrorEvent) {
   //   var errorCode = event.file.errorCode;
   //   console.log(event.error);
+  // const errorMessage = event.error;
+  // const totalerrors = event.totalError;
+  // const errorfiledetails = event.file.name;
+  // this.notificationService.openSnackMessage("Error file Name: "+ errorfiledetails + ' Total Error:' + totalerrors + "Errormsg:" +errorMessage);
   //   this.notificationService.openSnackMessage('File upload Error:' + errorCode + "totalerrors:" + event.totalError);
   //   // const errorMessage = event.error;
   //   // this.snackBar.open(errorMessage, '', { duration: 4000 });
@@ -109,23 +117,24 @@ export class MyFirstComponentComponent {
     console.log(event.error);
     this.notificationService.openSnackMessage('File upload Error:' + event.error + "totalerrors:" + event.totalError);
   }
-  // totalError: number = 0;
-  // queue: FileModel[];
-  // onUploadErrorNew(file: FileModel, error: any): void {
-  //   if (file) {
-  //     file.errorCode = (error || {}).status;
-  //     this.totalError++;
-
-  //     const event = new FileUploadErrorEvent(
-  //       file,
-  //       error,
-  //       this.totalError
-  //     );
-  //   }
-  // }
-
+  getnodedatalist() {
+    this.apiService.getnodedatalist(this.nodeId)
+      .subscribe(
+        res => {
+          this.listnodedatas = res;
+        },
+        err => {
+          console.log('Error occured while fetching node data');
+        }
+      );
+  }
   onBeginUpload(event: UploadFilesEvent) {
     const files = event.files || [];
+    // for (let x of this.listnodedatas.list.entries) {
+    //   if (files.find((val) => val.name == x.name))
+    //     this.Existingdatalist.push(x);
+    // }
+  
     if (files.length >= 1) {
       event.pauseUpload();
       const dialogRef = this.dialog.open(ConfirmDialogComponent, {
@@ -142,7 +151,6 @@ export class MyFirstComponentComponent {
         }
       });
     }
-    //this.onUploadErrorNew(files,null);
   }
   checkboxevent(event) {
     let entry = event.checked;
@@ -174,7 +182,7 @@ export class MyFirstComponentComponent {
       );
 
     this.getcontenttypelist();
-
+    this.getnodedatalist();
     this.firstFormGroup = this._formBuilder.group({
       firstCtrl: ['', Validators.required]
     });
