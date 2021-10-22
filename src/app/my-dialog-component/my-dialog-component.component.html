@@ -15,19 +15,19 @@
           <thead>
             <tr>
               <th>Name
-                <mat-checkbox class="" (change)="checkboxevent($event)" matTooltip="Apply Changes to all cells">
-                </mat-checkbox>
+                <!-- <mat-checkbox class="" (change)="checkboxevent($event)" matTooltip="Apply Changes to all cells">
+                </mat-checkbox> -->
               </th>
               <th>Content Type</th>
               <th>Created By</th>
               <th>Created On</th>
               <th>Modified By
-                <mat-checkbox class="" (change)="checkboxevent($event)" matTooltip="Apply Changes to all cells">
-                </mat-checkbox>
+                <!-- <mat-checkbox class="" (change)="checkboxevent($event)" matTooltip="Apply Changes to all cells">
+                </mat-checkbox> -->
               </th>
               <th>Modified On
-                <mat-checkbox class="" (change)="checkboxevent($event)" matTooltip="Apply Changes to all cells">
-                </mat-checkbox>
+                <!-- <mat-checkbox class="" (change)="checkboxevent($event)" matTooltip="Apply Changes to all cells">
+                </mat-checkbox> -->
               </th>
               <th>Action</th>
             </tr>
@@ -46,7 +46,7 @@
               </td>
               <td>
                 <span>{{ item.entry.nodeType }}</span>
-                <mat-select aria-required="true">
+                <mat-select aria-required="true" (selectionChange)="editcontenttype($event)" *ngIf="isEditable">
                   <mat-option *ngFor="let ct of listcontentdatas" [value]="ct.entry.id">
                     {{ct.entry.id}}
                   </mat-option>
@@ -90,27 +90,30 @@
                       (click)="remove(id)">Remove</button>
                   </span> -->
                 <div>
-                  <button mat-menu-item (click)="remove(id)">
-                    <mat-icon>delete</mat-icon><!-- <span>Delete</span> -->
-                  </button>
-                  <div class="adf-toolbar--spacer"></div>
-                  <span>
-                    <mat-checkbox class="" (change)="checkboxevent($event)" matTooltip="Apply Changes to all cells">
-                    </mat-checkbox>
-                  </span>
+                    <button mat-menu-item (click)="remove(id)">
+                      <mat-icon>delete</mat-icon>
+                    </button>
+                    <button mat-menu-item (click)="onEditClick()">
+                      <mat-icon>edit</mat-icon>
+                    </button>
+                    <span>
+                      <mat-checkbox class="margin" (change)="checkboxevent($event)" matTooltip="Apply Changes to all cells">
+                      </mat-checkbox>
+                    </span>
                 </div>
               </td>
             </tr>
           </tbody>
         </table>
-        <div style="visibility: hidden; position: fixed" [style.left]="contextMenuPosition.x"
+        <!-- <div style="visibility: hidden; position: fixed" [style.left]="contextMenuPosition.x"
           [style.top]="contextMenuPosition.y" [matMenuTriggerFor]="contextMenu">
         </div>
         <mat-menu #contextMenu="matMenu">
           <ng-template matMenuContent let-item="item">
             <button mat-menu-item (click)="checkboxevent($event)">Apply Changes to all cells</button>
           </ng-template>
-        </mat-menu>
+        </mat-menu> -->
+
         <!-- <div id="contextMenu" class="dropdown clearfix">
           <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu"
             style="display:block;position:static;margin-bottom:5px;">
@@ -121,7 +124,8 @@
       </div>
     </div>
   </div>
-
+  <!-- <adf-datatable [rows]="rows" [columns]="schema">
+  </adf-datatable> -->
   <div *ngIf="!dtlistlength && selectedcontenttype">
     <span>Sorry, no content</span>
   </div>

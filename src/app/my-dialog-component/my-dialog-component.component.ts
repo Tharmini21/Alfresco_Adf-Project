@@ -24,6 +24,9 @@ export interface dtElement {
   styleUrls: ['./my-dialog-component.component.css']
 })
 export class MyDialogComponentComponent implements OnInit {
+  rows: any;
+  schema: any;
+  tabledata: any = [];
   nodeId: string;
   selectedcontenttype: string;
   editField: string;
@@ -36,17 +39,19 @@ export class MyDialogComponentComponent implements OnInit {
   listnodedatas: any = [];
   listnodewithcontenttype: any = [];
   ischeckboxevent: boolean;
+  editedcontenttype: string;
   changedProperties = {
-    name:"",
-    modifiedByUser:{
-      displayName:"",
+    name: "",
+    modifiedByUser: {
+      displayName: "",
       id: "admin"
     },
   };
   hasMetadataChanged = false;
+  isEditable=false;
   private targetProperty: CardViewBaseItemModel;
   ngOnInit() {
-    
+
     this.getcontenttypelist();
     //this.getnodedatalist();
     this.cardViewUpdateService.itemUpdated$
@@ -63,12 +68,18 @@ export class MyDialogComponentComponent implements OnInit {
         }
       );
   }
+
+
   changecontenttype(event) {
     this.listnodewithcontenttype = [];
     let entry = event.value;
     this.selectedcontenttype = entry;
     this.getnodedatalist();
 
+  }
+  editcontenttype(event) {
+    let entry = event.value;
+    this.editedcontenttype = entry;
   }
   getcontenttypelist() {
     var nodetype = "cm:content";
@@ -82,18 +93,17 @@ export class MyDialogComponentComponent implements OnInit {
         }
       );
   }
-  remove(id:string)
-  {
+  remove(id: string) {
     this.apiService.Deletenode(this.listnodewithcontenttype[id].entry.id)
-    .subscribe(
-      res => {
-        this.listnodewithcontenttype=[];
-        this.getnodedatalist();
-      },
-      err => {
-        console.log('Error occured while deleting data');
-      }
-    );
+      .subscribe(
+        res => {
+          this.listnodewithcontenttype = [];
+          this.getnodedatalist();
+        },
+        err => {
+          console.log('Error occured while deleting data');
+        }
+      );
   }
   contextMenu: MatMenuTrigger;
 
@@ -108,6 +118,22 @@ export class MyDialogComponentComponent implements OnInit {
     this.contextMenu.openMenu();
   }
   getnodedatalist() {
+    // if (this.listnodewithcontenttype.length != 0) {
+    //   for (let i = 0; i < this.listnodewithcontenttype.length; i++) {
+    //     this.tabledata.push = (
+    //       [
+    //         {
+    //           id: this.listnodewithcontenttype[i].entry.id,
+    //           name: this.listnodewithcontenttype[i].entry.name,
+    //           "createdByUser.displayName": this.listnodewithcontenttype[i].entry.createdByUser.displayName,
+    //           createdAt: this.listnodewithcontenttype[i].entry.createdAt,
+    //           "modifiedByUser.displayName": this.listnodewithcontenttype[i].entry.modifiedByUser.displayName,
+    //           modifiedAt: this.listnodewithcontenttype[i].entry.modifiedAt,
+    //           nodeType: this.listnodewithcontenttype[i].entry.nodeType,
+    //         },
+    //       ]);
+    //   }
+    // }
     this.apiService.getnodedata_datatable(this.nodeId, this.selectedcontenttype)
       .subscribe(
         res => {
@@ -122,18 +148,77 @@ export class MyDialogComponentComponent implements OnInit {
           }
           else {
             this.dtlistlength = true;
+            for (let i = 0; i < this.listnodewithcontenttype.length; i++) {
+              this.tabledata.push = (
+                {
+                  id: this.listnodewithcontenttype[i].entry.id,
+                  name: this.listnodewithcontenttype[i].entry.name,
+                  "createdByUser.displayName": this.listnodewithcontenttype[i].entry.createdByUser.displayName,
+                  createdAt: this.listnodewithcontenttype[i].entry.createdAt,
+                  "modifiedByUser.displayName": this.listnodewithcontenttype[i].entry.modifiedByUser.displayName,
+                  modifiedAt: this.listnodewithcontenttype[i].entry.modifiedAt,
+                  nodeType: this.listnodewithcontenttype[i].entry.nodeType,
+                });
+            }
           }
         },
         err => {
           console.log('Error occured while fetching node data');
         }
       );
+
+    this.rows = this.tabledata;
+    this.schema =
+      [
+        {
+          type: 'text',
+          key: 'id',
+          title: 'Id',
+          sortable: true
+        },
+        {
+          type: 'text',
+          key: 'name',
+          title: 'Name',
+          sortable: true
+        },
+        {
+          type: 'text',
+          key: 'createdByUser.displayName',
+          title: 'Created By',
+          sortable: true
+        },
+        {
+          type: 'date',
+          key: 'createdAt',
+          title: 'Created On',
+          sortable: true
+        },
+        {
+          type: 'text',
+          key: 'modifiedByUser.displayName',
+          title: 'Modified By',
+          sortable: true
+        },
+        {
+          type: 'date',
+          key: 'modifiedAt',
+          title: 'Modified On',
+          sortable: true
+        },
+        {
+          type: 'text',
+          key: 'nodeType',
+          title: 'Content Type',
+          sortable: true
+        }
+      ];
   }
 
   updateList(id: number, property: string, event: any) {
     const editField = event.target.textContent;
-    this.changedProperties.name =  editField;
-    this.changedProperties.modifiedByUser.displayName =  editField;
+    this.changedProperties.name = editField;
+    this.changedProperties.modifiedByUser.displayName = editField;
     // this.updateChanges({property:editField});
     this.isedit = true;
   }
@@ -149,6 +234,9 @@ export class MyDialogComponentComponent implements OnInit {
       }
     });
   }
+  public onEditClick() {
+    this.isEditable = true;
+  }
   changeValue(event: any) {
     this.editField = event;
     this.isedit = true;
@@ -159,11 +247,11 @@ export class MyDialogComponentComponent implements OnInit {
     const editField = this.editField;
     switch (this.tempcellname) {
       case "name":
-      this.changedProperties.name =  editField;
-    break;
-    case "modifiedByUser":
-      this.changedProperties.modifiedByUser.displayName =  editField;
-      break;
+        this.changedProperties.name = editField;
+        break;
+      case "modifiedByUser":
+        this.changedProperties.modifiedByUser.displayName = editField;
+        break;
     }
     this.updateNode(this.tempid);
   }
@@ -196,8 +284,7 @@ export class MyDialogComponentComponent implements OnInit {
     // }
   }
   private updateNode(id?: string) {
-    if(id!=null)
-    {
+    if (id != null) {
       this.nodeApiService.updateNode(id, this.changedProperties).subscribe(data => {
         Object.assign(id, data);
         console.log(data);
@@ -205,7 +292,7 @@ export class MyDialogComponentComponent implements OnInit {
         console.log(error);
       });
     }
-    else{
+    else {
       for (let i = 0; i < this.listnodewithcontenttype.length; i++) {
         this.nodeApiService.updateNode(this.listnodewithcontenttype[i].entry.id, this.changedProperties).subscribe(data => {
           Object.assign(this.listnodewithcontenttype[i], data);
@@ -217,6 +304,7 @@ export class MyDialogComponentComponent implements OnInit {
       }
     }
   }
+
 
   ELEMENT_DATA: dtElement[] = this.listnodewithcontenttype;
 
