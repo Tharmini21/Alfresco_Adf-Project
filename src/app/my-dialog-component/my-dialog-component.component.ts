@@ -42,13 +42,19 @@ export class MyDialogComponentComponent implements OnInit {
   editedcontenttype: string;
   changedProperties = {
     name: "",
-    modifiedByUser: {
-      displayName: "",
-      id: "admin"
-    },
+    // modifiedByUser: {
+    //   displayName: "",
+    //   id: "admin"
+    // },
+    // nodeType: ""
+    "properties":
+    {
+      "cm:title": "",
+      "cm:author": ""
+    }
   };
   hasMetadataChanged = false;
-  isEditable=false;
+  isEditable = false;
   private targetProperty: CardViewBaseItemModel;
   ngOnInit() {
 
@@ -80,6 +86,7 @@ export class MyDialogComponentComponent implements OnInit {
   editcontenttype(event) {
     let entry = event.value;
     this.editedcontenttype = entry;
+    this.editField = this.editedcontenttype;
   }
   getcontenttypelist() {
     var nodetype = "cm:content";
@@ -101,7 +108,7 @@ export class MyDialogComponentComponent implements OnInit {
           this.getnodedatalist();
         },
         err => {
-          console.log('Error occured:'+err);
+          console.log('Error occured:' + err);
         }
       );
   }
@@ -118,22 +125,6 @@ export class MyDialogComponentComponent implements OnInit {
     this.contextMenu.openMenu();
   }
   getnodedatalist() {
-    // if (this.listnodewithcontenttype.length != 0) {
-    //   for (let i = 0; i < this.listnodewithcontenttype.length; i++) {
-    //     this.tabledata.push = (
-    //       [
-    //         {
-    //           id: this.listnodewithcontenttype[i].entry.id,
-    //           name: this.listnodewithcontenttype[i].entry.name,
-    //           "createdByUser.displayName": this.listnodewithcontenttype[i].entry.createdByUser.displayName,
-    //           createdAt: this.listnodewithcontenttype[i].entry.createdAt,
-    //           "modifiedByUser.displayName": this.listnodewithcontenttype[i].entry.modifiedByUser.displayName,
-    //           modifiedAt: this.listnodewithcontenttype[i].entry.modifiedAt,
-    //           nodeType: this.listnodewithcontenttype[i].entry.nodeType,
-    //         },
-    //       ]);
-    //   }
-    // }
     this.apiService.getnodedata_datatable(this.nodeId, this.selectedcontenttype)
       .subscribe(
         res => {
@@ -148,18 +139,18 @@ export class MyDialogComponentComponent implements OnInit {
           }
           else {
             this.dtlistlength = true;
-            for (let i = 0; i < this.listnodewithcontenttype.length; i++) {
-              this.tabledata.push = (
-                {
-                  id: this.listnodewithcontenttype[i].entry.id,
-                  name: this.listnodewithcontenttype[i].entry.name,
-                  "createdByUser.displayName": this.listnodewithcontenttype[i].entry.createdByUser.displayName,
-                  createdAt: this.listnodewithcontenttype[i].entry.createdAt,
-                  "modifiedByUser.displayName": this.listnodewithcontenttype[i].entry.modifiedByUser.displayName,
-                  modifiedAt: this.listnodewithcontenttype[i].entry.modifiedAt,
-                  nodeType: this.listnodewithcontenttype[i].entry.nodeType,
-                });
-            }
+            // for (let i = 0; i < this.listnodewithcontenttype.length; i++) {
+            //   this.tabledata.push = (
+            //     {
+            //       id: this.listnodewithcontenttype[i].entry.id,
+            //       name: this.listnodewithcontenttype[i].entry.name,
+            //       "createdByUser.displayName": this.listnodewithcontenttype[i].entry.createdByUser.displayName,
+            //       createdAt: this.listnodewithcontenttype[i].entry.createdAt,
+            //       "modifiedByUser.displayName": this.listnodewithcontenttype[i].entry.modifiedByUser.displayName,
+            //       modifiedAt: this.listnodewithcontenttype[i].entry.modifiedAt,
+            //       nodeType: this.listnodewithcontenttype[i].entry.nodeType,
+            //     });
+            // }
           }
         },
         err => {
@@ -167,58 +158,58 @@ export class MyDialogComponentComponent implements OnInit {
         }
       );
 
-    this.rows = this.tabledata;
-    this.schema =
-      [
-        {
-          type: 'text',
-          key: 'id',
-          title: 'Id',
-          sortable: true
-        },
-        {
-          type: 'text',
-          key: 'name',
-          title: 'Name',
-          sortable: true
-        },
-        {
-          type: 'text',
-          key: 'createdByUser.displayName',
-          title: 'Created By',
-          sortable: true
-        },
-        {
-          type: 'date',
-          key: 'createdAt',
-          title: 'Created On',
-          sortable: true
-        },
-        {
-          type: 'text',
-          key: 'modifiedByUser.displayName',
-          title: 'Modified By',
-          sortable: true
-        },
-        {
-          type: 'date',
-          key: 'modifiedAt',
-          title: 'Modified On',
-          sortable: true
-        },
-        {
-          type: 'text',
-          key: 'nodeType',
-          title: 'Content Type',
-          sortable: true
-        }
-      ];
+    // this.rows = this.tabledata;
+    // this.schema =
+    //   [
+    //     {
+    //       type: 'text',
+    //       key: 'id',
+    //       title: 'Id',
+    //       sortable: true
+    //     },
+    //     {
+    //       type: 'text',
+    //       key: 'name',
+    //       title: 'Name',
+    //       sortable: true
+    //     },
+    //     {
+    //       type: 'text',
+    //       key: 'createdByUser.displayName',
+    //       title: 'Created By',
+    //       sortable: true
+    //     },
+    //     {
+    //       type: 'date',
+    //       key: 'createdAt',
+    //       title: 'Created On',
+    //       sortable: true
+    //     },
+    //     {
+    //       type: 'text',
+    //       key: 'modifiedByUser.displayName',
+    //       title: 'Modified By',
+    //       sortable: true
+    //     },
+    //     {
+    //       type: 'date',
+    //       key: 'modifiedAt',
+    //       title: 'Modified On',
+    //       sortable: true
+    //     },
+    //     {
+    //       type: 'text',
+    //       key: 'nodeType',
+    //       title: 'Content Type',
+    //       sortable: true
+    //     }
+    //   ];
   }
 
   updateList(id: number, property: string, event: any) {
     const editField = event.target.textContent;
-    this.changedProperties.name = editField;
-    this.changedProperties.modifiedByUser.displayName = editField;
+    // this.changedProperties.name = editField;
+    // this.changedProperties.modifiedByUser.displayName = editField;
     // this.updateChanges({property:editField});
     this.isedit = true;
   }
@@ -241,7 +232,7 @@ export class MyDialogComponentComponent implements OnInit {
     this.editField = event;
     this.isedit = true;
   }
-  updatemethod(id: number, cellname: any, properties: any) {
+  updatemethod(id: number, cellname: any) {
     this.tempid = this.listnodewithcontenttype[id].entry.id;
     this.tempcellname = cellname;
     const editField = this.editField;
@@ -249,8 +240,17 @@ export class MyDialogComponentComponent implements OnInit {
       case "name":
         this.changedProperties.name = editField;
         break;
-      case "modifiedByUser":
-        this.changedProperties.modifiedByUser.displayName = editField;
+      // case "modifiedByUser":
+      //   this.changedProperties.modifiedByUser.displayName = editField;
+      //   break;
+      // case "nodeType":
+      //   this.changedProperties.nodeType = editField;
+      //   break;
+      case "author":
+        this.changedProperties.properties['cm:author'] = editField;
+        break;
+      case "title":
+        this.changedProperties.properties['cm:title'] = editField;
         break;
     }
     this.updateNode(this.tempid);
@@ -258,7 +258,6 @@ export class MyDialogComponentComponent implements OnInit {
   checkboxevent(event) {
     let entry = event.checked;
     this.ischeckboxevent = entry;
-
     if (entry) {
       var celval = this.listnodewithcontenttype.filter(s => s.entry.id == this.tempid);
       switch (this.tempcellname) {
@@ -269,13 +268,20 @@ export class MyDialogComponentComponent implements OnInit {
             });
           }
           break;
-        case "modifiedByUser":
+        case "nodeType":
           if (celval && celval.length > 0) {
             this.listnodewithcontenttype.forEach(element => {
-              element.entry.modifiedByUser.displayName = celval[0].entry.modifiedByUser.displayName
+              element.entry.nodeType = celval[0].entry.nodeType
             });
           }
           break;
+        // case "modifiedByUser":
+        //   if (celval && celval.length > 0) {
+        //     this.listnodewithcontenttype.forEach(element => {
+        //       element.entry.modifiedByUser.displayName = celval[0].entry.modifiedByUser.displayName
+        //     });
+        //   }
+        //   break;
       }
       this.updateNode(null);
     }

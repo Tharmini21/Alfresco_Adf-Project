@@ -9,6 +9,7 @@
     </mat-select>
   </mat-form-field>
   <div *ngIf="dtlistlength">
+    <span style="background-color: antiquewhite;">Editable columns: Content Type</span>
     <div class="card-body">
       <div id="table" class="table-editable">
         <table class="table table-bordered table-responsive-md table-striped text-center">
@@ -29,6 +30,8 @@
                 <!-- <mat-checkbox class="" (change)="checkboxevent($event)" matTooltip="Apply Changes to all cells">
                 </mat-checkbox> -->
               </th>
+              <th>Title</th>
+              <th>Author</th>
               <th>Action</th>
             </tr>
           </thead>
@@ -38,7 +41,7 @@
                 <!-- <span contenteditable="true" (keyup)="changeValue(id, 'entry.name', $event)"
                   (blur)="updateList(id, 'name', $event)">{{ item.entry.name }}</span> -->
                 <input contenteditable="true" matInput type="text" [(ngModel)]="item.entry.name"
-                  (ngModelChange)="changeValue($event)" (focusout)="updatemethod(id,'name','name')">
+                  (ngModelChange)="changeValue($event)" (focusout)="updatemethod(id,'name')">
                 <!-- <content-actions>
                     <content-action target="file" title="Apply Changes to all cells" (execute)="checkboxevent($event)">
                     </content-action>
@@ -46,11 +49,11 @@
               </td>
               <td>
                 <span>{{ item.entry.nodeType }}</span>
-                <mat-select aria-required="true" (selectionChange)="editcontenttype($event)" *ngIf="isEditable">
+                <!-- <mat-select aria-required="true" (selectionChange)="editcontenttype($event)" (focusout)="updatemethod(id,'nodeType')" *ngIf="isEditable">
                   <mat-option *ngFor="let ct of listcontentdatas" [value]="ct.entry.id">
                     {{ct.entry.id}}
                   </mat-option>
-                </mat-select>
+                </mat-select> -->
               </td>
               <td>
                 <span>{{item.entry.createdByUser.displayName}}</span>
@@ -59,19 +62,16 @@
                 <span>{{ item.entry.createdAt | date:'yyyy-MM-dd hh:mm'}}</span>
               </td>
               <td>
-                <!-- <span contenteditable="true" 
-                (focusout)="updatemethod(id,'modifiedByUser','entry.modifiedByUser.displayName', $event)">{{item.entry.modifiedByUser.displayName }}</span> -->
-                <!-- <span contenteditable="true" (keyup)="changeValue(id, 'entry.modifiedByUser.displayName', $event)"
-                  (blur)="updateList(id, 'modifiedByUser.displayName', $event)">{{
-                  item.entry.modifiedByUser.displayName }}</span> -->
-                <input matInput type="text" [(ngModel)]="item.entry.modifiedByUser.displayName"
+                <span>{{item.entry.modifiedByUser.displayName}}</span>
+                <!-- <input matInput type="text" [(ngModel)]="item.entry.modifiedByUser.displayName"
                   (ngModelChange)="changeValue($event)"
-                  (focusout)="updatemethod(id,'modifiedByUser','modifiedByUser.displayName')">
+                  (focusout)="updatemethod(id,'modifiedByUser','modifiedByUser.displayName')"> -->
               </td>
               <td>
-                <span contenteditable="true" (keyup)="changeValue(id, 'entry.modifiedAt', $event)"
+                <span>{{ item.entry.modifiedAt | date:'yyyy-MM-dd hh:mm'}}</span>
+                <!-- <span contenteditable="true" (keyup)="changeValue(id, 'entry.modifiedAt', $event)"
                   (blur)="updateList(id, 'modifiedAt', $event)">{{ item.entry.modifiedAt | date:'yyyy-MM-dd hh:mm'
-                  }}</span>
+                  }}</span> -->
                 <!-- <mat-form-field appearance="fill">
                   <mat-label>Custom calendar header</mat-label>
                   <input matInput [matDatepicker]="picker">
@@ -79,16 +79,21 @@
                   <mat-datepicker #picker [calendarHeaderComponent]="exampleHeader"></mat-datepicker>
                 </mat-form-field> -->
               </td>
-
               <td>
-                <!-- <span class="table-editable">
-                  <button type="button">Edit</button>
-                </span>
-                <span> -->
-                <!-- <span>
-                    <button type="button" mdbBtn color="danger" rounded="true" size="sm" class="my-0"
-                      (click)="remove(id)">Remove</button>
-                  </span> -->
+                <ng-container *ngIf="item.entry && item.entry.properties">
+                  <!-- <span>{{item.entry.properties["cm:title"]}}</span> -->
+                  <input contenteditable="true" matInput type="text" [(ngModel)]="item.entry.properties['cm:title']?"
+                  (ngModelChange)="changeValue($event)" (focusout)="updatemethod(id,'title')">
+                </ng-container>
+              </td>
+              <td>
+                <ng-container *ngIf="item.entry && item.entry.properties">
+                  <!-- <span>{{item.entry.properties["cm:author"]}}</span> -->
+                  <input contenteditable="true" matInput type="text" [(ngModel)]="item.entry.properties['cm:author']"
+                  (ngModelChange)="changeValue($event)" (focusout)="updatemethod(id,'author')">
+                </ng-container>
+              </td>
+              <td>
                 <div>
                     <button mat-menu-item (click)="remove(id)">
                       <mat-icon>delete</mat-icon>
