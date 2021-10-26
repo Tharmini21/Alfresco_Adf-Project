@@ -22,24 +22,27 @@
         </form>
     </mat-step>
     <mat-step [stepControl]="secondFormGroup" [editable]="isEditable">
-        <form [formGroup]="secondFormGroup">
+        <!-- <form [formGroup]="secondFormGroup"> -->
             <ng-template matStepLabel>Fill out your Document</ng-template>
             <adf-upload-button [rootFolderId]="nodeId" [adf-check-allowable-operation]="'create'" [multipleFiles]="true"
                 [majorVersion]="true" [nodeType]="selectedcontenttype" (beginUpload)="onBeginUpload($event)"
-                (success)="onUploadFiles($event)" (error)="onUploadError($event)">
+                (success)="onUploadFiles($event)" (error)="onUploadError($event)" *ngIf="upload">
             </adf-upload-button>
-            <adf-upload-version-button staticTitle="Upload new version" [node]="nodevalue" [rootFolderId]="nodeId"
+            <!-- <adf-upload-version-button staticTitle="Upload new version" [node]="updatenodeversion" [rootFolderId]="nodeId"
                 [adf-check-allowable-operation]="'create'" [multipleFiles]="true"
                 [nodeType]="selectedcontenttype" (beginUpload)="onBeginUpload($event)"
-                [versioning]="true" (success)="onUploadFiles($event)" (error)="onUploadError($event)">
+                [versioning]="true" (success)="onUploadFiles($event)" (error)="onUploadError($event)" *ngIf="uploadversion">
+            </adf-upload-version-button> -->
+
+            
+            <!-- <adf-upload-version-button staticTitle="Upload new version" [node]="updatenodeversion"
+                [rootFolderId]="parentnodeId" [versioning]="true" [majorVersion]="true" (success)="successversion($event)"
+                (error)="errorversion($event)" *ngIf="uploadversion">
             </adf-upload-version-button>
-            <!-- <adf-upload-button [rootFolderId]="nodeId" [adf-check-allowable-operation]="'create'" [multipleFiles]="true" [versioning]="false"
-                [nodeType]="selectedcontenttype" (beginUpload)="onBeginUpload($event)" (updateFileVersion)="onUploadFilescall($event)"
-                (success)="onUploadFiles($event)"  (error)="onUploadError($event)">
-            </adf-upload-button> -->
-            <!-- <adf-upload-button [rootFolderId]="nodeId" [adf-check-allowable-operation]="'create'" [multipleFiles]="true"
-                (success)="onUploadFilescall($event)">
-            </adf-upload-button> *ngIf="showuploaddialog"-->
+            <adf-version-manager *ngIf="uploadversion" [node]="updatenodeversion"
+                (uploadSuccess)="successversion($event)" (uploadError)="errorversion($event)">
+            </adf-version-manager> -->
+            <!-- <adf-version-upload [node]="updatenodeversion"></adf-version-upload> -->
             <div>
                 <adf-file-uploading-dialog></adf-file-uploading-dialog>
             </div>
@@ -49,7 +52,7 @@
                 <button mat-button matStepperPrevious>Back</button>
                 <button mat-button matStepperNext>Next</button>
             </div>
-        </form>
+        <!-- </form> -->
     </mat-step>
     <mat-step label="Apply Content Type" [stepControl]="thirdFormGroup" [editable]="isEditable">
         <form [formGroup]="thirdFormGroup">

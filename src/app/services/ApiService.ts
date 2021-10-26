@@ -8,7 +8,7 @@ import { SearchConfigurationInterface } from '@alfresco/adf-core';
 @Injectable()
 export class ApiService {
     constructor(private httpclient: HttpClient) { }
-    // Baseurl = 'http://127.0.0.1:8080';
+     Baseurl = 'http://127.0.0.1:8080';
     // dataUrl = 'http://localhost:8080';
     dataUrl = 'http://localhost:4200';
     data;
@@ -101,6 +101,15 @@ export class ApiService {
             'Authorization': "Basic YWRtaW46QWxmcmVzY29AMTIz"
          });
         return this.httpclient.delete(`${this.dataUrl}/alfresco/api/-default-/public/alfresco/versions/1/nodes/${node_id}?permanent=true`,{ headers: reqHeader });
+    }
+    Updatenode(nodeId: string) {
+        let node_id = nodeId;
+        var reqHeader = new HttpHeaders({ 
+            'Content-Type': 'octet-stream',
+            'Authorization': "Basic YWRtaW46QWxmcmVzY29AMTIz",
+            'accept': 'application/json'
+         });
+        return this.httpclient.put(`${this.dataUrl}/alfresco/api/-default-/public/alfresco/versions/1/nodes/${node_id}/content?majorVersion=true`,{ headers: reqHeader });
     }
     public generateQueryBody(searchTerm: string, maxResults: number, skipCount: number): QueryBody {
         const defaultQueryBody: QueryBody = {

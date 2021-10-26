@@ -101,7 +101,7 @@ export class MyDialogComponentComponent implements OnInit {
           this.getnodedatalist();
         },
         err => {
-          console.log('Error occured while deleting data');
+          console.log('Error occured:'+err);
         }
       );
   }

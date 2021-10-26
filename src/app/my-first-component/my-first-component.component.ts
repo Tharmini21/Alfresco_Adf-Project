@@ -18,7 +18,7 @@ import { ContentMetadataComponent } from '@alfresco/adf-content-services';
 import { Content } from '@angular/compiler/src/render3/r3_ast';
 import { ActivatedRoute, PRIMARY_OUTLET, Router } from '@angular/router';
 import { NodesApiService, CardViewUpdateService, CardViewBaseItemModel, UpdateNotification, AlfrescoApiService, FileModel } from '@alfresco/adf-core';
-import { Node, NodeBodyUpdate } from '@alfresco/js-api';
+import { Node } from '@alfresco/js-api';
 import { takeUntil, debounceTime, catchError, map } from 'rxjs/operators';
 import { ContentMetadataService, DocumentListComponent, ContentTypeService, DocumentActionsService } from '@alfresco/adf-content-services';
 
@@ -36,6 +36,7 @@ export class MyFirstComponentComponent {
   @Input() node: Node;
   // @Input() data:string;
   nodevalue: Node;
+  updatenodeversion: Node;
   nodeId: string;
   nodedata: Node;
   fileslist: any = [];
@@ -46,6 +47,7 @@ export class MyFirstComponentComponent {
   totalCompletefiles: number;
   listnodedatas: any = [];
   Existingdatalist: any = [];
+  parentnodeId: string;
   protected onDestroy$ = new Subject<boolean>();
   // @ViewChild('documentList')
   // documentList: DocumentListComponent;
@@ -59,10 +61,11 @@ export class MyFirstComponentComponent {
   isEditable = true;
   showuploaddialog = false;
   visible: boolean;
+  uploadversion = false;
+  upload = true;
   constructor(private apiService: ApiService, private contentservice: ContentTypeService, private notificationService: NotificationService, private _formBuilder: FormBuilder, private dialog: MatDialog, private router: Router,
     private route: ActivatedRoute,
     private nodeApiService: NodesApiService,
-    private nodeupdate: NodeBodyUpdate,
     private cardViewUpdateService: CardViewUpdateService,
     private alfrescoApiService: AlfrescoApiService) { }
 
@@ -122,35 +125,85 @@ export class MyFirstComponentComponent {
       .subscribe(
         res => {
           this.listnodedatas = res;
+          this.listnodedatas = this.listnodedatas.list.entries;
         },
         err => {
           console.log('Error occured while fetching node data');
         }
       );
   }
+  Existingdatanamelist: any = [];
+
   onBeginUpload(event: UploadFilesEvent) {
     const files = event.files || [];
-    // for (let x of this.listnodedatas.list.entries) {
-    //   if (files.find((val) => val.name == x.name))
-    //     this.Existingdatalist.push(x);
-    // }
-  
-    if (files.length >= 1) {
+    for (let i = 0; i < this.listnodedatas.length; i++) {
+      for (let j = 0; j < files.length; j++) {
+        if (this.listnodedatas[i].entry.name == files[j].name) {
+          this.Existingdatalist.push(this.listnodedatas[i].entry);
+        }
+      }
+    }
+    if (this.Existingdatalist.length != 0) {
+      for (let i = 0; i < this.Existingdatalist.length; i++) {
+        this.Existingdatanamelist.push(this.Existingdatalist[i].name);
+      }
       event.pauseUpload();
       const dialogRef = this.dialog.open(ConfirmDialogComponent, {
         data: {
-          title: 'Upload',
-          message: `Are you sure you want to upload ${files.length} file(s)?`
+          title: 'Upload Status',
+          message: `Do you want to proceed upload ${this.Existingdatalist[0].name} file with Version?`
         },
         minWidth: '250px'
       });
-
       dialogRef.afterClosed().subscribe(result => {
         if (result === true) {
-          event.resumeUpload();
+          // this.upload = false;
+          // this.uploadversion = true;
+          // this.updatenodeversion = this.Existingdatalist[0];
+          // this.parentnodeId=this.Existingdatalist[0].parentnodeId;
+
+          this.apiService.Updatenode(this.Existingdatalist[0].id)
+            .subscribe(
+              res => {
+                this.notificationService.openSnackMessage('File Major Version uploaded successfully');
+              },
+              err => {
+                console.log(err);
+              }
+            );
+           // this.updatenodeversion = this.Existingdatalist[0];
+          //event.resumeUpload();
         }
       });
     }
+    else {
+      this.Existingdatalist=[];
+      if (files.length >= 1) {
+        event.pauseUpload();
+        const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+          data: {
+            title: 'Upload',
+            message: `Are you sure you want to upload ${files.length} file(s)?`
+          },
+          minWidth: '250px'
+        });
+
+        dialogRef.afterClosed().subscribe(result => {
+          if (result === true) {
+            event.resumeUpload();
+          }
+        });
+      }
+    }
+
+  }
+  successversion(event:any)
+  {
+    this.notificationService.openSnackMessage("Version updated."); 
+  }
+  errorversion(event:any)
+  {
+    this.notificationService.openSnackMessage("Failed to update Version."); 
   }
   checkboxevent(event) {
     let entry = event.checked;
@@ -197,7 +250,7 @@ export class MyFirstComponentComponent {
   // frmStepTwo() { console.log(this.firstFormGroup.get('secondCtrl').value); return this.secondFormGroup.get('secondCtrl'); }
 
   form = new FormGroup({
-    contenttype: new FormControl('', Validators.required)
+    contenttype: new FormControl('', Validators.required),
   });
 
   get f() {
