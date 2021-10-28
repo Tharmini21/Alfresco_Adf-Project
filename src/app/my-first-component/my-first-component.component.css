@@ -20,3 +20,15 @@
     position: absolute;
     display: none;
   }
+  .next-button {
+    position: bottom;
+    right: 0px;
+    margin-bottom: 25px;
+    background-color:lightskyblue;
+  }
+  .back-button {
+    position: bottom;
+    right: 0px;
+    margin-bottom: 25px;
+    background-color:darkgray;
+    }

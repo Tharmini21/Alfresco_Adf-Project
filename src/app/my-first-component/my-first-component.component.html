@@ -17,7 +17,7 @@
                 <!-- <step1-component #step1></step1-component> -->
             </mat-form-field>
             <div>
-                <button mat-button matStepperNext>Next</button>
+                <button class="next-button" mat-button matStepperNext>Next</button>
             </div>
         </form>
     </mat-step>
@@ -28,33 +28,45 @@
                 [majorVersion]="true" [nodeType]="selectedcontenttype" (beginUpload)="onBeginUpload($event)"
                 (success)="onUploadFiles($event)" (error)="onUploadError($event)" *ngIf="upload">
             </adf-upload-button>
-            <!-- <adf-upload-version-button staticTitle="Upload new version" [node]="updatenodeversion" [rootFolderId]="nodeId"
-                [adf-check-allowable-operation]="'create'" [multipleFiles]="true"
-                [nodeType]="selectedcontenttype" (beginUpload)="onBeginUpload($event)"
-                [versioning]="true" (success)="onUploadFiles($event)" (error)="onUploadError($event)" *ngIf="uploadversion">
-            </adf-upload-version-button> -->
-
-            
-            <!-- <adf-upload-version-button staticTitle="Upload new version" [node]="updatenodeversion"
-                [rootFolderId]="parentnodeId" [versioning]="true" [majorVersion]="true" (success)="successversion($event)"
-                (error)="errorversion($event)" *ngIf="uploadversion">
-            </adf-upload-version-button>
-            <adf-version-manager *ngIf="uploadversion" [node]="updatenodeversion"
-                (uploadSuccess)="successversion($event)" (uploadError)="errorversion($event)">
-            </adf-version-manager> -->
-            <!-- <adf-version-upload [node]="updatenodeversion"></adf-version-upload> -->
+            <!-- <span>Do you want to proceed upload</span> {{Existingdatanamelist}} <span>file with Version? if yes proceed with version,no means proceed with autorename.</span> -->
+           <div *ngIf="Existingdatanamelist.length>0">
+            <span>Below files are already exist in this folder</span>
+            <table *ngIf="Existingdatanamelist.length>0" class="table">
+                <thead>
+                <tr>
+                  <th>Id</th>
+                  <th>Name</th>
+                </tr>
+                </thead>
+                <tbody *ngFor="let item of Existingdatanamelist;let id = index">
+                    <tr>
+                        <td>
+                            <span>{{ id }}</span>
+                        </td>
+                        <td>
+                            <span>{{ item }}</span>
+                        </td>
+                      </tr>
+                </tbody>
+              </table>
+              <div *ngIf="Existingdatanamelist.length>0">
+                <mat-slide-toggle [(ngModel)]="isCheckedversion" (change)="onChangesliderversion($event)">Slide Toggle to update version</mat-slide-toggle>
+                <mat-slide-toggle [(ngModel)]="isCheckedrename" (change)="onChangeslidername($event)">Slide Toggle to update rename</mat-slide-toggle>
+            </div>
+           </div>
+           
             <div>
                 <adf-file-uploading-dialog></adf-file-uploading-dialog>
             </div>
             <!-- </mat-form-field> -->
             <!-- <step2-component #step2></step2-component> -->
             <div>
-                <button mat-button matStepperPrevious>Back</button>
-                <button mat-button matStepperNext>Next</button>
+                <button class="back-button" mat-button matStepperPrevious>Back</button>
+                <button class="next-button" mat-button matStepperNext>Next</button>
             </div>
         <!-- </form> -->
     </mat-step>
-    <mat-step label="Apply Content Type" [stepControl]="thirdFormGroup" [editable]="isEditable">
+    <mat-step label="Apply Content Type" [stepControl]="thirdFormGroup" [editable]="isEditable" *ngIf="!uploadversion">
         <form [formGroup]="thirdFormGroup">
 
             <adf-content-metadata-card [node]="nodedata">
@@ -64,8 +76,8 @@
             <mat-checkbox class="" (change)="checkboxevent($event)">Apply Changes for to all the Document</mat-checkbox>
             <!-- <step3-component #step3></step3-component> -->
             <div>
-                <button mat-button matStepperPrevious type="button">Back</button>
-                <!-- <button mat-button matStepperNext type="button">Next</button> -->
+                <button class="back-button" mat-button matStepperPrevious type="button">Back</button>
+                <button class="next-button" mat-button matStepperNext type="button">Next</button>
             </div>
         </form>
     </mat-step>
@@ -81,6 +93,11 @@
         <div *ngIf="visible">
             <span>
                 <h3><strong> Total file Uploaded successCount : {{ totalCompletefiles }}</strong></h3>
+            </span>
+        </div>
+        <div *ngIf="uploadversion">
+            <span>
+                <h3><strong> Major version changed files are : {{ Existingdatanamelist }}</strong></h3>
             </span>
         </div>
         <div>

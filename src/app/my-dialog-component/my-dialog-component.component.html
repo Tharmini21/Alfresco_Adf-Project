@@ -9,7 +9,7 @@
     </mat-select>
   </mat-form-field>
   <div *ngIf="dtlistlength">
-    <span style="background-color: antiquewhite;">Editable columns: Content Type</span>
+    <span style="background-color: antiquewhite;">Editable columns: Author</span>
     <div class="card-body">
       <div id="table" class="table-editable">
         <table class="table table-bordered table-responsive-md table-striped text-center">
@@ -82,7 +82,7 @@
               <td>
                 <ng-container *ngIf="item.entry && item.entry.properties">
                   <!-- <span>{{item.entry.properties["cm:title"]}}</span> -->
-                  <input contenteditable="true" matInput type="text" [(ngModel)]="item.entry.properties['cm:title']?"
+                  <input contenteditable="true" matInput type="text" [(ngModel)]="item.entry.properties['cm:title']"
                   (ngModelChange)="changeValue($event)" (focusout)="updatemethod(id,'title')">
                 </ng-container>
               </td>

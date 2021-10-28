@@ -42,10 +42,6 @@ export class MyDialogComponentComponent implements OnInit {
   editedcontenttype: string;
   changedProperties = {
     name: "",
-    // modifiedByUser: {
-    //   displayName: "",
-    //   id: "admin"
-    // },
     // nodeType: ""
     "properties":
     {
@@ -249,9 +245,9 @@ export class MyDialogComponentComponent implements OnInit {
       case "author":
         this.changedProperties.properties['cm:author'] = editField;
         break;
-      case "title":
-        this.changedProperties.properties['cm:title'] = editField;
-        break;
+      // case "title":
+      //   this.changedProperties.properties['cm:title'] = editField;
+      //   break;
     }
     this.updateNode(this.tempid);
   }
@@ -268,26 +264,30 @@ export class MyDialogComponentComponent implements OnInit {
             });
           }
           break;
-        case "nodeType":
+        case "author":
           if (celval && celval.length > 0) {
             this.listnodewithcontenttype.forEach(element => {
-              element.entry.nodeType = celval[0].entry.nodeType
+              element.entry.properties['cm:author'] = celval[0].entry.properties['cm:author']
             });
           }
           break;
-        // case "modifiedByUser":
+        // case "title":
+        // if (celval && celval.length > 0) {
+        //   this.listnodewithcontenttype.forEach(element => {
+        //     element.entry.properties['cm:title'] = celval[0].entry.properties['cm:title']
+        //   });
+        // }
+        // break;
+        // case "nodeType":
         //   if (celval && celval.length > 0) {
         //     this.listnodewithcontenttype.forEach(element => {
-        //       element.entry.modifiedByUser.displayName = celval[0].entry.modifiedByUser.displayName
+        //       element.entry.nodeType = celval[0].entry.nodeType
         //     });
         //   }
         //   break;
       }
       this.updateNode(null);
     }
-    // if (this.ischeckboxevent == true && this.listnodewithcontenttype.length > 0 && this.isedit == true) {
-    //   this.updateNode();
-    // }
   }
   private updateNode(id?: string) {
     if (id != null) {
