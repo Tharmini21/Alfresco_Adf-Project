@@ -5,7 +5,8 @@
     <mat-step [stepControl]="firstFormGroup" [editable]="isEditable">
         <form [formGroup]="firstFormGroup">
             <ng-template matStepLabel>Fill out content type</ng-template>
-            <h1 mat-dialog-title>Select Content Type</h1>
+            <!-- <h1 mat-dialog-title>Select Content Type</h1> -->
+            <ng-template>Select Content Type</ng-template>
             <mat-form-field appearance="fill">
                 <label for="contenttype">Content type</label>
                 <mat-select formControlName="firstCtrl" (selectionChange)="changecontenttype($event)"
@@ -23,47 +24,60 @@
     </mat-step>
     <mat-step [stepControl]="secondFormGroup" [editable]="isEditable">
         <!-- <form [formGroup]="secondFormGroup"> -->
-            <ng-template matStepLabel>Fill out your Document</ng-template>
-            <adf-upload-button [rootFolderId]="nodeId" [adf-check-allowable-operation]="'create'" [multipleFiles]="true"
-                [majorVersion]="true" [nodeType]="selectedcontenttype" (beginUpload)="onBeginUpload($event)"
-                (success)="onUploadFiles($event)" (error)="onUploadError($event)" *ngIf="upload">
-            </adf-upload-button>
-            <!-- <span>Do you want to proceed upload</span> {{Existingdatanamelist}} <span>file with Version? if yes proceed with version,no means proceed with autorename.</span> -->
-           <div *ngIf="Existingdatanamelist.length>0">
-            <span>Below files are already exist in this folder</span>
-            <table *ngIf="Existingdatanamelist.length>0" class="table">
-                <thead>
-                <tr>
-                  <th>Id</th>
-                  <th>Name</th>
-                </tr>
-                </thead>
-                <tbody *ngFor="let item of Existingdatanamelist;let id = index">
-                    <tr>
-                        <td>
-                            <span>{{ id }}</span>
-                        </td>
-                        <td>
-                            <span>{{ item }}</span>
-                        </td>
-                      </tr>
-                </tbody>
-              </table>
-              <div *ngIf="Existingdatanamelist.length>0">
-                <mat-slide-toggle [(ngModel)]="isCheckedversion" (change)="onChangesliderversion($event)">Slide Toggle to update version</mat-slide-toggle>
-                <mat-slide-toggle [(ngModel)]="isCheckedrename" (change)="onChangeslidername($event)">Slide Toggle to update rename</mat-slide-toggle>
+        <ng-template matStepLabel>Fill out your Document</ng-template>
+
+        <!-- <span>Do you want to proceed upload</span> {{Existingdatanamelist}} <span>file with Version? if yes proceed with version,no means proceed with autorename.</span> -->
+        <div *ngIf="Existingdatanamelist.length>0">
+            <!-- <span>Below files are already exist in this folder</span> -->
+            <div id="table" class="table-editable">
+                <table *ngIf="Existingdatanamelist.length>0"
+                    class="table table-bordered table-responsive-md table-striped text-center">
+                    <thead>
+                        <tr>
+                            <th>Id</th>
+                            <th>Name</th>
+                        </tr>
+                    </thead>
+                    <tbody *ngFor="let item of Existingdatanamelist;let id = index">
+                        <tr>
+                            <td>
+                                <span>{{ id }}</span>
+                            </td>
+                            <td>
+                                <span>{{ item }}</span>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
-           </div>
-           
-            <div>
-                <adf-file-uploading-dialog></adf-file-uploading-dialog>
+            <div *ngIf="Existingdatanamelist.length>0">
+                <span>Do you want to proceed upload {{Existingdatanamelist}} file with Version? 
+                <br>
+                <br>if yes proceed with slide version,
+                <br>
+                <mat-slide-toggle [(ngModel)]="isCheckedversion" (change)="onChangesliderversion($event)">Slide Toggle
+                    to update version</mat-slide-toggle>
+                <br>no means proceed with slide autorename.</span>
+                <br>
+                <mat-slide-toggle [(ngModel)]="isCheckedrename" (change)="onChangeslidername($event)">Slide Toggle to
+                    update rename</mat-slide-toggle>
             </div>
-            <!-- </mat-form-field> -->
-            <!-- <step2-component #step2></step2-component> -->
-            <div>
-                <button class="back-button" mat-button matStepperPrevious>Back</button>
-                <button class="next-button" mat-button matStepperNext>Next</button>
-            </div>
+        </div>
+        <br>
+        <br>
+        <adf-upload-button [rootFolderId]="nodeId" [adf-check-allowable-operation]="'create'" [multipleFiles]="true"
+            [majorVersion]="true" [nodeType]="selectedcontenttype" (beginUpload)="onBeginUpload($event)"
+            (success)="onUploadFiles($event)" (error)="onUploadError($event)" *ngIf="upload">
+        </adf-upload-button>
+        <div>
+            <adf-file-uploading-dialog></adf-file-uploading-dialog>
+        </div>
+        <!-- </mat-form-field> -->
+        <!-- <step2-component #step2></step2-component> -->
+        <div>
+            <button class="back-button" mat-button matStepperPrevious>Back</button>
+            <button class="next-button" mat-button matStepperNext>Next</button>
+        </div>
         <!-- </form> -->
     </mat-step>
     <mat-step label="Apply Content Type" [stepControl]="thirdFormGroup" [editable]="isEditable" *ngIf="!uploadversion">

@@ -5,30 +5,26 @@
   .mat-form-field {
     margin-top: 16px;
   }
-
   table {
     border-collapse: collapse;
     width: 100%;
   }
   
-  th, td {
-    padding: 8px;
+  td, th {
+    border: 1px solid #dddddd;
     text-align: left;
-    border-bottom: 1px solid #ddd;
+    padding: 8px;
   }
+  
   #contextMenu {
     position: absolute;
     display: none;
   }
   .next-button {
-    position: bottom;
-    right: 0px;
-    margin-bottom: 25px;
+    margin: 50px 20px 15px;
     background-color:lightskyblue;
   }
   .back-button {
-    position: bottom;
-    right: 0px;
-    margin-bottom: 25px;
+    margin: 50px 20px 15px;
     background-color:darkgray;
     }

@@ -30,7 +30,7 @@
                 <!-- <mat-checkbox class="" (change)="checkboxevent($event)" matTooltip="Apply Changes to all cells">
                 </mat-checkbox> -->
               </th>
-              <th>Title</th>
+              <!-- <th>Title</th> -->
               <th>Author</th>
               <th>Action</th>
             </tr>
@@ -79,13 +79,14 @@
                   <mat-datepicker #picker [calendarHeaderComponent]="exampleHeader"></mat-datepicker>
                 </mat-form-field> -->
               </td>
-              <td>
-                <ng-container *ngIf="item.entry && item.entry.properties">
                   <!-- <span>{{item.entry.properties["cm:title"]}}</span> -->
+
+              <!-- <td>
+                <ng-container *ngIf="item.entry && item.entry.properties">
                   <input contenteditable="true" matInput type="text" [(ngModel)]="item.entry.properties['cm:title']"
                   (ngModelChange)="changeValue($event)" (focusout)="updatemethod(id,'title')">
                 </ng-container>
-              </td>
+              </td> -->
               <td>
                 <ng-container *ngIf="item.entry && item.entry.properties">
                   <!-- <span>{{item.entry.properties["cm:author"]}}</span> -->

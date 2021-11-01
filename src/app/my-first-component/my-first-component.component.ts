@@ -66,11 +66,15 @@ export class MyFirstComponentComponent {
   upload = true;
   isCheckedversion: boolean;
   isCheckedrename: boolean;
+  Existingdatanamelist: any = [];
+  Newdatalist: any = [];
+  updatenodeid: string;
   constructor(private apiService: ApiService, private contentservice: ContentTypeService, private notificationService: NotificationService, private _formBuilder: FormBuilder, private dialog: MatDialog, private router: Router,
     private route: ActivatedRoute,
     private nodeApiService: NodesApiService,
     private cardViewUpdateService: CardViewUpdateService,
-    private alfrescoApiService: AlfrescoApiService) { }
+    private alfrescoApiService: AlfrescoApiService,
+    private uploadService: UploadService) { }
 
   onUploadError(event: any) {
     this.visible = false;
@@ -81,18 +85,6 @@ export class MyFirstComponentComponent {
       this.notificationService.openSnackMessage(this.totalerrorfiles + ' File upload Error');
     }
   }
-  // onUploadError(event: FileUploadErrorEvent) {
-  //   var errorCode = event.file.errorCode;
-  //   console.log(event.error);
-  // const errorMessage = event.error;
-  // const totalerrors = event.totalError;
-  // const errorfiledetails = event.file.name;
-  // this.notificationService.openSnackMessage("Error file Name: "+ errorfiledetails + ' Total Error:' + totalerrors + "Errormsg:" +errorMessage);
-  //   this.notificationService.openSnackMessage('File upload Error:' + errorCode + "totalerrors:" + event.totalError);
-  //   // const errorMessage = event.error;
-  //   // this.snackBar.open(errorMessage, '', { duration: 4000 });
-  // }
-
   onUploadFiles(event: any) {
     let entry = event.value.entry;
     this.fileslist.push(entry);
@@ -123,21 +115,6 @@ export class MyFirstComponentComponent {
     console.log(event.error);
     this.notificationService.openSnackMessage('File upload Error:' + event.error + "totalerrors:" + event.totalError);
   }
-  getnodedatalist() {
-    this.apiService.getnodedatalist(this.nodeId)
-      .subscribe(
-        res => {
-          this.listnodedatas = res;
-          this.listnodedatas = this.listnodedatas.list.entries;
-        },
-        err => {
-          console.log('Error occured while fetching node data');
-        }
-      );
-  }
-  Existingdatanamelist: any = [];
-  Newdatalist: any = [];
-  updatenodeid: string;
   onChangeslidername(event) {
     if (event.checked === true) {
       this.isCheckedrename = true;
@@ -148,14 +125,31 @@ export class MyFirstComponentComponent {
       this.isCheckedversion = true;
     }
   }
-  onBeginUpload(event: UploadFilesEvent) {
-    this.getnodedatalist();
+  clear() {
     this.Existingdatalist = [];
+    this.Newdatalist = [];
     this.Existingdatanamelist = [];
+    this.successfileslist = [];
+    this.totalCompletefiles = 0;
+    this.uploadService.clearQueue();
+  }
+  getnodedatalist(event) {
+    this.apiService.getnodedatalist(this.nodeId)
+      .subscribe(
+        (res: any) => {
+          // this.listnodedatas = res;
+          this.listnodedatas = res.list.entries;
+        },
+        err => {
+          console.log('Error occured while fetching node data');
+        }
+      );
+  }
+  onBeginUpload(event: UploadFilesEvent) {
+    this.clear();
+    this.getnodedatalist(event);
     // const files = event.files || [];
-    var files = event.files || [];
-    event.pauseUpload();
-
+    var files = Object.assign([], event.files);
     for (let i = 0; i < this.listnodedatas.length; i++) {
       for (let j = 0; j < files.length; j++) {
         if (this.listnodedatas[i].entry.name == files[j].name) {
@@ -164,16 +158,21 @@ export class MyFirstComponentComponent {
       }
     }
     for (let i = 0; i < this.Existingdatalist.length; i++) {
-      this.Newdatalist = files.filter(x => x.name != this.Existingdatalist[i].name);
+      this.Newdatalist = files.filter(x=>this.Existingdatalist.findIndex(s=>s.name==x.name)==-1)
+     // this.Newdatalist = files.filter(x => x.name != this.Existingdatalist[i].name);
     }
     for (let i = 0; i < this.Existingdatalist.length; i++) {
       this.Existingdatanamelist.push(this.Existingdatalist[i].name);
     }
-    if (this.Existingdatalist.length > 0) {
+    event.pauseUpload();
+    if (this.Existingdatalist.length > 0 && this.Newdatalist.length > 0) {
+      // event.pauseUpload();
+      files.length = 0;
+      event.files = Object.assign([], this.Newdatalist);
       const dialogRef = this.dialog.open(ConfirmDialogComponent, {
         data: {
           title: 'Upload Status',
-          message: `Do you want to proceed upload ${this.Existingdatanamelist} file with Version? if yes proceed with version,no means proceed with autorename.`
+          message: `Do you want to proceed upload ${this.Existingdatanamelist} file with Version?if yes proceed with version,no means proceed with autorename.`,
         },
         minWidth: '250px'
       });
@@ -181,19 +180,38 @@ export class MyFirstComponentComponent {
         if (result === true) {
           this.uploadversion = true;
           for (let i = 0; i < this.Existingdatalist.length; i++) {
-            this.updatenode(this.Existingdatalist[i].id);
+            this.updatenodedata(this.Existingdatalist[i].id);
+          }
+          event.resumeUpload();
+        }
+      });
+    }
+    else if (this.Existingdatalist.length > 0) {
+      //event.pauseUpload();
+      const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+        data: {
+          title: 'Upload Status',
+          message: `Do you want to proceed upload ${this.Existingdatanamelist} file with Version?if yes proceed with version,no means proceed with autorename.`
+        },
+        minWidth: '250px'
+      });
+      dialogRef.afterClosed().subscribe(result => {
+        if (result === true) {
+          this.uploadversion = true;
+          for (let i = 0; i < this.Existingdatalist.length; i++) {
+            this.updatenodedata(this.Existingdatalist[i].id);
           }
         }
         else {
-          this.uploadversion = false;
           event.resumeUpload();
           this.notificationService.openSnackMessage('File uploaded successfully with autorename');
+          this.uploadversion = false;
         }
       });
     }
     else {
       if (files.length >= 1) {
-        event.pauseUpload();
+        //event.pauseUpload();
         const dialogRef = this.dialog.open(ConfirmDialogComponent, {
           data: {
             title: 'Upload',
@@ -209,14 +227,8 @@ export class MyFirstComponentComponent {
         });
       }
     }
-    if (this.Newdatalist.length > 0) {
-      files.length = 0;
-      files = this.Newdatalist;
-      console.log(files);
-      event.resumeUpload();
-    }
   }
-  updatenode(nodeId: string) {
+  updatenodedata(nodeId: string) {
     this.apiService.Updatenode(nodeId)
       .subscribe(
         res => {
@@ -227,12 +239,7 @@ export class MyFirstComponentComponent {
         }
       );
   }
-  successversion(event: any) {
-    this.notificationService.openSnackMessage("Version updated.");
-  }
-  errorversion(event: any) {
-    this.notificationService.openSnackMessage("Failed to update Version.");
-  }
+
   checkboxevent(event) {
     let entry = event.checked;
     this.ischeckboxevent = entry;
@@ -263,7 +270,7 @@ export class MyFirstComponentComponent {
       );
 
     this.getcontenttypelist();
-    this.getnodedatalist();
+    // this.getnodedatalist();
     this.firstFormGroup = this._formBuilder.group({
       firstCtrl: ['', Validators.required]
     });

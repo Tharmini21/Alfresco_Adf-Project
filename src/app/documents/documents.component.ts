@@ -90,7 +90,7 @@ export class DocumentsComponent {
       MyFirstComponentComponent,
       {
         //data:{node:entry},
-         width: '900px',height:'700px'
+         width: '1000px',height:'800px'
       }
     );
     dialogRef.componentInstance.nodevalue = entry;
