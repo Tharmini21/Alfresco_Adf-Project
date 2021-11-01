@@ -132,12 +132,13 @@ export class MyFirstComponentComponent {
     this.successfileslist = [];
     this.totalCompletefiles = 0;
     this.uploadService.clearQueue();
+    this.fileslist=[];
+   // this.listnodedatas = [];
   }
-  getnodedatalist(event) {
+  getnodedatalist() {
     this.apiService.getnodedatalist(this.nodeId)
       .subscribe(
         (res: any) => {
-          // this.listnodedatas = res;
           this.listnodedatas = res.list.entries;
         },
         err => {
@@ -147,7 +148,7 @@ export class MyFirstComponentComponent {
   }
   onBeginUpload(event: UploadFilesEvent) {
     this.clear();
-    this.getnodedatalist(event);
+    this.getnodedatalist();
     // const files = event.files || [];
     var files = Object.assign([], event.files);
     for (let i = 0; i < this.listnodedatas.length; i++) {
@@ -159,7 +160,6 @@ export class MyFirstComponentComponent {
     }
     for (let i = 0; i < this.Existingdatalist.length; i++) {
       this.Newdatalist = files.filter(x=>this.Existingdatalist.findIndex(s=>s.name==x.name)==-1)
-     // this.Newdatalist = files.filter(x => x.name != this.Existingdatalist[i].name);
     }
     for (let i = 0; i < this.Existingdatalist.length; i++) {
       this.Existingdatanamelist.push(this.Existingdatalist[i].name);
@@ -169,45 +169,68 @@ export class MyFirstComponentComponent {
       // event.pauseUpload();
       files.length = 0;
       event.files = Object.assign([], this.Newdatalist);
-      const dialogRef = this.dialog.open(ConfirmDialogComponent, {
-        data: {
-          title: 'Upload Status',
-          message: `Do you want to proceed upload ${this.Existingdatanamelist} file with Version?if yes proceed with version,no means proceed with autorename.`,
-        },
-        minWidth: '250px'
-      });
-      dialogRef.afterClosed().subscribe(result => {
-        if (result === true) {
-          this.uploadversion = true;
-          for (let i = 0; i < this.Existingdatalist.length; i++) {
-            this.updatenodedata(this.Existingdatalist[i].id);
-          }
-          event.resumeUpload();
+      if(this.isCheckedversion == true){
+        this.uploadversion = true;
+        for (let i = 0; i < this.Existingdatalist.length; i++) {
+          this.updatenodedata(this.Existingdatalist[i].id);
         }
-      });
+        event.resumeUpload();
+      }
+      else if(this.isCheckedrename == true){
+        event.resumeUpload();
+        this.notificationService.openSnackMessage('File uploaded successfully with autorename');
+        this.uploadversion = false;
+      }
+      // const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+      //   data: {
+      //     title: 'Upload Status',
+      //     message: `Do you want to proceed upload ${this.Existingdatanamelist} file with Version?if yes proceed with version,no means proceed with autorename.`,
+      //   },
+      //   minWidth: '250px'
+      // });
+      // dialogRef.afterClosed().subscribe(result => {
+      //   if (result === true) {
+      //     this.uploadversion = true;
+      //     for (let i = 0; i < this.Existingdatalist.length; i++) {
+      //       this.updatenodedata(this.Existingdatalist[i].id);
+      //     }
+      //     event.resumeUpload();
+      //   }
+      // });
     }
     else if (this.Existingdatalist.length > 0) {
-      //event.pauseUpload();
-      const dialogRef = this.dialog.open(ConfirmDialogComponent, {
-        data: {
-          title: 'Upload Status',
-          message: `Do you want to proceed upload ${this.Existingdatanamelist} file with Version?if yes proceed with version,no means proceed with autorename.`
-        },
-        minWidth: '250px'
-      });
-      dialogRef.afterClosed().subscribe(result => {
-        if (result === true) {
-          this.uploadversion = true;
-          for (let i = 0; i < this.Existingdatalist.length; i++) {
-            this.updatenodedata(this.Existingdatalist[i].id);
-          }
+      event.pauseUpload();
+      if(this.isCheckedversion == true){
+        this.uploadversion = true;
+        for (let i = 0; i < this.Existingdatalist.length; i++) {
+          this.updatenodedata(this.Existingdatalist[i].id);
         }
-        else {
-          event.resumeUpload();
-          this.notificationService.openSnackMessage('File uploaded successfully with autorename');
-          this.uploadversion = false;
-        }
-      });
+      }
+      else if(this.isCheckedrename == true){
+        event.resumeUpload();
+        this.notificationService.openSnackMessage('File uploaded successfully with autorename');
+        this.uploadversion = false;
+      }
+      // const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+      //   data: {
+      //     title: 'Upload Status',
+      //     message: `Do you want to proceed upload ${this.Existingdatanamelist} file with Version?if yes proceed with version,no means proceed with autorename.`
+      //   },
+      //   minWidth: '250px'
+      // });
+      // dialogRef.afterClosed().subscribe(result => {
+      //   if (result === true) {
+      //     this.uploadversion = true;
+      //     for (let i = 0; i < this.Existingdatalist.length; i++) {
+      //       this.updatenodedata(this.Existingdatalist[i].id);
+      //     }
+      //   }
+      //   else {
+      //     event.resumeUpload();
+      //     this.notificationService.openSnackMessage('File uploaded successfully with autorename');
+      //     this.uploadversion = false;
+      //   }
+      // });
     }
     else {
       if (files.length >= 1) {

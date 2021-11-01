@@ -6,29 +6,44 @@
         <form [formGroup]="firstFormGroup">
             <ng-template matStepLabel>Fill out content type</ng-template>
             <!-- <h1 mat-dialog-title>Select Content Type</h1> -->
-            <ng-template>Select Content Type</ng-template>
-            <mat-form-field appearance="fill">
-                <label for="contenttype">Content type</label>
-                <mat-select formControlName="firstCtrl" (selectionChange)="changecontenttype($event)"
-                    aria-required="true">
-                    <mat-option *ngFor="let ct of listcontentdatas" [value]="ct.entry.id">
-                        {{ct.entry.id}}
-                    </mat-option>
-                </mat-select>
-                <!-- <step1-component #step1></step1-component> -->
-            </mat-form-field>
             <div>
-                <button class="next-button" mat-button matStepperNext>Next</button>
+                <!-- <mat-label>Select Content Type</mat-label> -->
+                <h4 mat-dialog-title>Select Content Type</h4>
+                <mat-form-field appearance="fill">
+                    <label for="contenttype">Content type</label>
+                    <mat-select formControlName="firstCtrl" (selectionChange)="changecontenttype($event)"
+                        aria-required="true">
+                        <mat-option *ngFor="let ct of listcontentdatas" [value]="ct.entry.id">
+                            {{ct.entry.id}}
+                        </mat-option>
+                    </mat-select>
+                    <!-- <step1-component #step1></step1-component> -->
+                </mat-form-field>
+                <div>
+                    <button class="next-button" mat-button matStepperNext>Next</button>
+                </div>
             </div>
         </form>
     </mat-step>
     <mat-step [stepControl]="secondFormGroup" [editable]="isEditable">
         <!-- <form [formGroup]="secondFormGroup"> -->
         <ng-template matStepLabel>Fill out your Document</ng-template>
-
-        <!-- <span>Do you want to proceed upload</span> {{Existingdatanamelist}} <span>file with Version? if yes proceed with version,no means proceed with autorename.</span> -->
-        <div *ngIf="Existingdatanamelist.length>0">
-            <!-- <span>Below files are already exist in this folder</span> -->
+        <mat-label>Upload Document</mat-label>
+        <div>
+            <div>
+                <br>
+                <span>Do you want to proceed upload existing file with Version/Rename.
+                    <br>
+                    <br>
+                    <mat-slide-toggle [(ngModel)]="isCheckedversion" (change)="onChangesliderversion($event)">Slide
+                        Toggle
+                        to update version</mat-slide-toggle>
+                </span>
+                <br>
+                <br>
+                <mat-slide-toggle [(ngModel)]="isCheckedrename" (change)="onChangeslidername($event)">Slide Toggle to
+                    update rename</mat-slide-toggle>
+            </div>
             <div id="table" class="table-editable">
                 <table *ngIf="Existingdatanamelist.length>0"
                     class="table table-bordered table-responsive-md table-striped text-center">
@@ -49,18 +64,6 @@
                         </tr>
                     </tbody>
                 </table>
-            </div>
-            <div *ngIf="Existingdatanamelist.length>0">
-                <span>Do you want to proceed upload {{Existingdatanamelist}} file with Version? 
-                <br>
-                <br>if yes proceed with slide version,
-                <br>
-                <mat-slide-toggle [(ngModel)]="isCheckedversion" (change)="onChangesliderversion($event)">Slide Toggle
-                    to update version</mat-slide-toggle>
-                <br>no means proceed with slide autorename.</span>
-                <br>
-                <mat-slide-toggle [(ngModel)]="isCheckedrename" (change)="onChangeslidername($event)">Slide Toggle to
-                    update rename</mat-slide-toggle>
             </div>
         </div>
         <br>
@@ -116,6 +119,10 @@
         </div>
         <div>
             <button mat-button matDialogClose>Done</button>
+            <!-- <div>
+                <button mat-button matStepperPrevious>Back</button>
+                <button mat-button (click)="stepper.reset()">Reset</button>
+            </div> -->
         </div>
     </mat-step>
 </mat-horizontal-stepper>
