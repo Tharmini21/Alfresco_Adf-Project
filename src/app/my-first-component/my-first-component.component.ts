@@ -118,11 +118,17 @@ export class MyFirstComponentComponent {
   onChangeslidername(event) {
     if (event.checked === true) {
       this.isCheckedrename = true;
+      if(this.isCheckedrename == true){
+        this.isCheckedversion = false;
+      }
     }
   }
   onChangesliderversion(event) {
     if (event.checked === true) {
       this.isCheckedversion = true;
+      if(this.isCheckedversion == true){
+        this.isCheckedrename = false;
+      }
     }
   }
   clear() {
@@ -146,10 +152,75 @@ export class MyFirstComponentComponent {
         }
       );
   }
+  // BulkUpload(event){
+  //   var files = Object.assign([], event.files);
+  //   for (let i = 0; i < this.listnodedatas.length; i++) {
+  //     for (let j = 0; j < files.length; j++) {
+  //       if (this.listnodedatas[i].entry.name == files[j].name) {
+  //         this.Existingdatalist.push(this.listnodedatas[i].entry);
+  //       }
+  //     }
+  //   }
+  //   for (let i = 0; i < this.Existingdatalist.length; i++) {
+  //     this.Newdatalist = files.filter(x=>this.Existingdatalist.findIndex(s=>s.name==x.name)==-1)
+  //   }
+  //   for (let i = 0; i < this.Existingdatalist.length; i++) {
+  //     this.Existingdatanamelist.push(this.Existingdatalist[i].name);
+  //   }
+  //   event.pauseUpload();
+  //   if (this.Existingdatalist.length > 0 && this.Newdatalist.length > 0) {
+  //     files.length = 0;
+  //     event.files = Object.assign([], this.Newdatalist);
+  //     if(this.isCheckedversion == true){
+  //       this.uploadversion = true;
+  //       for (let i = 0; i < this.Existingdatalist.length; i++) {
+  //         this.updatenodedata(this.Existingdatalist[i].id);
+  //       }
+  //       event.resumeUpload();
+  //     }
+  //     else if(this.isCheckedrename == true){
+  //       event.resumeUpload();
+  //       this.notificationService.openSnackMessage('File uploaded successfully with autorename');
+  //       this.uploadversion = false;
+  //     }
+  //   }
+  //   else if (this.Existingdatalist.length > 0) {
+  //     if(this.isCheckedversion == true){
+  //       this.uploadversion = true;
+  //       for (let i = 0; i < this.Existingdatalist.length; i++) {
+  //         this.updatenodedata(this.Existingdatalist[i].id);
+  //       }
+  //     }
+  //     else if(this.isCheckedrename == true){
+  //       event.resumeUpload();
+  //       this.notificationService.openSnackMessage('File uploaded successfully with autorename');
+  //       this.uploadversion = false;
+  //     }
+  //   }
+  //   else {
+  //     if (files.length >= 1) {
+  //       const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+  //         data: {
+  //           title: 'Upload',
+  //           message: `Are you sure you want to upload ${files.length} file(s)?`
+  //         },
+  //         minWidth: '250px'
+  //       });
+
+  //       dialogRef.afterClosed().subscribe(result => {
+  //         if (result === true) {
+  //           event.resumeUpload();
+  //         }
+  //       });
+  //     }
+  //   }
+  // }
   onBeginUpload(event: UploadFilesEvent) {
     this.clear();
     this.getnodedatalist();
+
     // const files = event.files || [];
+
     var files = Object.assign([], event.files);
     for (let i = 0; i < this.listnodedatas.length; i++) {
       for (let j = 0; j < files.length; j++) {
@@ -199,7 +270,7 @@ export class MyFirstComponentComponent {
       // });
     }
     else if (this.Existingdatalist.length > 0) {
-      event.pauseUpload();
+      //event.pauseUpload();
       if(this.isCheckedversion == true){
         this.uploadversion = true;
         for (let i = 0; i < this.Existingdatalist.length; i++) {

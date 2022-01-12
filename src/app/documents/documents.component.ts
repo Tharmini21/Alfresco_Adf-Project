@@ -102,7 +102,7 @@ export class DocumentsComponent {
     let dialogRef = this.dialog.open(
       MyDialogComponentComponent,
       {
-         // width: '700px',
+         width: '1200px',height:'800px'
       }
     );
     dialogRef.componentInstance.nodeId = nodeId;

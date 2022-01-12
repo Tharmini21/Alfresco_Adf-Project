@@ -45,7 +45,7 @@ export class MyDialogComponentComponent implements OnInit {
     // nodeType: ""
     "properties":
     {
-      "cm:title": "",
+      //"cm:title": "",
       "cm:author": ""
     }
   };

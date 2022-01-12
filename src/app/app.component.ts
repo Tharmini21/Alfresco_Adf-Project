@@ -6,6 +6,8 @@ import { NodeDatas } from './Classes/NodeDatas';
 import { MyFirstComponentComponent } from './my-first-component/my-first-component.component';
 import { ContentTypeService } from '@alfresco/adf-content-services';
 import { MyDialogComponentComponent } from './my-dialog-component/my-dialog-component.component';
+import { ContractHomeComponent } from './contract-home/contract-home.component';
+import { ContractDetailsComponent } from './contract-details/contract-details.component';
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',

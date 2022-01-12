@@ -47,6 +47,8 @@ import { MyDialogComponentComponent } from './my-dialog-component/my-dialog-comp
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MetadataComponentComponent } from './metadata-component/metadata-component.component';
+import { ContractHomeComponent } from './contract-home/contract-home.component';
+import { ContractDetailsComponent } from './contract-details/contract-details.component';
 
 registerLocaleData(localeFr);
 registerLocaleData(localeDe);
@@ -93,7 +95,9 @@ registerLocaleData(localeSv);
         FileViewComponent,
         MyFirstComponentComponent,
         MyDialogComponentComponent,
-        MetadataComponentComponent
+        MetadataComponentComponent,
+        ContractHomeComponent,
+        ContractDetailsComponent
         // MatStepperModule
     ],
     providers: [

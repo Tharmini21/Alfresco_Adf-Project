@@ -1,0 +1,35 @@
+.info{
+    width: 500px;
+    border: 5px solid black;
+    padding: 50px;
+    margin: 20px;
+    border-radius:10px;
+  }
+  .File{
+    width: 500px;
+    border: 5px solid black;
+    padding: 50px;
+    margin: 20px;
+    border-radius:10px;
+  }
+  .Workflow{
+    width: 500px;
+    border: 5px solid black;
+    padding: 50px;
+    margin: 20px;
+    border-radius:10px;
+  }
+  .Comments{
+    width: 500px;
+    border: 5px solid black;
+    padding: 50px;
+    margin: 20px;
+    border-radius:10px;
+  }
+  .Audit{
+    width: 500px;
+    border: 5px solid black;
+    padding: 50px;
+    margin: 20px;
+    border-radius:10px;
+  }
