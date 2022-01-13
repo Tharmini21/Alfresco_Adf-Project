@@ -1,7 +1,10 @@
 <div style="width: auto;">
     <button>home</button>
     <button>Report</button>
-    <button class="contractbtn">New Contract</button>
+    <!-- <button class="contractbtn" click="openFolderDialog($event)">New Contract</button> -->
+    <button mat-icon-button [adf-create-folder]="" title="Create New Folder">
+        <mat-icon>create_new_folder</mat-icon>New Contract
+    </button>
     <div class="pendingapproval">
         <span>My pending contract approval</span>
 
@@ -10,6 +13,33 @@
         <span>Contracts - Recently Viewed</span>
     </div>
     <div class="allcontract">
-        <span>All Contracts</span>
+        <span style="font-weight: bold;">All Contracts</span>
+        <table>
+            <tr>
+                <th>Name</th>
+                <th class="text-center">Status</th>
+                <th class="text-center">Created By</th>
+                <th class="text-center">Last Modified By</th>
+                <th class="text-center">Last Modified On</th>
+            </tr>
+            <tr *ngFor="let node of listnodedatas; let id = index">
+                <td>
+                    <!-- <a href="/contract-details/{{node.entry.id}}"><span>{{node.entry.name}}</span></a> -->
+                    <a href="/contract-details"><span>{{node.entry.name}}</span></a>
+                </td>
+                <td>
+                    <span>{{NA}}</span>
+                </td>
+                <td>
+                    <span>{{node.entry.createdByUser.displayName}}</span>
+                </td>
+                <td>
+                    <span>{{node.entry.modifiedByUser.displayName}}</span>
+                </td>
+                <td>
+                    <span>{{ node.entry.createdAt | date:'MMMM, dd yyyy'}}</span>
+                </td>
+            </tr>
+        </table>
     </div>
 </div>

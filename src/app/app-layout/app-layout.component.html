@@ -22,6 +22,10 @@
                     <mat-icon matListIcon class="sidenav-menu-icon">exit_to_app</mat-icon>
                     <div class="sidenav-menu-label" *ngIf="!isMenuMinimized()">Logout</div>
                 </a>
+                <a mat-list-item class="adf-sidenav-link" routerLink="/contract-home">
+                    <mat-icon matListIcon class="sidenav-menu-icon">folder_open</mat-icon>
+                    <div class="sidenav-menu-label" *ngIf="!isMenuMinimized()">ContractHome</div>
+                </a>
             </mat-nav-list>
         </ng-template>
     </adf-sidenav-layout-navigation>

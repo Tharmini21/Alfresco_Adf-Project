@@ -19,7 +19,7 @@ export class ApiService {
         node_id = node_id.replace(/"/g, "");
         var reqHeader = new HttpHeaders({ 
             'Content-Type': 'application/json',
-            'Authorization': "Basic YWRtaW46QWxmcmVzY29AMTIz"
+            'Authorization': "Basic YWRtaW46YWRtaW4="
          });
         return this.httpclient.get(`${this.dataUrl}/alfresco/api/-default-/public/alfresco/versions/1/nodes/${node_id}/children?where=(${isfile})`,{ headers: reqHeader });
     }
@@ -29,7 +29,7 @@ export class ApiService {
         node_id = node_id.replace(/"/g, "");
         var reqHeader = new HttpHeaders({ 
             'Content-Type': 'application/json',
-            'Authorization': "Basic YWRtaW46QWxmcmVzY29AMTIz"
+            'Authorization': "Basic YWRtaW46YWRtaW4="
          });
         return this.httpclient.get(`${this.dataUrl}/alfresco/api/-default-/public/alfresco/versions/1/nodes/${node_id}/children?where=(${isfolder})`,{ headers: reqHeader });
     }
@@ -37,7 +37,7 @@ export class ApiService {
         let searchdata = name;
         var reqHeader = new HttpHeaders({ 
             'Content-Type': 'application/json',
-            'Authorization': "Basic YWRtaW46QWxmcmVzY29AMTIz"
+            'Authorization': "Basic YWRtaW46YWRtaW4="
          });
         return this.httpclient.get(`${this.dataUrl}/alfresco/api/-default-/public/alfresco/versions/1/queries/sites?term=${searchdata}`,{ headers: reqHeader });
 
@@ -47,7 +47,7 @@ export class ApiService {
         let node_id = nodeId;
         var reqHeader = new HttpHeaders({ 
             'Content-Type': 'application/json',
-            'Authorization': "Basic YWRtaW46QWxmcmVzY29AMTIz"
+            'Authorization': "Basic YWRtaW46YWRtaW4="
          });
         return this.httpclient.get(`${this.dataUrl}/alfresco/api/-default-/public/alfresco/versions/1/nodes/${node_id}/secondary-children`,{ headers: reqHeader });
     }
@@ -59,7 +59,7 @@ export class ApiService {
         let query=JSON.stringify(querydata)
         var reqHeader = new HttpHeaders({ 
             'Content-Type': 'application/json',
-            'Authorization': "Basic YWRtaW46QWxmcmVzY29AMTIz",
+            'Authorization': "Basic YWRtaW46YWRtaW4=",
             'accept': 'application/json'
          });
         return this.httpclient.post(`${this.dataUrl}/alfresco/api/-default-/public/search/versions/1/search`,query,{ headers: reqHeader});
@@ -69,7 +69,7 @@ export class ApiService {
         let searchdata = "(namespaceUri matches('http://www.mycompany.com/model/finance/1.0.'))";
         var reqHeader = new HttpHeaders({ 
             'Content-Type': 'application/json',
-            'Authorization': "Basic YWRtaW46QWxmcmVzY29AMTIz",
+            'Authorization': "Basic YWRtaW46YWRtaW4=",
             'accept': 'application/json'
          });
         return this.httpclient.get(`${this.dataUrl}/alfresco/api/-default-/public/alfresco/versions/1/types?where=(${searchdata})`,{ headers: reqHeader});
@@ -79,7 +79,7 @@ export class ApiService {
         node_id = node_id.replace(/"/g, "");
         var reqHeader = new HttpHeaders({ 
             'Content-Type': 'application/json',
-            'Authorization': "Basic YWRtaW46QWxmcmVzY29AMTIz"
+            'Authorization': "Basic YWRtaW46YWRtaW4="
          });
        // (nodeType='finance:FileId')
         return this.httpclient.get(`${this.dataUrl}/alfresco/api/-default-/public/alfresco/versions/1/nodes/${node_id}/children?where=(nodeType=${nodeType})&include=properties`,{ headers: reqHeader });
@@ -89,7 +89,7 @@ export class ApiService {
         node_id = node_id.replace(/"/g, "");
         var reqHeader = new HttpHeaders({ 
             'Content-Type': 'application/json',
-            'Authorization': "Basic YWRtaW46QWxmcmVzY29AMTIz"
+            'Authorization': "Basic YWRtaW46YWRtaW4="
          });
         return this.httpclient.get(`${this.dataUrl}/alfresco/api/-default-/public/alfresco/versions/1/nodes/${node_id}/children`,{ headers: reqHeader });
     }
@@ -98,7 +98,7 @@ export class ApiService {
        // node_id = node_id.replace(/"/g, "");
         var reqHeader = new HttpHeaders({ 
             'Content-Type': 'application/json',
-            'Authorization': "Basic YWRtaW46QWxmcmVzY29AMTIz"
+            'Authorization': "Basic YWRtaW46YWRtaW4="
          });
         return this.httpclient.delete(`${this.dataUrl}/alfresco/api/-default-/public/alfresco/versions/1/nodes/${node_id}?permanent=true`,{ headers: reqHeader });
     }
@@ -106,7 +106,7 @@ export class ApiService {
         let node_id = nodeId;
         var reqHeader = new HttpHeaders({ 
             'Content-Type': 'application/octet-stream',
-            'Authorization': "Basic YWRtaW46QWxmcmVzY29AMTIz",
+            'Authorization': "Basic YWRtaW46YWRtaW4=",
             'accept': 'application/json'
          });
         return this.httpclient.put(`${this.dataUrl}/alfresco/api/-default-/public/alfresco/versions/1/nodes/${node_id}/content?majorVersion=true`,null,{ headers: reqHeader });

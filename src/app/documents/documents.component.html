@@ -3,6 +3,9 @@
     <adf-breadcrumb class="files-breadcrumb" root="Personal Files" [target]="documentList"
       [folderNode]="documentList.folderNode">
     </adf-breadcrumb>
+    <button mat-icon-button [adf-create-folder]="documentList.currentFolderId" title="Create New Folder">
+      <mat-icon>create_new_folder</mat-icon>
+    </button>
   </adf-toolbar-title>
 
   <div class="adf-toolbar--spacer"></div>
@@ -55,7 +58,7 @@
     </data-column>
     <data-column title="Modified On" key="modifiedAt" type="date" format="medium" sortable="true" class="desktop-only">
     </data-column>
-    <data-column title="Content Type" key="nodeType"  sortable="true" class="desktop-only">
+    <data-column title="Content Type" key="nodeType" sortable="true" class="desktop-only">
     </data-column>
   </data-columns>
   <content-actions>
