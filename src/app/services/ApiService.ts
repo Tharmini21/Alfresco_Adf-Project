@@ -129,7 +129,22 @@ export class ApiService {
         };
           return defaultQueryBody;
     }
-
+    getnodedetails(nodeId: string) {
+        let node_id = nodeId;
+        var reqHeader = new HttpHeaders({ 
+            'Content-Type': 'application/json',
+            'Authorization': "Basic YWRtaW46YWRtaW4="
+         });
+        return this.httpclient.get(`${this.dataUrl}/alfresco/api/-default-/public/alfresco/versions/1/nodes/${node_id}/comments`,{ headers: reqHeader });
+    }
+    getcommentdetails(nodeId: string) {
+        let node_id = nodeId;
+        var reqHeader = new HttpHeaders({ 
+            'Content-Type': 'application/json',
+            'Authorization': "Basic YWRtaW46YWRtaW4="
+         });
+        return this.httpclient.get(`${this.dataUrl}/alfresco/api/-default-/public/alfresco/versions/1/nodes/${node_id}`,{ headers: reqHeader });
+    }
 }
 // export class TestSearchConfigurationService implements SearchConfigurationInterface {
 

@@ -48,10 +48,10 @@ export const appRoutes: Routes = [
         path: 'contract-home',
         component: ContractHomeComponent
       },
-      // {
-      //   path: 'contract-details',
-      //   component: ContractDetailsComponent
-      // },
+      {
+        path: 'contract-details/:id',
+        component: ContractDetailsComponent
+      },
     ]
   },
   {

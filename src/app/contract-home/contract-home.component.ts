@@ -6,11 +6,13 @@ import { ApiService } from '../services/ApiService';
   styleUrls: ['./contract-home.component.css']
 })
 export class ContractHomeComponent implements OnInit {
-
+  nodeId: string;
   constructor(private apiService: ApiService) { }
 
   ngOnInit(): void {
     this.getnodedatalist();
+    // this.nodeId = ((document.getElementById("nodeid") as HTMLInputElement).value);
+    // console.log(this.nodeId);
   }
   listnodedatas: any = [];
   getnodedatalist() {

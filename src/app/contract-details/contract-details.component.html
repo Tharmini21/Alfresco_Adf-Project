@@ -3,29 +3,38 @@
     <button>Report</button>
     <button class="contractbtn">Share</button>
     <div>
-        <span>Test Contract</span>
-        <div >
-            <span>Information</span>
+        
+        <div>
+            <a><h2>{{nodedetails.entry.name}}</h2></a>
+            <p>Information</p>
             <div class="info">
-                <p>Created By:</p>
-                <p>Created On:</p>
-                <p>Modified By:</p>
+                <p>Created By:{{nodedetails.entry.createdByUser.displayName}}</p>
+                <p>Created On:{{ nodedetails.entry.createdAt | date:'MMMM, dd yyyy'}}</p>
+                <p>Modified By:{{nodedetails.entry.modifiedByUser.displayName}}</p>
                 <p>Status:</p>
                 <p>Workflow Status:</p>
                 <p>Current Workflow Step:</p>
             </div>
         </div>
-        <div >
+        <div>
             <span>File</span>
             <button>Add</button>
             <button>Remove</button>
             <div class="File">
-                <p>Name:</p>
-                <p>Modified On:</p>
-                <p>Modified By:</p>
+                <tr *ngFor="let node of nodechildrendetails; let id = index">
+                    <td><p>Name: {{node.entry.name}}</p></td><br><br>
+                    <td><p>Modified On:{{node.entry.modifiedAt | date:'MMMM, dd yyyy'}}</p></td>
+                    <td><p>Modified By:{{node.entry.modifiedByUser.displayName}}</p></td>
+                    <td><p>Status:</p></td>
+                    <td><p>Version:</p></td>
+                    <td><p>Checked_out_by:</p></td>
+                </tr>
+                <!-- <p>Name: {{node.entry.name}}</p>
+                <p>Modified On:{{node.entry.modifiedAt | date:'MMMM, dd yyyy'}}</p>
+                <p>Modified By:{{node.entry.modifiedByUser.displayName}}</p>
                 <p>Status:</p>
                 <p>Version:</p>
-                <p>Checked_out_by:</p>
+                <p>Checked_out_by:</p> -->
             </div>
         </div>
         <div >

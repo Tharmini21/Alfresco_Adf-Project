@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ApiService } from '../services/ApiService';
+import { Router, ActivatedRoute } from '@angular/router';
 @Component({
   selector: 'app-contract-details',
   templateUrl: './contract-details.component.html',
@@ -7,17 +8,49 @@ import { ApiService } from '../services/ApiService';
 })
 export class ContractDetailsComponent implements OnInit {
   nodeId: string;
-  constructor(private apiService: ApiService) { }
+
+  constructor(private apiService: ApiService, private activatedRoute: ActivatedRoute) { }
 
   ngOnInit(): void {
+    this.activatedRoute.params.subscribe(params => {
+      // this.activatedRoute.params._value.id
+      this.nodeId = params['id'];
+      console.log(this.nodeId);
+    });
     this.getnodedatalist();
+    this.getnodedetails();
+    this.getcomments();
   }
-  listnodedatas: any = [];
-  getnodedatalist() {
-    this.apiService.getnodedatalist("-root-")
+  nodechildrendetails: any = [];
+  nodedetails: any = [];
+  commentdetails: any = [];
+  getnodedetails() {
+    this.apiService.getnodedetails(this.nodeId)
       .subscribe(
         (res: any) => {
-          this.listnodedatas = res.list.entries;
+          this.nodedetails = res;
+        },
+        err => {
+          console.log('Error occured while fetching node data');
+        }
+      );
+  }
+  getnodedatalist() {
+    this.apiService.getnodedatalist(this.nodeId)
+      .subscribe(
+        (data: any) => {
+          this.nodechildrendetails = data.list.entries;
+        },
+        err => {
+          console.log('Error occured while fetching node data');
+        }
+      );
+  }
+  getcomments() {
+    this.apiService.getcommentdetails(this.nodeId)
+      .subscribe(
+        (val: any) => {
+          this.commentdetails = val;
         },
         err => {
           console.log('Error occured while fetching node data');
