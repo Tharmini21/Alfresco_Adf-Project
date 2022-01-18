@@ -2,25 +2,28 @@
     <button>home</button>
     <button>Report</button>
     <!-- <button class="contractbtn" click="openFolderDialog($event)">New Contract</button> -->
-    <button mat-icon-button [adf-create-folder]="" title="Create New Folder">
-        <mat-icon>create_new_folder</mat-icon>New Contract
-    </button>
-    <div class="pendingapproval">
-        <span>My pending contract approval</span>
+        <button mat-icon-button [adf-create-folder]="" title="Create New Folder">
+            <mat-icon>create_new_folder</mat-icon>New Contract
+        </button>
+   
+    <div>
+        <div class="pendingapproval">
+            <span style="font-weight: bold;">My pending contract approval</span>
 
-    </div>
-    <div class="recentlyviewed">
-        <span>Contracts - Recently Viewed</span>
+        </div>
+        <div class="recentlyviewed">
+            <span style="font-weight: bold;">Contracts - Recently Viewed</span>
+        </div>
     </div>
     <div class="allcontract">
         <span style="font-weight: bold;">All Contracts</span>
         <table>
             <tr>
                 <th>Name</th>
-                <th class="text-center">Status</th>
-                <th class="text-center">Created By</th>
-                <th class="text-center">Last Modified By</th>
-                <th class="text-center">Last Modified On</th>
+                <th>Status</th>
+                <th>Created By</th>
+                <th>Last Modified By</th>
+                <th>Last Modified On</th>
             </tr>
             <tr *ngFor="let node of listnodedatas; let id = index">
                 <td hidden>

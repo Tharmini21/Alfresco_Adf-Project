@@ -135,7 +135,7 @@ export class ApiService {
             'Content-Type': 'application/json',
             'Authorization': "Basic YWRtaW46YWRtaW4="
          });
-        return this.httpclient.get(`${this.dataUrl}/alfresco/api/-default-/public/alfresco/versions/1/nodes/${node_id}/comments`,{ headers: reqHeader });
+        return this.httpclient.get(`${this.dataUrl}/alfresco/api/-default-/public/alfresco/versions/1/nodes/${node_id}`,{ headers: reqHeader });
     }
     getcommentdetails(nodeId: string) {
         let node_id = nodeId;
@@ -143,7 +143,7 @@ export class ApiService {
             'Content-Type': 'application/json',
             'Authorization': "Basic YWRtaW46YWRtaW4="
          });
-        return this.httpclient.get(`${this.dataUrl}/alfresco/api/-default-/public/alfresco/versions/1/nodes/${node_id}`,{ headers: reqHeader });
+        return this.httpclient.get(`${this.dataUrl}/alfresco/api/-default-/public/alfresco/versions/1/nodes/${node_id}/comments`,{ headers: reqHeader });
     }
 }
 // export class TestSearchConfigurationService implements SearchConfigurationInterface {

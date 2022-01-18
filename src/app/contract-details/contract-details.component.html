@@ -3,14 +3,19 @@
     <button>Report</button>
     <button class="contractbtn">Share</button>
     <div>
-        
+
         <div>
-            <a><h2>{{nodedetails.entry.name}}</h2></a>
+            <a>
+                <h2>{{nodedetails.entry? nodedetails.entry.name:'NA'}}</h2>
+            </a>
             <p>Information</p>
             <div class="info">
                 <p>Created By:{{nodedetails.entry.createdByUser.displayName}}</p>
                 <p>Created On:{{ nodedetails.entry.createdAt | date:'MMMM, dd yyyy'}}</p>
-                <p>Modified By:{{nodedetails.entry.modifiedByUser.displayName}}</p>
+                <p>Modified By:{{ nodedetails.entry.modifiedByUser.displayName}}</p>
+                <!-- <p>Created By:{{nodedetails.entry? nodedetails.entry.createdByUser.displayName:'NA'}}</p>
+                <p>Created On:{{nodedetails.entry? nodedetails.entry.createdAt | date:'MMMM, dd yyyy':'NA'}}</p>
+                <p>Modified By:{{nodedetails.entry? nodedetails.entry.modifiedByUser.displayName:'NA'}}</p> -->
                 <p>Status:</p>
                 <p>Workflow Status:</p>
                 <p>Current Workflow Step:</p>
@@ -22,13 +27,30 @@
             <button>Remove</button>
             <div class="File">
                 <tr *ngFor="let node of nodechildrendetails; let id = index">
-                    <td><p>Name: {{node.entry.name}}</p></td><br><br>
-                    <td><p>Modified On:{{node.entry.modifiedAt | date:'MMMM, dd yyyy'}}</p></td>
-                    <td><p>Modified By:{{node.entry.modifiedByUser.displayName}}</p></td>
-                    <td><p>Status:</p></td>
-                    <td><p>Version:</p></td>
-                    <td><p>Checked_out_by:</p></td>
+                    <td>
+                        <p>Name: {{node.entry.name}}</p>
+                    </td><br><br>
+                    <td>
+                        <p>Modified On:{{node.entry.modifiedAt | date:'MMMM, dd yyyy'}}</p>
+                    </td>
+                    <td>
+                        <p>Modified By:{{node.entry.modifiedByUser.displayName}}</p>
+                    </td>
+                    <td>
+                        <p>Status:</p>
+                    </td>
+                    <td>
+                        <p>Version:</p>
+                    </td>
+                    <td>
+                        <p>Checked_out_by:</p>
+                    </td>
                 </tr>
+                <!-- <tr *ngIf=(nodechildrendetails.length==0)>
+                    <td>
+                        <span>NO Record Found</span>
+                    </td>
+                </tr> -->
                 <!-- <p>Name: {{node.entry.name}}</p>
                 <p>Modified On:{{node.entry.modifiedAt | date:'MMMM, dd yyyy'}}</p>
                 <p>Modified By:{{node.entry.modifiedByUser.displayName}}</p>
@@ -37,7 +59,7 @@
                 <p>Checked_out_by:</p> -->
             </div>
         </div>
-        <div >
+        <div>
             <span>Workflow</span>
             <button>Add Step</button>
             <button>Remove Step</button>
@@ -49,11 +71,12 @@
         </div>
         <div class="Comments">
             <span>Comments</span>
-           
+            <p>Content: {{ commentdetails[0].entry.content}}</p>
+            <!-- <p>Modified By: {{ commentdetails[0].entry.modifiedByUser[0].displayName}}</p> -->
         </div>
         <div class="Audit">
             <span>Audit History</span>
         </div>
     </div>
-   
+
 </div>

@@ -13,12 +13,11 @@ export class ContractDetailsComponent implements OnInit {
 
   ngOnInit(): void {
     this.activatedRoute.params.subscribe(params => {
-      // this.activatedRoute.params._value.id
       this.nodeId = params['id'];
       console.log(this.nodeId);
     });
-    this.getnodedatalist();
     this.getnodedetails();
+    this.getnodedatalist();
     this.getcomments();
   }
   nodechildrendetails: any = [];
@@ -50,7 +49,7 @@ export class ContractDetailsComponent implements OnInit {
     this.apiService.getcommentdetails(this.nodeId)
       .subscribe(
         (val: any) => {
-          this.commentdetails = val;
+          this.commentdetails = val.list.entries;
         },
         err => {
           console.log('Error occured while fetching node data');
