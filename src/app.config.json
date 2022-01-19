@@ -190,8 +190,30 @@
     "presets": {
       "default": {
         "properties": "*",
-        "readOnlyProperties": ["cm:author"]
+        "readOnlyProperties": [
+          "cm:author"
+        ]
       }
+    }
+  },
+  "adf-process-list": {
+    "presets": {
+      "customSchema": [
+        {
+          "key": "name",
+          "type": "text",
+          "title": "name",
+          "sortable": true
+        }
+      ],
+      "default": [
+        {
+          "key": "name",
+          "type": "text",
+          "title": "name",
+          "sortable": true
+        }
+      ]
     }
   },
   "logLevel": "trace"

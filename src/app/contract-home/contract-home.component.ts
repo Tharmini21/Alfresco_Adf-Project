@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ApiService } from '../services/ApiService';
+// import { SelectAppsDialogComponent } from '@alfresco/adf-process-services';
+import { MatDialog } from '@angular/material/dialog';
 @Component({
   selector: 'app-contract-home',
   templateUrl: './contract-home.component.html',
@@ -7,8 +9,18 @@ import { ApiService } from '../services/ApiService';
 })
 export class ContractHomeComponent implements OnInit {
   nodeId: string;
-  constructor(private apiService: ApiService) { }
+  processId: string;
+  constructor(private apiService: ApiService, private dialog: MatDialog) { }
+  // startSelectDialog() {
+  //   const dialogRef = this.dialog.open(SelectAppsDialogComponent, {
+  //     width: '630px',
+  //     panelClass: 'adf-version-manager-dialog'
+  //   });
 
+  //   dialogRef.afterClosed().subscribe(selectedProcess => {
+  //     this.processId = selectedProcess.id;
+  //   });
+  // }
   ngOnInit(): void {
     this.getnodedatalist();
     // this.nodeId = ((document.getElementById("nodeid") as HTMLInputElement).value);

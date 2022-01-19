@@ -20,7 +20,9 @@
     border-radius:10px;
   }
   .contractbtn{
-    align-self: right;
+    float: right;
+    margin-right: 150px;
+    /* align-self: right; */
   }
   /* .createfolder{
     align-items: right;
