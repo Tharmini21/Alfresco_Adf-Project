@@ -1,85 +1,81 @@
-<div style="width: auto;">
+<div>
     <div class="btnhome">
         <button>home</button>
         <button>Report</button>
     </div>
-    
     <button class="contractbtn">Share</button>
-    <div>
+</div>
 
-        <div>
-            <a>
-                <h2>{{nodedetails.entry? nodedetails.entry.name:'NA'}}</h2>
-            </a>
-            <p>Information</p>
-            <div class="info">
-                <p>Created By:{{nodedetails.entry.createdByUser.displayName}}</p>
-                <p>Created On:{{ nodedetails.entry.createdAt | date:'MMMM, dd yyyy'}}</p>
-                <p>Modified By:{{ nodedetails.entry.modifiedByUser.displayName}}</p>
-                <!-- <p>Created By:{{nodedetails.entry? nodedetails.entry.createdByUser.displayName:'NA'}}</p>
+<div class="maindiv">
+    <a>
+        <span style="padding: 30px;font-weight: bold;font-size: x-large;">{{nodedetails.entry? nodedetails.entry.name:'NA'}}</span>
+    </a>
+    <div>
+        <span style="padding: 30px;font-weight: bold;">Information</span>
+        <div class="info">
+            <p>Created By: {{nodedetails.entry.createdByUser.displayName}}</p>
+            <p>Created On: {{ nodedetails.entry.createdAt | date:'MMMM, dd yyyy'}}</p>
+            <p>Modified By: {{ nodedetails.entry.modifiedByUser.displayName}}</p>
+            <!-- <p>Created By:{{nodedetails.entry? nodedetails.entry.createdByUser.displayName:'NA'}}</p>
                 <p>Created On:{{nodedetails.entry? nodedetails.entry.createdAt | date:'MMMM, dd yyyy':'NA'}}</p>
                 <p>Modified By:{{nodedetails.entry? nodedetails.entry.modifiedByUser.displayName:'NA'}}</p> -->
-                <p>Status:</p>
-                <p>Workflow Status:</p>
-                <p>Current Workflow Step:</p>
-            </div>
+            <p>Status:</p>
+            <p>Workflow Status:</p>
+            <p>Current Workflow Step:</p>
         </div>
-        <div>
-            <span>File</span>
-            <button>Add</button>
-            <button>Remove</button>
-            <div class="File">
-                <tr *ngFor="let node of nodechildrendetails; let id = index">
-                    <td>
-                        <p>Name: {{node.entry.name}}</p>
-                    </td><br><br>
-                    <td>
-                        <p>Modified On:{{node.entry.modifiedAt | date:'MMMM, dd yyyy'}}</p>
-                    </td>
-                    <td>
-                        <p>Modified By:{{node.entry.modifiedByUser.displayName}}</p>
-                    </td>
-                    <td>
-                        <p>Status:</p>
-                    </td>
-                    <td>
-                        <p>Version:</p>
-                    </td>
-                    <td>
-                        <p>Checked_out_by:</p>
-                    </td>
-                </tr>
-                <!-- <tr *ngIf=(nodechildrendetails.length==0)>
+    </div>
+    <div>
+        <span style="padding: 30px;font-weight: bold;">File</span>
+        <button>Add</button>
+        <button>Remove</button>
+        <div class="File">
+            <tr *ngFor="let node of listfiles; let id = index">
+                <td>
+                    <span>Name: {{node.entry.name}}</span>
+                </td>
+                <td>
+                    <span>Modified On: {{node.entry.modifiedAt | date:'MMMM, dd yyyy'}}</span>
+                    <!-- <span>Modified On: {{node.entry.modifiedAt}}</span> -->
+                </td>
+                <td>
+                    <span>Modified By: {{node.entry.modifiedByUser.displayName}}</span>
+                </td>
+                <td>
+                    <span>Version: {{node.entry.properties["cm:versionLabel"]}}</span>
+                </td>
+                <td>
+                    <span>Checked_out_by:</span>
+                </td>
+            </tr>
+            <!-- <tr *ngIf=(nodechildrendetails.length==0)>
                     <td>
                         <span>NO Record Found</span>
                     </td>
                 </tr> -->
-                <!-- <p>Name: {{node.entry.name}}</p>
+            <!-- <p>Name: {{node.entry.name}}</p>
                 <p>Modified On:{{node.entry.modifiedAt | date:'MMMM, dd yyyy'}}</p>
                 <p>Modified By:{{node.entry.modifiedByUser.displayName}}</p>
                 <p>Status:</p>
                 <p>Version:</p>
                 <p>Checked_out_by:</p> -->
-            </div>
-        </div>
-        <div>
-            <span>Workflow</span>
-            <button>Add Step</button>
-            <button>Remove Step</button>
-            <button>Hold/Resume</button>
-            <div class="Workflow">
-                <p>Step 1:</p>
-                <p>Step 2:</p>
-            </div>
-        </div>
-        <div class="Comments">
-            <span>Comments</span>
-            <p>Content: {{ commentdetails[0].entry.content}}</p>
-            <!-- <p>Modified By: {{ commentdetails[0].entry.modifiedByUser[0].displayName}}</p> -->
-        </div>
-        <div class="Audit">
-            <span>Audit History</span>
         </div>
     </div>
-
+    <div>
+        <span style="padding: 30px;font-weight: bold;">Workflow</span>
+        <button>Add Step</button>
+        <button>Remove Step</button>
+        <button>Hold/Resume</button>
+        <div class="Workflow">
+            <p>Step 1:</p>
+            <p>Step 2:</p>
+        </div>
+    </div>
+    <div class="Comments">
+        <span style="padding: 30px;font-weight: bold;">Comments</span>
+        <p>Content: {{ commentdetails[0].entry.content}}</p>
+        <!-- <p>Modified By: {{ commentdetails[0].entry.modifiedByUser[0].displayName}}</p> -->
+    </div>
+    <div class="Audit">
+        <span style="padding: 30px;font-weight: bold;">Audit History</span>
+    </div>
 </div>

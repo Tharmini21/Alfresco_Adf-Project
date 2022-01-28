@@ -145,6 +145,22 @@ export class ApiService {
          });
         return this.httpclient.get(`${this.dataUrl}/alfresco/api/-default-/public/alfresco/versions/1/nodes/${node_id}/comments`,{ headers: reqHeader });
     }
+    getfiles(nodeId: string) {
+        let node_id = nodeId;
+        var reqHeader = new HttpHeaders({ 
+            'Content-Type': 'application/json',
+            'Authorization': "Basic YWRtaW46YWRtaW4="
+         });
+        return this.httpclient.get(`${this.dataUrl}/alfresco/api/-default-/public/alfresco/versions/1/nodes/${node_id}/children?skipCount=0&maxItems=100&include=properties`,{ headers: reqHeader });
+    }
+    gettaskdetails(nodeId: string) {
+        let node_id = nodeId;
+        var reqHeader = new HttpHeaders({ 
+            'Content-Type': 'application/json',
+            'Authorization': "Basic YWRtaW46YWRtaW4="
+         });
+        return this.httpclient.get(`${this.dataUrl}/alfresco/api/-default-/public/alfresco/versions/1/nodes/${node_id}/comments`,{ headers: reqHeader });
+    }
 }
 // export class TestSearchConfigurationService implements SearchConfigurationInterface {
 

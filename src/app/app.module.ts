@@ -9,7 +9,7 @@ import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { MatStepperModule } from '@angular/material/stepper';
 import { MatIconModule } from '@angular/material/icon';
 import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
-import { FormsModule,ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { appRoutes } from './app.routes';
 import { PreviewService } from './services/preview.service';
@@ -49,6 +49,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MetadataComponentComponent } from './metadata-component/metadata-component.component';
 import { ContractHomeComponent } from './contract-home/contract-home.component';
 import { ContractDetailsComponent } from './contract-details/contract-details.component';
+import { DatePipe } from '@angular/common';
 
 registerLocaleData(localeFr);
 registerLocaleData(localeDe);
@@ -115,7 +116,7 @@ registerLocaleData(localeSv);
         //     provide: STEPPER_GLOBAL_OPTIONS,
         //     useValue: { displayDefaultIndicatorType: false }
         // }
-
+        , DatePipe
     ],
     bootstrap: [AppComponent]
 })

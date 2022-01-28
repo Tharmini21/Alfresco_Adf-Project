@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ApiService } from '../services/ApiService';
 import { Router, ActivatedRoute } from '@angular/router';
+import { DatePipe } from '@angular/common';
 @Component({
   selector: 'app-contract-details',
   templateUrl: './contract-details.component.html',
@@ -8,8 +9,11 @@ import { Router, ActivatedRoute } from '@angular/router';
 })
 export class ContractDetailsComponent implements OnInit {
   nodeId: string;
-
-  constructor(private apiService: ApiService, private activatedRoute: ActivatedRoute) { }
+  datePipeString : string;
+  constructor(private apiService: ApiService, private activatedRoute: ActivatedRoute,private datePipe: DatePipe) { 
+    this.datePipeString = datePipe.transform(Date.now(),'yyyy-MM-dd');
+    console.log(this.datePipeString);
+  }
 
   ngOnInit(): void {
     this.activatedRoute.params.subscribe(params => {
@@ -19,10 +23,12 @@ export class ContractDetailsComponent implements OnInit {
     this.getnodedetails();
     this.getnodedatalist();
     this.getcomments();
+    this.getfiles();
   }
   nodechildrendetails: any = [];
   nodedetails: any = [];
   commentdetails: any = [];
+  listfiles: any = [];
   getnodedetails() {
     this.apiService.getnodedetails(this.nodeId)
       .subscribe(
@@ -45,6 +51,18 @@ export class ContractDetailsComponent implements OnInit {
         }
       );
   }
+  getfiles() {
+    this.apiService.getfiles(this.nodeId)
+      .subscribe(
+        (restdata: any) => {
+          this.listfiles = restdata.list.entries;
+        },
+        err => {
+          console.log('Error occured while fetching node data');
+        }
+      );
+  }
+  
   getcomments() {
     this.apiService.getcommentdetails(this.nodeId)
       .subscribe(

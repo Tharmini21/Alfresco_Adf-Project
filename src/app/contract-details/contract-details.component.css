@@ -37,8 +37,19 @@
     float:left;
   }
   button{
-    float:right;
     /* margin-right: 100px; */
     margin: 5px;
     padding: 5px;
+    /* float:right; */
+
+  }
+  table, th, td {
+    /* border: 1px solid black; */
+    padding: 10px;
+  }
+  .maindiv{
+    border: 3px solid black;
+    padding: 50px;
+    margin-top: 20px;
+    border-radius:20px;
   }
