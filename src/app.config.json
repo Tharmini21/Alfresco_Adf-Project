@@ -196,13 +196,18 @@
       }
     }
   },
-  "adf-process-list": {
+  "adf-process-instance-header": {
+    "presets": {
+        "properties" : [ "status", "ended", "created", "id"]
+    }
+  },
+  "adf-process-instance-list": {
     "presets": {
       "customSchema": [
         {
-          "key": "name",
+          "key": "id",
           "type": "text",
-          "title": "name",
+          "title": "Id",
           "sortable": true
         }
       ],

@@ -23,10 +23,12 @@ export class ContractHomeComponent implements OnInit {
   // }
   ngOnInit(): void {
     this.getnodedatalist();
+    this.getpendingtasklist();
     // this.nodeId = ((document.getElementById("nodeid") as HTMLInputElement).value);
     // console.log(this.nodeId);
   }
   listnodedatas: any = [];
+  pendingtasklist: any = [];
   getnodedatalist() {
     this.apiService.getnodedatalist("-root-")
       .subscribe(
@@ -38,4 +40,16 @@ export class ContractHomeComponent implements OnInit {
         }
       );
   }
+  getpendingtasklist() {
+    this.apiService.gettaskdetails()
+      .subscribe(
+        (res: any) => {
+          this.pendingtasklist = res.list.entries;
+        },
+        err => {
+          console.log('Error occured while fetching node data');
+        }
+      );
+  }
+
 }

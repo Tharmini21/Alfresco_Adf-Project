@@ -15,6 +15,8 @@ import { appRoutes } from './app.routes';
 import { PreviewService } from './services/preview.service';
 import { FileViewComponent } from './file-view/file-view.component';
 import { ApiService } from './services/ApiService';
+import { ProcessService, ProcessInstance, ProcessInstanceVariable, 
+    ProcessDefinitionRepresentation, ProcessFilterParamRepresentationModel, TaskDetailsModel } from '@alfresco/adf-process-services';
 
 
 // App components

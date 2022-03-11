@@ -24,6 +24,11 @@
     margin-right: 150px;
     /* align-self: right; */
   }
+  table, th, td {
+    align-items: left;
+    /* border: 1px solid black; */
+    /* padding: 10px; */
+  }
   /* .createfolder{
     align-items: right;
   } */

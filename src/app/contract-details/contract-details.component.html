@@ -8,7 +8,8 @@
 
 <div class="maindiv">
     <a>
-        <span style="padding: 30px;font-weight: bold;font-size: x-large;">{{nodedetails.entry? nodedetails.entry.name:'NA'}}</span>
+        <span style="padding: 30px;font-weight: bold;font-size: x-large;">{{nodedetails.entry?
+            nodedetails.entry.name:'NA'}}</span>
     </a>
     <div>
         <span style="padding: 30px;font-weight: bold;">Information</span>
@@ -27,6 +28,10 @@
     <div>
         <span style="padding: 30px;font-weight: bold;">File</span>
         <button>Add</button>
+        <!-- <adf-upload-button [uploadFolders]="true" [multipleFiles]="false"
+            [acceptedFilesType]=".jpg,.gif,.png,.svg" [versioning]="false">
+        </adf-upload-button>
+        <adf-file-uploading-dialog></adf-file-uploading-dialog> -->
         <button>Remove</button>
         <div class="File">
             <tr *ngFor="let node of listfiles; let id = index">

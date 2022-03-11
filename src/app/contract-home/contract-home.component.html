@@ -2,14 +2,19 @@
     <button>home</button>
     <button>Report</button>
     <!-- <button class="contractbtn" click="openFolderDialog($event)">New Contract</button> -->
-        <button class="contractbtn" mat-icon-button [adf-create-folder]="" title="Create New Folder">
-            <mat-icon>create_new_folder</mat-icon>New Contract
-        </button>
-   
+    <button class="contractbtn" mat-icon-button [adf-create-folder]="" title="Create New Folder">
+        <mat-icon>create_new_folder</mat-icon>New Contract
+    </button>
+
     <div>
         <div class="pendingapproval">
             <span style="font-weight: bold;">My pending contract approval</span>
-
+            <tr *ngFor="let tsk of pendingtasklist; let id = index">
+                <td>
+                    <!-- <a href="/contract-details/{{node.entry.id}}"><span>{{node.entry.name}}</span></a> -->
+                    <a href=""><span>{{tsk.entry.description}}</span></a>
+                </td>
+            </tr>
         </div>
         <div class="recentlyviewed">
             <span style="font-weight: bold;">Contracts - Recently Viewed</span>

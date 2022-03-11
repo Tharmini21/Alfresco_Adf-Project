@@ -153,35 +153,14 @@ export class ApiService {
          });
         return this.httpclient.get(`${this.dataUrl}/alfresco/api/-default-/public/alfresco/versions/1/nodes/${node_id}/children?skipCount=0&maxItems=100&include=properties`,{ headers: reqHeader });
     }
-    gettaskdetails(nodeId: string) {
-        let node_id = nodeId;
+    gettaskdetails() {
         var reqHeader = new HttpHeaders({ 
             'Content-Type': 'application/json',
-            'Authorization': "Basic YWRtaW46YWRtaW4="
+            // 'Authorization': "Basic YWRtaW46YWRtaW4="
+            'Authorization': "Basic VGhhcm1pbmk6QWxmcmVzY29AMTIz"
          });
-        return this.httpclient.get(`${this.dataUrl}/alfresco/api/-default-/public/alfresco/versions/1/nodes/${node_id}/comments`,{ headers: reqHeader });
+         
+        return this.httpclient.get(`${this.dataUrl}/alfresco/api/-default-/public/workflow/versions/1/tasks`,{ headers: reqHeader });
     }
 }
-// export class TestSearchConfigurationService implements SearchConfigurationInterface {
 
-//     constructor() {
-//     }
-  
-//     public generateQueryBody(searchTerm: string, maxResults: number, skipCount: number): QueryBody {
-//         const defaultQueryBody: QueryBody = {
-//             query: {
-//                 query: searchTerm ? `${searchTerm}* OR name:${searchTerm}*` : searchTerm
-//             },
-//             include: ['path', 'allowableOperations'],
-//             paging: {
-//                 maxItems: maxResults,
-//                 skipCount: skipCount
-//             },
-//             filterQueries: [
-//                 { query: "TYPE:'cm:folder'" },
-//                 { query: 'NOT cm:creator:System' }]
-//         };
-  
-//         return defaultQueryBody;
-//     }
-//   }
