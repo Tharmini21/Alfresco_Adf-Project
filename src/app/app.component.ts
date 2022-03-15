@@ -23,7 +23,8 @@ export class AppComponent {
               private authService: AuthenticationService,
               private router: Router,
               private apiService: ApiService,
-              private contentservice: ContentTypeService) {
+              private contentservice: ContentTypeService,
+              private processService: ProcessService) {
     translationService.use('en');
   }
   

@@ -1,7 +1,7 @@
 <!-- <app-contract-home></app-contract-home>
 <app-contract-details></app-contract-details> -->
 <!-- <adf-process-instance-list
-    [appId]="'1'" 
+    [appId]="'firstprocess'" 
     [presetColumn]="'customSchema'">
     <data-columns>
         <data-column key="key" title="title" class="full-width name-column">
@@ -21,5 +21,9 @@
         </data-column>
     </data-columns>
 </adf-process-instance-list> -->
+<adf-process-instance-list
+    [appId]="'1'"
+    [state]="'all'">
+</adf-process-instance-list>
 <router-outlet></router-outlet>
 <router-outlet name="overlay"></router-outlet>

@@ -52,6 +52,7 @@ import { MetadataComponentComponent } from './metadata-component/metadata-compon
 import { ContractHomeComponent } from './contract-home/contract-home.component';
 import { ContractDetailsComponent } from './contract-details/contract-details.component';
 import { DatePipe } from '@angular/common';
+import { ProcessDetailsComponent } from './process-details/process-details.component';
 
 registerLocaleData(localeFr);
 registerLocaleData(localeDe);
@@ -100,7 +101,8 @@ registerLocaleData(localeSv);
         MyDialogComponentComponent,
         MetadataComponentComponent,
         ContractHomeComponent,
-        ContractDetailsComponent
+        ContractDetailsComponent,
+        ProcessDetailsComponent
         // MatStepperModule
     ],
     providers: [
