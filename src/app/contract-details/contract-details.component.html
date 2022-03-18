@@ -82,5 +82,9 @@
     </div>
     <div class="Audit">
         <span style="padding: 30px;font-weight: bold;">Audit History</span>
+        <button adf-process-audit [process-id]="processId" [format]="'pdf'" [download]="true" mat-icon-button
+            (clicked)="onAuditClick($event)" (error)="onAuditError($event)">
+            <mat-icon>assignment_ind</mat-icon>
+        </button>
     </div>
 </div>

@@ -1,6 +1,9 @@
 {
   "$schema": "../node_modules/@alfresco/adf-core/app.config.schema.json",
-  "ecmHost": "{protocol}//{hostname}{:port}",
+  "ecmHost": "{protocol}//{hostname}{:port}/ecm",
+  "bpmHost": "http://{hostname}{:port}/bpm",
+  "logLevel": "silent",
+  "alfrescoRepositoryName": "",
   "providers": "ALL",
   "authType": "BASIC",
   "identityHost": "{protocol}//{hostname}{:port}/auth/realms/alfresco",
@@ -198,7 +201,12 @@
   },
   "adf-process-instance-header": {
     "presets": {
-        "properties" : [ "status", "ended", "created", "id"]
+      "properties": [
+        "status",
+        "ended",
+        "created",
+        "id"
+      ]
     }
   },
   "adf-process-instance-list": {
@@ -220,6 +228,5 @@
         }
       ]
     }
-  },
-  "logLevel": "trace"
+  }
 }
